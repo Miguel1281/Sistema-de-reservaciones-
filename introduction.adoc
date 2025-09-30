@@ -1,1 +1,31 @@
-hola mundo
+== Contexto y alcance del sistema
+
+=== Visión del Sistema
+
+El proyecto busca crear una solucion integral y centralizada de gestion hotelera para una cadena con mas de 5000 hoteles. Diseñado pra los clientes y el personal operativo y administrativo, quienes necesitan de una plataforma confiable para gestionar el inventario, tarifas y reservaciones. El sistema permitirá a los clientes realizar reservaciones en linea y de forma presencial, mientras que el personal podra gestionar las operaciones diarias de manera eficiente.
+
+A diferencia de las soluciones actuales, que son propensas a errores, nuestra plataforma ofrecerá un unico punto de acceso a todo el inventario, garantizando la consistencia, reduciendo errores y mejorando la eficiencia, con el oobjetivo de transformar la gestión de reservaciones de un costo operativo a una ventaja competitiva.
+
+=== Alcance
+
+
+.Funcionalidades principales del sistema:
+* Reservaciones: flujo completo de reserva con pago y opción de cancelación.
+* Gestión de estancias: operaciones de check-in, check-out y cambio de habitación.
+* Administración: gestión de hoteles, habitaciones, tarifas diarias y políticas de overbooking.
+* Consultas: búsqueda de disponibilidad para iniciar una reservación.
+* Servicios adicionales: registro de consumos como desayunos.
+
+
+
+.Funcionalidades fuera del alcance del sistema:
+* Búsquedas avanzadas con filtros y recomendaciones.
+* Integración con agencias de viajes en línea (OTAs), sistemas de contabilidad o programas de fidelidad.
+* Funciones adicionales como la programación de tareas para el personal o la facturación.
+
+=== Audiencia del documento
+
+
+
+=== Glosario
+
