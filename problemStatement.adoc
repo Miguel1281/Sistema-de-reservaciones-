@@ -1,0 +1,11 @@
+== Planteamiento del problema
+
+La situación actual de la cadena hotelera es que usa un sistema local por cada hotel para poder gestionar todas las operaciones relacionadas a la reservación y para poder llevar a cabo el flujo del hotel. Esto genera algunos inconvenientes como ciertas inconsistencias en la información y errores constantes en las reservaciones, así mismo una enorme dificultad para ejercer un control centralizado y coherente sobre toda la cadena. En lugar de funcionar como una entidad unificada y fuerte, la gestión de inventario y reservas es caótica y reactiva.
+
+Esta cadena de hoteles es de un tamaño considerable ya que tiene operando en activo más de 5,000 hoteles y entre todos ellos acumulan aproximadamente 1,000,000 de habitaciones, por lo que se busca optimizar la gestión de todas las operaciones correspondientes.
+
+El problema central no solo es hacer un sistema modernizado y más actual, sino todas las consecuencias directas e indirectas que tiene el negocio y su principal fuente de ingresos que son los clientes y la experiencia que estos tienen al usar el sistema. El sistema acual es propenso a fallos que afectan a la confianza de los huéspedes que este nuevo proyecto busca eliminar por completo. Por otro lado, también genera obstáculos de crecimiento para la misma empresa ya que si la administración desea hacer algún cambio interno en este momento significaría un gran reto ya que no existe un punto único para hacerlo, lo que impide reaccionar rápidamente a las condiciones del mercado y perdiendo oportunidades de negocio, lo que se traduce a miles o millones de pesos
+
+Lo que buscamos no solo es erradicar completamente con los errores que existen, sino de tener una estrategia para transformar la gestión de reservaciones de un simple costo operativo a tener ventajas competitivas en el mercado al desplegar precios dinámicos para responder a la demanda en tiempo real y gestionar políticas de la empresa controlando el overbooking y maximizar la capacidad de venta sin generar sobreventas accidentales o algún otro error.
+
+No queremos realizar una actualización del sistema, creemos que es un paso fundamental para optimzar las operaciones diarias, garantizar consistencia de datos y principalmente reducir errores para ofrecer una experiencia satisfactoria a los clientes.
