@@ -9,21 +9,27 @@ A diferencia de las soluciones actuales, que son propensas a errores, nuestra pl
 === Alcance
 
 
-.Funcionalidades principales del sistema:
-* Reservaciones: flujo completo de reserva con pago y opción de cancelación.
-* Gestión de estancias: operaciones de check-in, check-out y cambio de habitación.
-* Administración: gestión de hoteles, habitaciones, tarifas diarias y políticas de overbooking.
-* Consultas: búsqueda de disponibilidad para iniciar una reservación.
-* Servicios adicionales: registro de consumos como desayunos.
+De manera general, el alcance del sistema se centra en desarrollar las funcionalidades críticas para la operación hotelera. La primera versión incluirá el flujo completo de reservación, abarcando desde la consulta de disponibilidad hasta la confirmación y el pago. También cubrirá las operaciones esenciales de recepción, como el check-in y el check-out de los huéspedes.
 
+El sistema permitirá la gestión de estancias, incluyendo cambios de habitación y el registro de consumos adicionales como desayunos. Adicionalmente, ofrecerá un back-office básico para la administración de hoteles, habitaciones y tarifas, junto con la capacidad de gestionar precios diarios y las políticas de overbooking.
 
-
-.Funcionalidades fuera del alcance del sistema:
-* Búsquedas avanzadas con filtros y recomendaciones.
-* Integración con agencias de viajes en línea (OTAs), sistemas de contabilidad o programas de fidelidad.
-* Funciones adicionales como la programación de tareas para el personal o la facturación.
+Quedan fuera del alcance inicial, para ser consideradas en futuras versiones, funcionalidades como las búsquedas avanzadas y recomendaciones, así como la integración con agencias de viaje en línea y otros sistemas externos. También se posponen funciones adicionales como la facturación o la programación de tareas del personal.
 
 === Audiencia del documento
+
+•	Cliente (web/app): Es el cliente final que consulta disponibilidad, reserva, paga y gestiona sus estancias.
+•	Personal de Recepción: El equipo del hotel que utiliza el sistema para operaciones diarias como check-in, check-out, cambios de habitación y registro de consumos.
+•	Administración (cadena/hotel): Los responsables de gestionar el catálogo de hoteles, habitaciones, precios y las políticas de negocio como el overbooking.
+•	Auditores: Personal encargado de asegurar la trazabilidad e integridad de todas las operaciones financieras y de reserva que se realizan en el sistema.
+
+Preocupaciones (Concerns):
+
+•	Gestión de inventario bajo concurrencia: El sistema debe ser capaz de evitar dobles reservas, incluso cuando múltiples usuarios intentan reservar la misma habitación simultáneamente.
+•	Pagos y confirmación: Es crucial asegurar que cada pago se procese una sola vez para evitar dobles cobros, incluso si el cliente reintenta la operación por error.
+•	Manejo de picos de demanda: El sistema debe estar preparado para gestionar aumentos inesperados de tráfico de manera controlada, evitando caídas y degradando el servicio de forma predecible si es necesario.
+•	Coherencia de precios: Se debe garantizar que el precio mostrado al inicio de la reserva sea exactamente el mismo que se cobra al finalizar la transacción.
+•	Privacidad de la información: Proteger los datos personales y de pago de los clientes es una prioridad, cumpliendo con todas las regulaciones locales de privacidad.
+•	Facilidad de operación: La interfaz debe ser intuitiva y fácil de usar para el personal de recepción, incluso para novatos con mínima capacitación, y debe funcionar en equipos con recursos modestos.
 
 
 
