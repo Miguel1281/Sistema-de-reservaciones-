@@ -3,9 +3,6 @@ Version 1.0
 :toc: left
 :icons: font
 
-// ------------------------------------------------------------------
-// 1. PROPÓSITO DEL DISEÑO
-// ------------------------------------------------------------------
 == 1. Propósito del Diseño
 El objetivo principal es transformar la gestión de reservaciones de un costo operativo a una ventaja competitiva. La nueva plataforma unificada permitirá:
 
@@ -16,9 +13,6 @@ El objetivo principal es transformar la gestión de reservaciones de un costo op
 
 Este diseño servirá como guía para tomar decisiones arquitectónicas que satisfagan tanto los requisitos funcionales como los atributos de calidad críticos para el negocio.
 
-// ------------------------------------------------------------------
-// 2. ALCANCE DEL DISEÑO
-// ------------------------------------------------------------------
 == 2. Alcance del Diseño
 === 2.1. Funcionalidades Incluidas (En Alcance)
 
@@ -48,9 +42,6 @@ Las siguientes funcionalidades se consideran para futuras versiones y no forman 
 * Módulos adicionales de gestión hotelera, como la programación de tareas del personal o la facturación detallada.
 * Modelos de pago alternativos, como pagos parciales o pago en el hotel. El único modelo soportado es el pago completo al reservar. 
 
-// ------------------------------------------------------------------
-// 3. INTERESADOS Y SUS PREOCUPACIONES (STAKEHOLDERS & CONCERNS)
-// ------------------------------------------------------------------
 == 3. Interesados y sus Preocupaciones
 
 === 3.1. Huésped / Cliente
