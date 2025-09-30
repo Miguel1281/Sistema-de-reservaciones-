@@ -1,0 +1,47 @@
+= Descripción de la Arquitectura de Software
+:author: Brayan Gabriel Fernández Tlapa; Rodrigo Luna Vázquez; Miguel Angel Méndez Ronzón
+:revnumber: Diseño de software | Quinto periodo | 17788
+:revdate: 29 de Septiembre, 2025
+:url-repo: https://github.com/Miguel1281/Sistema-de-reservaciones-.git
+:revremark: Repositorio del proyecto: {url-repo}
+:doctype: book
+:toc: left
+:sectnums:
+:icons: font
+:source-highlighter: highlightjs
+:imagesdir: images
+:lang: es
+:chapter-label: Capítulo
+:appendix-caption: Apéndice
+:part-signifier: Parte
+:figure-caption: Figura
+:table-caption: Tabla
+:example-caption: Ejemplo
+:listing-caption: Listado
+:caution-caption: Precaución
+:important-caption: Importante
+:note-caption: Nota
+:tip-caption: Consejo
+:warning-caption: Advertencia
+
+== Historial de Revisiones
+
+[cols="1,2,3,4"]
+|===
+| Versión | Fecha      | Autor(es)              | Resumen de cambios significativos
+| 1.0     | 2025-09-29 | Equipo Completo        | Creación inicial de la estructura del documento y portada.
+|===
+
+
+include::introduction.adoc[]
+include::stakeholders.adoc[]
+include::views/context.adoc[]
+include::views/functional.adoc[]
+include::views/information.adoc[]
+include::views/concurrency.adoc[]
+include::views/deployment.adoc[]
+include::views/development.adoc[]
+include::views/operational.adoc[]
+include::qualities.adoc[]
+include::decisions.adoc[]
+include::appendix.adoc[]
