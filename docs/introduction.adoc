@@ -30,6 +30,7 @@ Preocupaciones (Concerns):
 •	Coherencia de precios: Se debe garantizar que el precio mostrado al inicio de la reserva sea exactamente el mismo que se cobra al finalizar la transacción.
 •	Privacidad de la información: Proteger los datos personales y de pago de los clientes es una prioridad, cumpliendo con todas las regulaciones locales de privacidad.
 •	Facilidad de operación: La interfaz debe ser intuitiva y fácil de usar para el personal de recepción, incluso para novatos con mínima capacitación, y debe funcionar en equipos con recursos modestos.
+•	Gerente: El responsable de la gestión y supervisión de un hotel específico. Utiliza el sistema para gestionar el inventario de habitaciones (altas, bajas, bloqueos) y administrar las cuentas del personal de recepción.
 
 
 
