@@ -1,9 +1,8 @@
 = Alcance y Propósito del Diseño: Sistema de Reservaciones para Cadena de Hoteles
 Version 1.0
-:toc: left
-:icons: font
 
-== 1. Propósito del Diseño
+
+== Propósito del Diseño
 El objetivo principal es transformar la gestión de reservaciones de un costo operativo a una ventaja competitiva. La nueva plataforma unificada permitirá:
 
 1. Centralizar la gestión del inventario de habitaciones, tarifas y políticas de ocupación.
@@ -13,8 +12,8 @@ El objetivo principal es transformar la gestión de reservaciones de un costo op
 
 Este diseño servirá como guía para tomar decisiones arquitectónicas que satisfagan tanto los requisitos funcionales como los atributos de calidad críticos para el negocio.
 
-== 2. Alcance del Diseño
-=== 2.1. Funcionalidades Incluidas (En Alcance)
+== Alcance del Diseño
+=== Funcionalidades Incluidas (En Alcance)
 
 La primera versión del sistema se centrará en las siguientes funcionalidades esenciales:
 
@@ -33,7 +32,7 @@ La primera versión del sistema se centrará en las siguientes funcionalidades e
     * Gestión básica del catálogo: altas, bajas y modificaciones de hoteles, tipos de habitación y habitaciones.
     * Administración de tarifas diarias y políticas de overbooking.
 
-=== 2.2. Funcionalidades Excluidas (Fuera de Alcance)
+=== Funcionalidades Excluidas (Fuera de Alcance)
 
 Las siguientes funcionalidades se consideran para futuras versiones y no forman parte del alcance inicial:
 
@@ -42,9 +41,9 @@ Las siguientes funcionalidades se consideran para futuras versiones y no forman 
 * Módulos adicionales de gestión hotelera, como la programación de tareas del personal o la facturación detallada.
 * Modelos de pago alternativos, como pagos parciales o pago en el hotel. El único modelo soportado es el pago completo al reservar.
 
-== 3. Interesados y sus Preocupaciones
+== Interesados y sus Preocupaciones
 
-=== 3.1. Huésped / Cliente
+=== Huésped / Cliente
 
 * *Descripción:* Usuario final que interactúa con el sistema a través de la web o la aplicación móvil para reservar una estancia.
 * *Preocupaciones (Concerns):*
@@ -53,7 +52,7 @@ Las siguientes funcionalidades se consideran para futuras versiones y no forman 
 ** **Usabilidad:** El flujo de reserva debe ser rápido, intuitivo y con un mínimo de pasos.
 ** **Privacidad:** Sus datos personales y de pago deben ser manejados de forma segura y cumpliendo con la normativa vigente.
 
-=== 3.2. Personal de Recepción
+=== Personal de Recepción
 
 * *Descripción:* Empleado del hotel que utiliza el sistema para gestionar la estancia de los huéspedes.
 * *Preocupaciones (Concerns):*
@@ -61,7 +60,7 @@ Las siguientes funcionalidades se consideran para futuras versiones y no forman 
 ** **Eficiencia:** El sistema debe agilizar las operaciones diarias para reducir los tiempos de espera de los huéspedes.
 ** **Rendimiento del Hardware:** La aplicación debe poder ejecutarse en equipos de cómputo con recursos modestos.
 
-=== 3.3. Administración (Cadena/Hotel)
+=== Administración (Cadena/Hotel)
 
 * *Descripción:* Gestiona el catálogo, las tarifas, las políticas y supervisa el rendimiento del negocio.
 * *Preocupaciones (Concerns):*
@@ -69,11 +68,18 @@ Las siguientes funcionalidades se consideran para futuras versiones y no forman 
 ** **Maximización de Ingresos:** El sistema debe ser la herramienta para implementar políticas de precios y ocupación que incrementen la rentabilidad.
 ** **Visibilidad Operativa:** Acceso a reportes para analizar métricas clave como ingresos, ocupación y tarifas aplicadas.
 
-=== 3.4. Auditoría
+=== Auditoría
 
 * *Descripción:* Rol encargado de verificar la corrección y trazabilidad de las operaciones financieras y de negocio.
 * *Preocupaciones (Concerns):*
 ** **Trazabilidad:** Cada operación (reserva, pago, cancelación, check-in) debe quedar registrada de forma inmutable para poder ser auditada.
+
+=== Gerente
+
+* *Descripción:* Gestiona las habitaciones de un hotel, al igual que el personal de recepción.
+* *Preocupaciones (Concerns):*
+** **Gestión de Habitaciones:** El sistema debe permitir la administración eficiente del inventario de habitaciones, incluyendo su disponibilidad y estado.
+** **Reportes y Bitácoras:** Acceso a reportes e historial de operaciones para supervisar el desempeño del hotel.
 
 [[context-view]]
 == Diagrama de contexto
