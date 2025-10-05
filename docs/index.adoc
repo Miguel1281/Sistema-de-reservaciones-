@@ -1,5 +1,5 @@
 = Descripción de la Arquitectura de Software
-:author: Brayan Gabriel Fernández Tlapa; Rodrigo Luna Vázquez; Miguel Angel Méndez Ronzón
+:author: Brayan Gabriel Fernández Tlapa| Rodrigo Luna Vázquez| Miguel Angel Méndez Ronzón
 :revnumber: Diseño de software | Quinto periodo | 17788
 :revdate: 29 de Septiembre, 2025
 :url-repo: https://github.com/Miguel1281/Sistema-de-reservaciones-.git

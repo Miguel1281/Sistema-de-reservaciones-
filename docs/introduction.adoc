@@ -17,7 +17,7 @@ Quedan fuera del alcance inicial, para ser consideradas en futuras versiones, fu
 
 === Audiencia del documento
 
-•	Cliente (web/app): Es el cliente final que consulta disponibilidad, reserva, paga y gestiona sus estancias.
+•	Huésped (web/app): Es el cliente final que consulta disponibilidad, reserva, paga y gestiona sus estancias.
 •	Personal de Recepción: El equipo del hotel que utiliza el sistema para operaciones diarias como check-in, check-out, cambios de habitación y registro de consumos.
 •	Administración (cadena/hotel): Los responsables de gestionar el catálogo de hoteles, habitaciones, precios y las políticas de negocio como el overbooking.
 •	Auditores: Personal encargado de asegurar la trazabilidad e integridad de todas las operaciones financieras y de reserva que se realizan en el sistema.

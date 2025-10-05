@@ -40,15 +40,15 @@ Las siguientes funcionalidades se consideran para futuras versiones y no forman 
 * Búsquedas avanzadas con filtros complejos o sistemas de recomendación.
 * Integraciones con sistemas de terceros como agencias de viaje en línea (OTAs), sistemas de contabilidad o programas de fidelidad.
 * Módulos adicionales de gestión hotelera, como la programación de tareas del personal o la facturación detallada.
-* Modelos de pago alternativos, como pagos parciales o pago en el hotel. El único modelo soportado es el pago completo al reservar. 
+* Modelos de pago alternativos, como pagos parciales o pago en el hotel. El único modelo soportado es el pago completo al reservar.
 
 == 3. Interesados y sus Preocupaciones
 
 === 3.1. Huésped / Cliente
 
-* *Descripción:* Usuario final que interactúa con el sistema a través de la web o la aplicación móvil para reservar una estancia. 
+* *Descripción:* Usuario final que interactúa con el sistema a través de la web o la aplicación móvil para reservar una estancia.
 * *Preocupaciones (Concerns):*
-** **Confianza y Fiabilidad:** El sistema no debe permitir dobles reservas ni dobles cobros. La confirmación debe ser definitiva y consistente. 
+** **Confianza y Fiabilidad:** El sistema no debe permitir dobles reservas ni dobles cobros. La confirmación debe ser definitiva y consistente.
 ** **Consistencia de Precios:** El precio mostrado al inicio de la reserva debe ser el mismo que se cobra al final.
 ** **Usabilidad:** El flujo de reserva debe ser rápido, intuitivo y con un mínimo de pasos.
 ** **Privacidad:** Sus datos personales y de pago deben ser manejados de forma segura y cumpliendo con la normativa vigente.
@@ -74,3 +74,10 @@ Las siguientes funcionalidades se consideran para futuras versiones y no forman 
 * *Descripción:* Rol encargado de verificar la corrección y trazabilidad de las operaciones financieras y de negocio.
 * *Preocupaciones (Concerns):*
 ** **Trazabilidad:** Cada operación (reserva, pago, cancelación, check-in) debe quedar registrada de forma inmutable para poder ser auditada.
+
+[[context-view]]
+== Diagrama de contexto
+
+
+
+image::Context Level 0 Diagram.png[Diagrama de contexto de sistema hotelero, width=600, align=center]
