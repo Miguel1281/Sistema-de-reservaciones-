@@ -3,3 +3,812 @@
 
 
 image::DiagramaCU_Hotel.png[Diagrama de casos de uso de sistema hotelero, width=600, align=center]
+
+
+[options="header"]
+|===
+|Campo |Descripción
+
+|ID
+|CU-16
+
+|Nombre
+|Actualizar tarifa
+
+|Autor
+|Miguel Angel Méndez Ronzón
+
+|Descripción
+|El administrador puede actualizar las tarifas actuales. (por habitación)
+
+|Disparador
+|Clic en “Actualizar tarifa”.
+
+|Precondiciones
+|PRE-01: existe al menos una tarifa registrada en el sistema.
+
+|Flujo normal
+a|
+. El sistema muestra una lista de las tarifas existentes.
+. El administrador busca y selecciona la tarifa que desea modificar.
+. El sistema muestra los detalles de la tarifa seleccionada en un formulario editable.
+. El administrador modifica los campos deseados (precio, fechas de validez, condiciones).
+. El administrador guarda los cambios. Ver (FA 5.1) (FA 5.2)
+. El sistema valida que los datos ingresados sean correctos.
+. El sistema actualiza la tarifa en la base de datos y muestra un mensaje de éxito de la operación. Ver (EX01)
+. Termina el caso de uso.
+
+|Flujo alterno
+a|
+
+*FA 5.1 Cancelar operación*
+
+. El administrador cancela la actualización de la tarifa.
+. El sistema descarta los cambios y regresa a la lista de tarifas.
+
+*FA 5.2 Datos inválidos*
+
+. El administrador ingresa datos inválidos en el formulario (números negativos, fechas inconsistentes).
+. El sistema muestra un mensaje de error y permite al administrador corregir los datos sin perder la información ya ingresada.
+
+|Excepciones
+a|
+*EX01: Sin conexión a la base de datos*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
+
+|Postcondiciones
+|POST-01: La tarifa seleccionada se actualiza correctamente en la base de datos.
+|===
+
+
+
+[options="header"]
+|===
+|Campo |Descripción
+
+|ID
+|CU-17
+
+|Nombre
+|Registrar política
+
+|Autor
+|Miguel Angel Méndez Ronzón
+
+|Descripción
+|El administrador agrega las políticas para la cadena de hoteles.
+
+|Disparador
+|Clic en “Registrar política”.
+
+|Precondiciones
+|
+
+|Flujo normal
+a|
+. El sistema presenta un formulario para ingresar la nueva política (nombre, tipo, descripción, condiciones).
+. El administrador completa el formulario.
+. El administrador guarda la nueva política. Ver (FA 3.1)
+. El sistema valida los datos. Ver (FA 4.1)
+. El sistema guarda la nueva política en la base de datos y muestra un mensaje que confirma su creación. Ver (EX01)
+. Termina el caso de uso.
+
+|Flujo alterno
+a|
+*FA 3.1 Cancelar operación*
+
+. El administrador cancela el registro de la política.
+. El sistema regresa a la ventana anterior.
+
+*FA 4.1 Campos vacíos*
+
+. El administrador ingresa campos vacíos en el formulario de registro.
+. El sistema muestra un mensaje de error y permite al administrador corregir los datos sin perder la información ya ingresada.
+
+|Excepciones
+a|
+
+*EX01: Sin conexión a la base de datos*
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
+
+|Postcondiciones
+|POST-01: Se registra la nueva política en la base de datos.
+|===
+
+
+
+[options="header"]
+|===
+|Campo |Descripción
+
+|ID
+|CU-18
+
+|Nombre
+|Actualizar políticas
+
+|Autor
+|Miguel Angel Méndez Ronzón
+
+|Descripción
+|El administrador podrá actualizar las políticas existentes.
+
+|Disparador
+|El administrador selecciona una política y da clic en “Actualizar política”.
+
+|Precondiciones
+|PRE-01: existe al menos una política registrada en el sistema.
+
+|Flujo normal
+a|
+. El sistema muestra los detalles de la política en un formulario editable.
+. El administrador modifica los datos de la política.
+. El administrador guarda los cambios. Ver (FA 3.1)
+. El sistema valida los datos. Ver (FA 4.1)
+. El sistema actualiza la política en la base de datos y muestra un mensaje que confirma la operación. Ver (EX01)
+. Termina el caso de uso.
+
+|Flujo alterno
+a|
+*FA 3.1 Cancelar operación*
+
+. El administrador cancela la actualización de la política.
+. El sistema regresa a la lista de políticas.
+
+*FA 4.1 Campos vacíos*
+
+. El administrador ingresa campos vacíos en el formulario de registro.
+. El sistema muestra un mensaje de error y permite al administrador corregir los datos.
+
+|Excepciones
+a|
+*EX01: Sin conexión a la base de datos*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
+
+|Postcondiciones
+|POST-01: Se actualiza la política en la base de datos.
+|===
+
+
+
+[options="header"]
+|===
+|Campo |Descripción
+
+|ID
+|CU-19
+
+|Nombre
+|Dar de baja política
+
+|Autor
+|Miguel Angel Méndez Ronzón
+
+|Descripción
+|El administrador podrá dar de baja una política.
+
+|Disparador
+|El administrador selecciona una política y da clic en “Dar de baja”.
+
+|Precondiciones
+|PRE-01: existe al menos una política registrada en el sistema.
+
+|Flujo normal
+a|
+. El sistema solicita una confirmación.
+. El administrador confirma la acción. Ver (FA 2.1)
+. El sistema cambia el estado de la política a inactiva para que no aparezca en el sistema. Ver (EX01)
+. El sistema muestra un mensaje que confirma que la política ha sido dada de baja.
+. Termina el caso de uso.
+
+|Flujo alterno
+a|
+*FA 2.1 Cancelar operación*
+
+. El administrador cancela la solicitud de confirmación.
+. El sistema regresa a la lista de políticas.
+
+|Excepciones
+a|
+*EX01: Sin conexión a la base de datos*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
+
+|Postcondiciones
+|POST-01: Se actualiza el estado de la política en la base de datos.
+|===
+
+
+[options="header"]
+|===
+|Campo |Descripción
+
+|ID
+|CU-20
+
+|Nombre
+|Registrar gerente
+
+|Autor
+|Miguel Angel Méndez Ronzón
+
+|Descripción
+|El administrador podrá agregar al gerente del hotel.
+
+|Disparador
+|Clic en “Registrar gerente”.
+
+|Precondiciones
+|
+
+|Flujo normal
+a|
+. El sistema muestra un formulario para los datos del gerente (nombre, email, teléfono, fecha de nacimiento, dirección) y una lista para seleccionar el hotel a asignar.
+. El administrador completa los datos y asigna un hotel.
+. El administrador guarda la información. Ver (FA 3.1)
+. El sistema valida que los datos sean válidos. Ver (FA 4.1)
+. El sistema crea el nuevo usuario gerente, lo asocia al hotel seleccionado y muestra un mensaje que confirma la operación. Ver (EX01)
+. Termina el caso de uso.
+
+|Flujo alterno
+a|
+*FA 3.1 Cancelar operación*
+
+. El administrador cancela el registro del gerente.
+. El sistema regresa a la ventana anterior.
+
+*FA 4. Datos inválidos*
+
+. El administrador ingresa campos vacíos o datos inválidos (correo o teléfono con formato incorrecto) en el formulario de registro.
+. El sistema muestra un mensaje de error y permite al administrador corregir los datos sin perder la información ya ingresada.
+
+|Excepciones
+a|
+*EX01: Sin conexión a la base de datos*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
+
+|Postcondiciones
+|POST-01: Se registra el nuevo gerente en la base de datos y se registra la asignación del hotel seleccionado.
+|===
+
+
+
+[options="header"]
+|===
+|Campo |Descripción
+
+|ID
+|CU-21
+
+|Nombre
+|Actualizar gerente
+
+|Autor
+|Miguel Angel Méndez Ronzón
+
+|Descripción
+|El administrador podrá modificar los datos del gerente.
+
+|Disparador
+|El administrador selecciona un gerente y da clic en “Actualizar gerente”.
+
+|Precondiciones
+|PRE-01: existe al menos un gerente registrado en el sistema.
+
+|Flujo normal
+a|
+. El sistema muestra los datos del gerente en un formulario editable.
+. El administrador modifica los campos necesarios.
+. El administrador guarda los cambios. Ver (FA 3.1)
+. El sistema valida los datos. Ver (FA 4.1)
+. El sistema actualiza la información del gerente y muestra un mensaje que confirma la operación. Ver (EX01)
+. Termina el caso de uso.
+
+|Flujo alterno
+a|
+*FA 3.1 Cancelar operación*
+
+. El administrador cancela la actualización del gerente.
+. El sistema regresa a la lista de gerentes.
+
+*FA 4.1 Datos inválidos*
+
+. El administrador ingresa campos vacíos o inválidos en el formulario.
+. El sistema muestra un mensaje de error y permite al administrador corregir los datos.
+
+|Excepciones
+a|
+*EX01: Sin conexión a la base de datos*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
+
+|Postcondiciones
+|POST-01: Se actualiza el gerente en la base de datos.
+|===
+
+
+
+[options="header"]
+|===
+|Campo |Descripción
+
+|ID
+|CU-22
+
+|Nombre
+|Dar de baja gerente
+
+|Autor
+|Miguel Angel Méndez Ronzón
+
+|Descripción
+|El administrador podrá dar de baja a un gerente de un hotel.
+
+|Disparador
+|El administrador selecciona un gerente y da clic en “Dar de baja”.
+
+|Precondiciones
+|PRE-01: existe al menos un gerente registrado en el sistema.
+
+|Flujo normal
+a|
+. El sistema solicita una confirmación.
+. El administrador confirma la acción. Ver (FA 2.1)
+. El sistema cambia el estado del gerente revocando su acceso al sistema. Ver (EX01)
+. El sistema muestra un mensaje que confirma que el gerente ha sido dado de baja.
+. Termina el caso de uso.
+
+|Flujo alterno
+a|
+*FA 2.1 Cancelar operación*
+
+. El administrador cancela la solicitud de confirmación.
+. El sistema regresa a la lista de gerentes.
+
+|Excepciones
+a|
+*EX01: Sin conexión a la base de datos*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
+
+|Postcondiciones
+|POST-01: Se actualiza el estado del gerente en la base de datos.
+|===
+
+
+
+[options="header"]
+|===
+|Campo |Descripción
+
+|ID
+|CU-23
+
+|Nombre
+|Consultar gerente
+
+|Autor
+|Miguel Angel Méndez Ronzón
+
+|Descripción
+|El administrador podrá ver la información detallada de un gerente.
+
+|Disparador
+|El administrador selecciona un gerente y da clic en “Mostrar información”.
+
+|Precondiciones
+|PRE-01: existe al menos un gerente registrado en el sistema.
+
+|Flujo normal
+a|
+. El sistema muestra toda la información detallada del gerente seleccionado. Ver (EX01)
+. Termina el caso de uso.
+
+|Flujo alterno
+a|
+
+
+|Excepciones
+a|
+*EX01: Sin conexión a la base de datos*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
+
+|Postcondiciones
+|POST-01: El sistema muestra la información del gerente.
+|===
+
+
+
+[options="header"]
+|===
+|Campo |Descripción
+
+|ID
+|CU-24
+
+|Nombre
+|Registrar hotel
+
+|Autor
+|Miguel Angel Méndez Ronzón
+
+|Descripción
+|El administrador puede dar de alta un hotel para la cadena.
+
+|Disparador
+|Clic en “Registrar hotel”.
+
+|Precondiciones
+|
+
+|Flujo normal
+a|
+. El sistema muestra un formulario para los datos del hotel.
+. El administrador completa la información. Ver (FA 2.1)
+. El administrador guarda el nuevo hotel. Ver (FA 3.1)
+. El sistema valida los datos. Ver (FA 4.1)
+. El sistema guarda el nuevo hotel en la base de datos y muestra un mensaje que confirma la operación. Ver (EX01)
+. Termina el caso de uso.
+
+|Flujo alterno
+a|
+*FA 2.1 Asignar gerente*
+
+. El administrador selecciona “Asignar gerente”.
+. El sistema muestra la lista de gerentes disponibles.
+. El administrador guarda el gerente seleccionado.
+. El sistema guarda el nuevo hotel en la base de datos y le asigna el gerente seleccionado.
+. Termina el caso de uso.
+
+*FA 3.1 Cancelar operación*
+
+. El administrador cancela el registro del hotel.
+. El sistema regresa a la lista de hoteles.
+
+*FA 4. Datos inválidos*
+
+. El administrador ingresa campos vacíos o datos inválidos en el formulario de registro.
+. El sistema muestra un mensaje de error y permite al administrador corregir los datos sin perder la información ya ingresada.
+
+|Excepciones
+a|
+*EX01: Sin conexión a la base de datos*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
+
+|Postcondiciones
+a|
+. POST-01: Se registra el nuevo hotel en la base de datos.
+. POST-02: Se registra el nuevo hotel y se realiza la asignación del gerente en la base de datos.
+|===
+
+
+
+[options="header"]
+|===
+|Campo |Descripción
+
+|ID
+|CU-25
+
+|Nombre
+|Actualizar hotel
+
+|Autor
+|Miguel Angel Méndez Ronzón
+
+|Descripción
+|El administrador puede actualizar la información de un hotel.
+
+|Disparador
+|El administrador selecciona un hotel y da clic en “Actualizar hotel”.
+
+|Precondiciones
+|PRE-01: existe al menos un hotel registrado en el sistema.
+
+|Flujo normal
+a|
+. El sistema muestra la información actual del hotel en un formulario editable.
+. El administrador modifica los campos necesarios.
+. El administrador guarda los cambios. Ver (FA 3.1)
+. El sistema valida y actualiza la información del hotel en la base de datos. Ver (FA 4.1)
+. El sistema muestra un mensaje de confirmación de la operación.
+. Termina el caso de uso.
+
+|Flujo alterno
+a|
+*FA 3.1 Cancelar operación*
+
+. El administrador cancela la actualización del hotel.
+. El sistema regresa a la lista de hoteles.
+
+*FA 4.1 Datos inválidos*
+
+. El administrador ingresa campos vacíos o inválidos en el formulario.
+. El sistema muestra un mensaje de error y permite al administrador corregir los datos.
+
+|Excepciones
+a|
+*EX01: Sin conexión a la base de datos*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
+
+|Postcondiciones
+|POST-01: Se actualiza el hotel en la base de datos.
+|===
+
+
+
+[options="header"]
+|===
+|Campo |Descripción
+
+|ID
+|CU-26
+
+|Nombre
+|Dar de baja hotel
+
+|Autor
+|Miguel Angel Méndez Ronzón
+
+|Descripción
+|El administrador podrá dar de baja un hotel en caso de ser necesario.
+
+|Disparador
+|El administrador selecciona un hotel y da clic en “Dar de baja”.
+
+|Precondiciones
+|PRE-01: existe al menos un hotel registrado en el sistema.
+
+|Flujo normal
+a|
+. El sistema verifica que el hotel no tenga reservaciones activas. Ver (FA 1.1)
+. El sistema solicita una confirmación.
+. El administrador confirma la acción. Ver (FA 3.1)
+. El sistema cambia el estado del hotel para que no aparezca en el sistema. Ver (EX01)
+. El sistema confirma que el hotel ha sido dado de baja.
+. Termina el caso de uso.
+
+|Flujo alterno
+a|
+*FA 1.1 El hotel aún tiene reservaciones*
+
+. El sistema muestra un mensaje de aviso sobre que el hotel no puede ser dado de baja y muestra las reservas.
+. Termina el caso de uso.
+
+*FA 3.1 Cancelar operación*
+
+. El administrador cancela la solicitud de confirmación.
+. El sistema regresa a la lista de hoteles.
+
+|Excepciones
+a|
+*EX01: Sin conexión a la base de datos*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
+
+|Postcondiciones
+|POST-01: Se actualiza el estado del hotel en la base de datos.
+|===
+
+
+
+[options="header"]
+|===
+|Campo |Descripción
+
+|ID
+|CU-27
+
+|Nombre
+|Consultar hotel
+
+|Autor
+|Miguel Angel Méndez Ronzón
+
+|Descripción
+|El administrador podrá consultar la información del hotel.
+
+|Disparador
+|El administrador selecciona un hotel y da clic en “Mostrar información”.
+
+|Precondiciones
+|PRE-01: existe al menos un hotel registrado en el sistema.
+
+|Flujo normal
+a|
+. El sistema muestra toda la información detallada del hotel seleccionado. Ver (EX01)
+. Termina el caso de uso.
+
+|Flujo alterno
+a|
+
+|Excepciones
+a|
+*EX01: Sin conexión a la base de datos*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
+
+|Postcondiciones
+|POST-01: El sistema muestra la información del hotel.
+|===
+
+
+
+[options="header"]
+|===
+|Campo |Descripción
+
+|ID
+|CU-28
+
+|Nombre
+|Registrar tipo de habitación
+
+|Autor
+|Miguel Angel Méndez Ronzón
+
+|Descripción
+|El administrador podrá dar de alta un nuevo tipo de habitación.
+
+|Disparador
+|Clic en “Registrar tipo de habitación”.
+
+|Precondiciones
+|
+
+|Flujo normal
+a|
+. El sistema muestra un formulario para definir el tipo (nombre, descripción, capacidad, precio).
+. El administrador completa el formulario.
+. El administrador guarda el nuevo tipo. Ver (FA 3.1)
+. El sistema valida los datos. Ver (FA 4.1)
+. El sistema guarda el nuevo tipo de habitación y muestra un mensaje que confirma la operación. Ver (EX01)
+. Termina el caso de uso.
+
+|Flujo alterno
+a|
+*FA 3.1 Cancelar operación*
+
+. El administrador cancela el registro del tipo de habitación.
+. El sistema regresa a la lista de hoteles.
+
+*FA 4.1 Datos inválidos*
+
+. El administrador ingresa campos vacíos o datos inválidos (precio negativo) en el formulario de registro.
+. El sistema muestra un mensaje de error y permite al administrador corregir los datos sin perder la información ya ingresada.
+
+|Excepciones
+a|
+
+*EX01: Sin conexión a la base de datos*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
+
+|Postcondiciones
+|POST-01: Se registra el nuevo tipo de habitación en la base de datos.
+|===
+
+
+
+[options="header"]
+|===
+|Campo |Descripción
+
+|ID
+|CU-29
+
+|Nombre
+|Actualizar tipo de habitación
+
+|Autor
+|Miguel Angel Méndez Ronzón
+
+|Descripción
+|El administrador podrá actualizar la información del tipo de habitación.
+
+|Disparador
+|El administrador selecciona un tipo de habitación y da clic en “Actualizar tipo de habitación”.
+
+|Precondiciones
+|PRE-01: existe al menos un tipo de habitación registrado en el sistema.
+
+|Flujo normal
+a|
+. El sistema muestra sus datos en un formulario editable.
+. El administrador realiza los cambios.
+. El administrador guarda la información. Ver (FA 3.1)
+. El sistema valida los datos. Ver (FA 4.1)
+. El sistema actualiza los datos en la base de datos y muestra un mensaje que confirma la operación. Ver (EX01)
+. Termina el caso de uso.
+
+|Flujo alterno
+a|
+*FA 3.1 Cancelar operación*
+
+. El administrador cancela la actualización del tipo de habitación.
+. El sistema regresa a la lista de hoteles.
+
+*FA 4.1 Datos inválidos*
+
+. El administrador ingresa campos vacíos o inválidos en el formulario.
+. El sistema muestra un mensaje de error y permite al administrador corregir los datos.
+
+|Excepciones
+a|
+*EX01: Sin conexión a la base de datos*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
+
+|Postcondiciones
+|POST-01: Se actualiza el tipo de habitación en la base de datos.
+|===
+
+
+
+[options="header"]
+|===
+|Campo |Descripción
+
+|ID
+|CU-30
+
+|Nombre
+|Dar de baja tipo de habitación
+
+|Autor
+|Miguel Angel Méndez Ronzón
+
+|Descripción
+|El administrador podrá dar de baja del sistema un tipo de habitación.
+
+|Disparador
+|El administrador selecciona un tipo de habitación y da clic en “Dar de baja”.
+
+|Precondiciones
+|PRE-01: existe al menos un tipo de habitación registrado en el sistema.
+
+|Flujo normal
+a|
+. El sistema solicita confirmación.
+. El administrador confirma. Ver (FA 3.1)
+. El sistema cambia el estado del tipo de habitación en la base de datos para que no aparezca en el sistema. Ver (EX01)
+. El sistema muestra un mensaje que confirma la operación.
+. Termina el caso de uso.
+
+|Flujo alterno
+a|
+*FA 3.1 Cancelar operación*
+
+. El administrador cancela la solicitud de confirmación.
+. El sistema regresa a la lista de tipos de habitación.
+
+|Excepciones
+a|
+*EX01: Sin conexión a la base de datos*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
+
+|Postcondiciones
+|POST-01: Se actualiza el estado del tipo de habitación en la base de datos.
+|===
