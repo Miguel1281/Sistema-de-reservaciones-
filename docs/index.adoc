@@ -28,9 +28,11 @@
 
 [cols="1,2,3,4"]
 |===
-| Versión | Fecha      | Autor(es)              | Resumen de cambios significativos
-| 1.0     | 2025-09-29 | Equipo Completo        | Creación inicial de la estructura del documento y portada.
+| Versión | Fecha      | Autor(es)       | Resumen de cambios significativos
+| 1.0     | 2025-09-29 | Equipo Completo | Creación inicial de la estructura del documento y portada.
+| 1.1     | 2025-10-05 | Equipo Completo | Definición de requerimientos e impulsos arquitectónicos y priorización.
 |===
+
 
 
 include::introduction.adoc[]
