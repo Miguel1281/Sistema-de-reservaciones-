@@ -342,7 +342,7 @@ PRE-02: La modificación se solicita antes de la fecha de llegada original.
 | RN-01: Las modificaciones están sujetas a las políticas de cambio de la cadena de hoteles.
 |===
 
-=== Administrador
+=== Recepcionista
 
 [cols="1,3",options="header"]
 |===
@@ -677,6 +677,8 @@ EX-1: No hay conexión con la base de datos → se muestra mensaje, el huésped 
 | Reglas de negocio
 | RN-01: Las modificaciones están sujetas a las políticas de cambio de la cadena de hoteles.
 |===
+
+=== Administrador
 
 [cols="1,3",options="header"]
 |===
