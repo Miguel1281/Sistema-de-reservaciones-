@@ -1,0 +1,344 @@
+= Impulsores Arquitectónicos (ASRs) y Priorización
+:author: Equipo de Arquitectura de Software
+:revdate: 2025-10-05
+:toc:
+:sectnums:
+
+== Utility Tree
+
+[cols="^1,^2,^3,^5"]
+|===
+.10+^| Utility
+.2+^| Disponibilidad
+| Recuperación ante fallos
+| Garantizar la continuidad del negocio sin pérdida de transacciones ante una caída del nodo principal de la base de datos. (H/H)
+
+| Tiempo de detección de un fallo
+| Garantizar la continuidad en la toma de reservas ante una caída de la pasarela de pagos. (H/H)
+
+.2+^| Rendimiento
+| Latencia
+| Garantizar que el proceso de confirmación de una reserva sea rápido y eficiente, incluso durante los momentos de mayor demanda. (H/H)
+
+| Capacidad de Procesamiento (Throughput)
+| Soportar la carga de consultas generada durante una campaña de marketing. (H/M)
+
+.2+^| Usabilidad
+| Minimización de errores
+| Un cliente que reserva por primera vez debe poder completar el proceso de forma rápida e intuitiva, entendiendo cada paso. (H/L)
+
+| Eficiencia de uso
+| Un recepcionista novato debe realizar el check-in de un huésped de forma ágil durante la hora pico. (H/M)
+
+.2+^| Seguridad
+| Resistencia a ataques
+| Proteger la información sensible de los huéspedes y las reservaciones contra intentos de extracción a través de vulnerabilidades comunes. (H/M)
+
+| Resistencia a ataques de control de acceso
+| Evitar que un huésped autenticado pueda acceder a los detalles de la reserva de otro huésped. (H/M)
+
+.2+^| Modificabilidad
+| Propagación de cambio
+| Permitir que el equipo de desarrollo reemplace la pasarela de pago actual por una nueva con un impacto mínimo y controlado en el sistema. (M/M)
+
+| Flexibilidad en reglas de reglas de negocio
+| Permitir al equipo de negocio ajustar la política de penalización por cancelación tardía. (M/M)
+|===
+
+== Definición e importancia para el sistema
+
+=== 1. Disponibilidad (Availability)
+Grado en que un sistema o componente es operacional y accesible cuando se requiere para su uso.
+
+=== 2. Modificabilidad (Modifiability)
+Grado en que un producto o sistema puede ser modificado de manera efectiva y eficiente sin introducir defectos o degradar la calidad del producto existente.
+
+=== 3. Rendimiento (Performance)
+Grado en que un sistema o componente cumple sus funciones designadas dentro de determinadas restricciones, como velocidad, precisión o uso de memoria.
+
+=== 4. Seguridad (Security)
+Grado en que un producto o sistema protege la información y los datos para que las personas u otros productos o sistemas tengan el grado de acceso apropiado para sus tipos y niveles de autorización.
+
+=== 5. Usabilidad (Usability)
+Grado en que un producto o sistema puede ser utilizado por usuarios específicos para alcanzar metas específicas con efectividad, eficiencia y satisfacción en un contexto de uso determinado.
+
+== Importancia para el sistema
+
+=== Disponibilidad
+La disponibilidad es crítica porque el negocio hotelero opera 24/7. Una caída del sistema significa pérdida directa de ingresos, ya que los huéspedes no pueden realizar nuevas reservaciones.
+Además, interrumpe las operaciones esenciales en más de 5,000 hoteles, impidiendo tareas como check-in y check-out.
+Es crucial evitar dobles reservas o cobros, por lo que el sistema debe estar disponible y mantener la integridad de datos en todo momento.
+
+=== Modificabilidad
+Es esencial para la agilidad y competitividad.
+El sistema debe permitir cambios rápidos en tarifas y políticas de overbooking sin intervención de desarrolladores, y ser flexible para futuras integraciones con agencias, contabilidad o programas de lealtad.
+
+=== Rendimiento
+El rendimiento impacta directamente en la experiencia del cliente.
+Se establecen métricas estrictas:
+* Latencia máxima de 500 ms en consultas de disponibilidad.
+* 2.5 s (P95) para confirmar una reserva en picos de demanda.
+
+=== Seguridad
+El sistema maneja datos personales y de pago, por lo que una brecha sería catastrófica.
+Debe proteger la información contra accesos no autorizados, cumpliendo normas de seguridad y privacidad.
+
+=== Usabilidad
+Crucial para huéspedes y personal de recepción.
+* El huésped debe poder reservar de forma clara y rápida.
+* El sistema debe ser intuitivo para que el 90 % de recepcionistas puedan usarlo tras solo 10 minutos de instrucción.
+
+== Referencia
+
+ISO/IEC/IEEE 24765:2017(E). *Systems and software engineering — Vocabulary.*
+
+== Refinamientos y escenarios de calidad
+
+=== Disponibilidad
+
+==== Recuperación ante fallos
+Garantizar la continuidad del negocio sin pérdida de transacciones ante una caída del nodo principal de la base de datos.
+
+[cols="1,3"]
+|===
+|Fuente
+|Un componente interno del sistema (hardware o software).
+
+|Estímulo
+|El nodo principal de la base de datos transaccional sufre un crash inesperado.
+
+|Entorno
+|El sistema se encuentra en operación normal, procesando un flujo constante de reservaciones y consultas.
+
+|Artefacto
+|La base de datos relacional (RDBMS) que gestiona las transacciones de reserva y pago.
+
+|Respuesta
+|El sistema debe detectar el fallo, conmutar automáticamente a un nodo de respaldo sincronizado (failover), registrar el incidente y notificar al equipo de operaciones.
+
+|Medida de respuesta
+|El tiempo de conmutación (failover) debe ser ≤ 15 segundos. La pérdida de transacciones en curso debe ser de cero.
+|===
+
+==== Tiempo de detección de un fallo
+Garantizar la continuidad en la toma de reservas ante una caída de la pasarela de pagos.
+
+[cols="1,3"]
+|===
+|Fuente
+|Un componente externo del sistema (la pasarela de pagos).
+
+|Estímulo
+|La API de la pasarela de pagos deja de responder, generando timeouts en las solicitudes de autorización de pago.
+
+|Entorno
+|El sistema se encuentra en operación normal, con un huésped intentando finalizar el pago de su reserva.
+
+|Artefacto
+|El servicio de procesamiento de pagos y el flujo de confirmación de reserva.
+
+|Respuesta
+|El sistema detecta el fallo del servicio externo tras un número configurable de reintentos y en lugar de mostrar un error fatal, le informa al huésped que su reserva ha sido "retenida" y que el pago se procesará más tarde. Se reintenta el cobro automáticamente cuando el servicio se restablezca y se notifica al equipo de operaciones.
+
+|Medida de respuesta
+|El sistema debe detectar la indisponibilidad del servicio externo en ≤20 segundos. El 100% de las reservas afectadas durante la interrupción deben ser guardadas como pre-reservas. La pérdida de potenciales reservas por este fallo debe ser de cero.
+|===
+
+=== Rendimiento
+
+==== Latencia
+Garantizar que el proceso de confirmación de una reserva sea rápido y eficiente, incluso durante los momentos de mayor demanda.
+
+[cols="1,3"]
+|===
+|Fuente
+|Un huésped que utiliza la aplicación web o móvil.
+
+|Estímulo
+|El usuario envía la solicitud final para confirmar y pagar una reserva.
+
+|Entorno
+|El sistema está operando bajo una carga pico de 3 TPS sostenidos, con ráfagas de hasta 10 TPS.
+
+|Artefacto
+|El flujo de trabajo completo de la reserva (validación de inventario, procesamiento de pago y confirmación).
+
+|Respuesta
+|El sistema procesa la solicitud de forma atómica y devuelve una confirmación de reserva exitosa al huésped.
+
+|Medida de respuesta
+|El tiempo de respuesta de extremo a extremo debe ser P95≤2.5 segundos y P99≤4.0 segundos.
+|===
+==== Capacidad de procesamiento (Throughput)
+Soportar la carga de consultas generada durante una campaña de marketing.
+
+[cols="1,3"]
+|===
+|Fuente
+|Miles de huéspedes potenciales utilizando simultáneamente la aplicación web y móvil para buscar.
+
+|Estímulo
+|El sistema recibe una carga sostenida de 300 consultas por segundo (QPS) para verificar la disponibilidad de habitaciones.
+
+|Entorno
+|El sistema está operando bajo una carga de lectura intensa, pero con un volumen normal de transacciones de reserva.
+
+|Artefacto
+|El servicio de búsqueda de inventario y sus réplicas de base de datos.
+
+|Respuesta
+|El sistema procesa de forma concurrente todas las solicitudes de búsqueda, devolviendo la disponibilidad y las tarifas correctas para las fechas y hoteles consultados, sin impactar la latencia de las reservas en curso.
+
+|Medida de respuesta
+|El sistema debe mantener un throughput de al menos 300 QPS de manera sostenida. La latencia para el 95% de estas consultas (P95) debe ser ≤500 ms. El impacto en la latencia de las transacciones de confirmación de reserva no debe superar un incremento del 10%.
+|===
+
+=== Usabilidad
+
+==== Minimización de errores
+Un cliente que reserva por primera vez debe poder completar el proceso de forma rápida e intuitiva, entendiendo cada paso.
+
+[cols="1,3"]
+|===
+|Fuente
+|Un huésped potencial usando el portal web.
+
+|Estímulo
+|El usuario inicia el proceso para reservar una habitación.
+
+|Entorno
+|El sistema está en operación normal.
+
+|Artefacto
+|La interfaz de usuario del flujo de reserva (búsqueda, selección, datos personales, pago, confirmación).
+
+|Respuesta
+|El usuario navega por los pasos, llena la información requerida y finaliza su reserva exitosamente. Si comete un error (e.g., formato de fecha incorrecto), el sistema se lo indica de forma clara y constructiva.
+
+|Medida de respuesta
+|El flujo completo de reserva debe constar de ≤5 pasos principales. Los mensajes de error deben ser comprensibles y guiar al usuario a la solución.
+|===
+
+==== Eficiencia de uso
+Un recepcionista novato debe realizar el check-in de un huésped de forma ágil durante la hora pico.
+
+[cols="1,3"]
+|===
+|Fuente
+|Un recepcionista con solo 10 minutos de capacitación previa en el sistema.
+
+|Estímulo
+|Un huésped con una reserva existente llega al mostrador para registrar su entrada. Hay una fila de espera.
+
+|Entorno
+|El lobby de un hotel en un momento de alta afluencia de llegadas.
+
+|Artefacto
+|La interfaz de usuario del módulo de gestión de estancias.
+
+|Respuesta
+|El recepcionista localiza la reserva (por apellido o código), el sistema le presenta la información pre-cargada, finaliza el proceso de check-in.
+
+|Medida de respuesta
+|El flujo completo de check-in para una reserva existente no debe requerir más de 4 clics principales. El tiempo total para completar la tarea, desde la búsqueda hasta la confirmación, debe ser ≤2 minutos. La tasa de éxito de la tarea para recepcionistas novatos debe ser del 90% en el primer intento.
+|===
+
+=== Seguridad
+
+==== Resistencia a ataques
+Proteger la información sensible de los huéspedes y las reservaciones contra intentos de extracción a través de vulnerabilidades comunes.
+
+[cols="1,3"]
+|===
+|Fuente
+|Un actor malicioso externo (atacante).
+
+|Estímulo
+|El atacante introduce una cadena de SQL maliciosa en un campo de entrada público (ej. el formulario de búsqueda de disponibilidad).
+
+|Entorno
+|El sistema está operando en producción y es accesible desde internet.
+
+|Artefacto
+|La capa de acceso a datos y la base de datos de reservaciones.
+
+|Respuesta
+|El sistema debe sanitizar todas las entradas del usuario, identificar la entrada como maliciosa, rechazar la solicitud, registrar el intento de ataque y no devolver ningún dato sensible.
+
+|Medida de respuesta
+|El sistema no debe ejecutar la consulta maliciosa en la base de datos. La tasa de exposición de datos por este vector de ataque debe ser cero. El intento debe ser registrado en el log de seguridad en tiempo real.
+|===
+
+==== Resistencia a ataques de control de acceso
+Evitar que un huésped autenticado pueda acceder a los detalles de la reserva de otro huésped.
+
+[cols="1,3"]
+|===
+|Fuente
+|Un actor malicioso interno (un huésped autenticado en el sistema).
+
+|Estímulo
+|El usuario, tras visualizar su propia reserva, modifica manualmente el identificador en la URL para intentar acceder a otra reserva que no le pertenece.
+
+|Entorno
+|El sistema está operando en producción y el atacante ha iniciado sesión con una cuenta válida.
+
+|Artefacto
+|La capa de control de acceso a nivel de API y la lógica de negocio del servicio de gestión de reservaciones.
+
+|Respuesta
+|El sistema intercepta la solicitud y, antes de consultar la base de datos, verifica que el identificador del usuario autenticado en la sesión coincide con el propietario de la reserva. Al detectar que no coinciden, deniega la solicitud, registra el intento de acceso no autorizado y devuelve un código de error de "Acceso Prohibido".
+
+|Medida de respuesta
+|El sistema debe prevenir el 100% de los intentos de acceso a datos de reservaciones por parte de usuarios no autorizados. La tasa de exposición de datos por este vector de ataque debe ser cero. El intento debe ser registrado en el log de seguridad en tiempo real (< 1 segundo).
+|===
+
+=== Modificabilidad
+
+==== Propagación de cambio
+Permitir que el equipo de desarrollo reemplace la pasarela de pago actual por una nueva con un impacto mínimo y controlado en el sistema.
+
+[cols="1,3"]
+|===
+|Fuente
+|El equipo de desarrollo, a petición del negocio.
+
+|Estímulo
+|El negocio decide migrar del proveedor de pagos a uno nuevo debido a mejores tarifas.
+
+|Entorno
+|Durante el ciclo de desarrollo del software.
+
+|Artefacto
+|El código fuente del sistema, específicamente los módulos relacionados con transacciones.
+
+|Respuesta
+|El desarrollador crea un nuevo adaptador para la API de pagos nueva que implementa la interfaz de pago interna del sistema. Luego, actualiza la configuración del sistema para usar el nuevo adaptador.
+
+|Medida de respuesta
+|El cambio debe estar localizado en ≤2 componentes. No se deben requerir cambios en la lógica de negocio de los módulos de reserva o inventario. El esfuerzo estimado para la tarea debe ser ≤3 días.
+|===
+
+==== Flexibilidad en reglas de negocio
+Permitir al equipo de negocio ajustar la política de penalización por cancelación tardía.
+
+[cols="1,3"]
+|===
+|Fuente
+|El equipo de administración de la cadena, en respuesta a una nueva estrategia comercial.
+
+|Estímulo
+|El negocio decide que las cancelaciones realizadas con menos de 24 horas de antelación deben tener una penalización equivalente al costo de la primera noche, en lugar de un porcentaje fijo.
+
+|Entorno
+|Durante el ciclo de operación normal del negocio.
+
+|Artefacto
+|El módulo de configuración de políticas de negocio (Backoffice) y el motor de reglas que utiliza el servicio de reservaciones.
+
+|Respuesta
+|Un administrador de la cadena accede a la interfaz de administración, navega a la sección de "Políticas de Cancelación", modifica los parámetros de la regla (cambia de "porcentaje" a "costo primera noche" y ajusta el umbral de tiempo a 48 horas) y guarda el cambio. No se requiere intervención del equipo de desarrollo.
+
+|Medida de respuesta
+|La modificación y activación de la nueva regla de negocio deben realizarse a través de una interfaz de usuario en ≤10 minutos. No se deben requerir cambios en el código de la lógica de negocio ni en los módulos de reserva o inventario. El cambio debe estar activo en producción en ≤5 minutos tras ser guardado, sin necesidad de un nuevo despliegue.
+|===

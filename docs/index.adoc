@@ -36,6 +36,7 @@
 include::introduction.adoc[]
 include::stakeholders.adoc[]
 include::views/context.adoc[]
+include::views/ASRs.adoc[]
 include::views/functional.adoc[]
 include::views/information.adoc[]
 include::views/concurrency.adoc[]
