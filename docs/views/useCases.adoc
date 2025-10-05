@@ -1,0 +1,5 @@
+== Diagrama de casos de uso
+
+
+
+image::DiagramaCU_Hotel.png[Diagrama de casos de uso de sistema hotelero, width=600, align=center]
