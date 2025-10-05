@@ -1,6 +1,5 @@
-= Alcance y Propósito del Diseño: Sistema de Reservaciones para Cadena de Hoteles
-Version 1.0
 
+= Alcance y Propósito del Diseño: Sistema de Reservaciones para Cadena de Hoteles
 
 == Propósito del Diseño
 El objetivo principal es transformar la gestión de reservaciones de un costo operativo a una ventaja competitiva. La nueva plataforma unificada permitirá:
