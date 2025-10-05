@@ -24,6 +24,8 @@
 :tip-caption: Consejo
 :warning-caption: Advertencia
 
+Prueba github pages
+
 == Historial de Revisiones
 
 [cols="1,2,3,4"]
