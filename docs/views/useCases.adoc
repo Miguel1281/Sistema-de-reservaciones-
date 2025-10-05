@@ -4,6 +4,789 @@
 
 image::DiagramaCU_Hotel.png[Diagrama de casos de uso de sistema hotelero, width=600, align=center]
 
+=== Huésped
+[cols="1,3",options="header"]
+|===
+| Campo | Descripción
+
+| ID
+| CU-01
+
+| Nombre
+| Hacer reservación
+
+| Autor
+| Brayan Gabriel Fernández Tlapa
+
+| Descripción
+| Un huésped podrá hacer una reservación de la habitación seleccionada, proporcionando sus datos personales y confirmando.
+
+| Actor(es)
+| Huésped
+
+| Disparador
+| El huésped hace clic en “Reservar ahora.”
+
+| Precondiciones
+| PRE-01: Existe un hotel seleccionado. +
+PRE-02: Existe una habitación seleccionada.
+
+| Flujo Normal
+| 1. El sistema muestra un formulario para la captura de datos del huésped. +
+2. El huésped ingresa su información personal y da clic en “Confirmar”. (Ver FA-2a) +
+3. El sistema valida los datos ingresados y muestra un resumen de todas las selecciones realizadas. (Ver FA-3a) (Ver FA-3b) +
+4. El huésped da clic al botón de proceder al pago. (Ver FA-2a) +
+5. El sistema retiene temporalmente la habitación, crea la reservación con estado "Pendiente de Pago". (Ver EX-1) (Ver EX-2) (Ver FA-7a) +
+6. Termina el caso de uso.
+
+| Flujos Alternos
+| *FA-2a*: El huésped hace clic en cancelar → El sistema descarta la operación. +
+*FA-3a*: Se ingresaron datos incompletos → El sistema solicita completar los datos. +
+*FA-3b*: Se ingresaron datos inválidos → El sistema solicita corregir los datos. +
+*FA-7a*: Incluye CU-02 Realizar pago de reserva.
+
+| Excepciones
+| *EX-1*: Otro usuario completó la última habitación disponible → se notifica y se regresa atrás. +
+*EX-2*: No hay conexión con la base de datos → se muestra mensaje y termina el CU.
+
+| Postcondiciones
+| POST-01: Se ha creado una reservación en estado "Pendiente de Pago".
+
+| Incluye
+| CU-02 Realizar pago de reserva
+|===
+
+[cols="1,3",options="header"]
+|===
+| Campo | Descripción
+
+| ID
+| CU-02
+
+| Nombre
+| Realizar pago de reserva
+
+| Autor
+| Brayan Gabriel Fernández Tlapa
+
+| Descripción
+| Un huésped podrá llevar a cabo el pago de la reserva previamente solicitada. El sistema le brindará diferentes métodos de pago.
+
+| Actor(es)
+| Huésped
+
+| Disparador
+| El sistema creó una reservación con el estado “Pendiente de Pago”.
+
+| Precondiciones
+| PRE-01: Existe una reservación en estado "Pendiente de Pago".
+
+| Flujo Normal
+| 1. El huésped da clic en aceptar. +
+2. El sistema muestra la pantalla de pago con el resumen y un formulario para ingresar datos de la tarjeta. +
+3. El huésped ingresa sus datos de pago y hace clic en pagar. (Ver FA-2a) +
+4. El sistema envía la solicitud a la pasarela de pagos, valida y autoriza la transacción, mostrando mensaje “Pago realizado”. (Ver EX-1) +
+5. El huésped da clic en aceptar. +
+6. El sistema actualiza la reservación a "Confirmada", muestra confirmación y envía un correo con el resumen. +
+7. Termina el caso de uso.
+
+| Flujos Alternos
+| *FA-2a*: El huésped cancela el pago → el sistema libera la habitación y marca la reservación como "Cancelada". +
+*FA-4a*: Datos incompletos → el sistema notifica y solicita completar. +
+*FA-4b*: Datos inválidos → el sistema notifica y solicita corregir.
+
+| Excepciones
+| *EX-4a*: La pasarela de pagos rechaza la transacción → se muestra mensaje y regresa al paso 2. +
+*EX-2*: No hay conexión con la base de datos → se muestra mensaje y termina el CU.
+
+| Postcondiciones
+| POST-01: La reservación ha sido confirmada y el estado de la habitación se actualiza en el inventario.
+
+| Reglas de negocio
+| RN-01: El sistema debe garantizar que cada intento de cobro sea único para evitar dobles cargos.
+|===
+
+[cols="1,3",options="header"]
+|===
+| Campo | Descripción
+
+| ID
+| CU-03
+
+| Nombre
+| Consultar disponibilidad
+
+| Autor
+| Brayan Gabriel Fernández Tlapa
+
+| Descripción
+| Un huésped podrá consultar y seleccionar los hoteles y la disponibilidad de las habitaciones en un rango de fechas. El sistema mostrará los detalles de los hoteles con sus distintos tipos de habitaciones y precios.
+
+| Actor(es)
+| Huésped
+
+| Disparador
+| El huésped ingresa criterios de búsqueda (destino) en la página principal y hace clic en buscar.
+
+| Precondiciones
+| PRE-01: Existen hoteles con habitaciones disponibles.
+
+| Flujo Normal
+| 1. El sistema recupera los hoteles y muestra una lista con sus nombres, descripciones y fotografías. (Ver EX-01) +
+2. El huésped selecciona un hotel. (Ver FA-2a) +
+3. El sistema muestra una lista de habitaciones disponibles del hotel con tarifas, tipo, descripción y fotos. (Ver FA-3a) (Ver EX-01) +
+4. El huésped selecciona una habitación. (Ver FA-4a) +
+5. El sistema muestra una ventana para seleccionar un rango de fechas. +
+6. El huésped selecciona un rango de fechas y da clic en aceptar. +
+7. El sistema guarda y valida el rango de fechas. (Ver FA-7a) (EX-01) +
+8. Termina el caso de uso.
+
+| Flujos Alternos
+| *FA-2a*: El huésped selecciona cancelar → el sistema regresa al menú principal. +
+*FA-3a*: No se encontraron habitaciones disponibles → se muestra mensaje, el huésped acepta y regresa al paso 1. +
+*FA-4a*: El huésped selecciona volver → regresa a la ventana anterior. +
+*FA-7a*: Extiende a CU-01 Hacer reservación.
+
+| Excepciones
+| *EX-2*: No hay conexión con la base de datos → se muestra mensaje, el huésped acepta y termina el CU.
+
+| Postcondiciones
+| POST-01: Se muestra al huésped una lista de opciones de hospedaje disponibles.
+
+| Extiende
+| CU-01 Hacer reservación
+|===
+
+[cols="1,3",options="header"]
+|===
+| Campo | Descripción
+
+| ID
+| CU-04
+
+| Nombre
+| Cancelar reservación
+
+| Autor
+| Brayan Gabriel Fernández Tlapa
+
+| Descripción
+| El huésped podrá solicitar la cancelación de su reserva siempre y cuando cumpla con las políticas de la cadena de hoteles. El sistema actualizará el estado de la habitación y proporcionará el reembolso al huésped si aplica.
+
+| Actor(es)
+| Huésped
+
+| Disparador
+| El huésped selecciona la opción de cancelar reservación.
+
+| Precondiciones
+| PRE-01: El huésped tiene al menos una reservación con estado "Confirmada".
+
+| Flujo Normal
+| 1. El sistema muestra una ventana con las condiciones de la cancelación. +
+2. El huésped confirma la cancelación. +
+3. El sistema verifica si la solicitud cumple con las políticas y muestra ventana de confirmación. (Ver FA-3a) +
+4. El huésped da clic en aceptar. (Ver FA-4a) +
+5. El sistema actualiza la reservación a "Cancelada", libera la habitación y gestiona el reembolso correspondiente si aplica. (Ver EX-01) +
+6. Termina el caso de uso.
+
+| Flujos Alternos
+| *FA-3a*: La cancelación está fuera de política → el sistema informa que no es posible, el huésped acepta y regresa al paso 1. +
+*FA-4a*: El huésped no confirma la cancelación → termina el caso de uso.
+
+| Excepciones
+| *EX-1a*: Falla el sistema de reembolsos → el sistema marca la cancelación como "Pendiente de Reembolso" y notifica al área administrativa. +
+
+| Postcondiciones
+| POST-01: El estado de la reservación es "Cancelada". +
+POST-02: La disponibilidad de la habitación se actualiza.
+
+| Reglas de negocio
+| RN-01: La elegibilidad para un reembolso depende de las políticas vigentes de la cadena de hoteles.
+|===
+
+[cols="1,3",options="header"]
+|===
+| Campo | Descripción
+
+| ID
+| CU-05
+
+| Nombre
+| Consultar reserva con cuenta
+
+| Autor
+| Brayan Gabriel Fernández Tlapa
+
+| Descripción
+| El huésped podrá acceder a las reservas realizadas. El sistema mostrará la información detallada de la reserva.
+
+| Actor(es)
+| Huésped
+
+| Disparador
+| El huésped da clic en "Ver reservaciones".
+
+| Precondiciones
+| PRE-01: El huésped tiene una cuenta registrada.
+
+| Flujo Normal
+| 1. El sistema recupera y presenta un listado de todas sus reservaciones (pasadas, futuras y activas). (Ver EX-01) +
+2. El huésped selecciona una reserva específica de la lista. (Ver FA-2a) +
+3. El sistema recupera y muestra toda la información detallada de la reserva (hotel, fechas, tipo de habitación, costo, estado). (Ver EX-01) +
+4. Termina el caso de uso.
+
+| Flujos Alternos
+| *FA-2a*: El huésped da clic en salir → termina el caso de uso.
+
+| Excepciones
+| *EX-1*: No hay conexión con la base de datos → el sistema muestra mensaje, el huésped acepta y termina el CU.
+
+| Postcondiciones
+| POST-01: El sistema mostró correctamente todas las reservaciones y sus detalles.
+|===
+
+[cols="1,3",options="header"]
+|===
+| Campo | Descripción
+
+| ID
+| CU-06
+
+| Nombre
+| Modificar periodo de estancia
+
+| Autor
+| Brayan Gabriel Fernández Tlapa
+
+| Descripción
+| El huésped puede modificar las fechas siempre y cuando lo haga antes de la fecha de llegada y cumpla con las políticas de cambio. El sistema validará la disponibilidad y ajustará el costo.
+
+| Actor(es)
+| Huésped
+
+| Disparador
+| El huésped selecciona "Modificar estancia".
+
+| Precondiciones
+| PRE-01: El huésped tiene una reservación confirmada. +
+PRE-02: La modificación se solicita antes de la fecha de llegada original.
+
+| Flujo Normal
+| 1. El sistema recupera y muestra los detalles de la reserva. (Ver EX-01) +
+2. El huésped ingresa el nuevo rango de fechas. +
+3. El sistema valida que la solicitud cumpla con las políticas de cambio, verifica disponibilidad, recalcula el costo y muestra diferencia a pagar o crédito a reembolsar. (Ver FA-3a) (Ver FA-3b) (Ver EX-01) +
+4. El huésped da clic en aceptar. +
+5. El sistema actualiza fechas, costo y realiza el cobro o reembolso según corresponda. (Ver EX-01) +
+6. Termina el caso de uso.
+
+| Flujos Alternos
+| *FA-3a*: No hay disponibilidad para las nuevas fechas → el sistema informa y sugiere otro rango. Regresa al paso 2. +
+*FA-3b*: El cambio no cumple con las políticas → el sistema informa y termina el CU.
+
+| Excepciones
+| *EX-1*: No hay conexión con la base de datos → se muestra mensaje, el huésped acepta y termina el CU.
+
+| Postcondiciones
+| POST-01: La reservación es actualizada con las nuevas fechas y el nuevo costo total.
+
+| Reglas de negocio
+| RN-01: Las modificaciones están sujetas a las políticas de cambio de la cadena de hoteles.
+|===
+
+[cols="1,3",options="header"]
+|===
+| Campo | Descripción
+
+| ID
+| CU-07
+
+| Nombre
+| Modificar tipo de habitación
+
+| Autor
+| Brayan Gabriel Fernández Tlapa
+
+| Descripción
+| El huésped puede modificar la habitación y el tipo de habitación de una reservación. El sistema validará la disponibilidad y ajustará el costo.
+
+| Actor(es)
+| Huésped
+
+| Disparador
+| El huésped selecciona "Cambiar de habitación".
+
+| Precondiciones
+| PRE-01: El huésped tiene una reservación confirmada.
+
+| Flujo Normal
+| 1. El sistema recupera y muestra los tipos de habitación disponibles para las fechas de la estancia. (Ver EX-01) +
+2. El huésped selecciona el nuevo tipo de habitación. (Ver FA-2a) +
+3. El sistema recalcula el costo total y muestra la diferencia. +
+4. El huésped acepta los cambios. (Ver FA-2a) +
+5. El sistema actualiza el tipo de habitación y el costo en la reservación, hace el cobro o reembolso y valida con las políticas. (Ver FA-5a) (Ver FA-5b) +
+6. Termina el caso de uso.
+
+| Flujos Alternos
+| *FA-2a*: El huésped da clic en cancelar → regresa al paso anterior del flujo normal. +
+*FA-5a*: No hay otros tipos de habitación disponibles → el sistema informa y termina el CU. +
+*FA-5b*: El cambio no cumple con políticas → el sistema informa y termina el CU.
+
+| Excepciones
+| *EX-1*: No hay conexión con la base de datos → se muestra mensaje, el huésped acepta y termina el CU.
+
+| Postcondiciones
+| POST-01: El tipo de habitación de la reservación y su costo son actualizados.
+
+| Reglas de negocio
+| RN-01: Las modificaciones están sujetas a las políticas de cambio de la cadena de hoteles.
+|===
+
+=== Administrador
+
+[cols="1,3",options="header"]
+|===
+| Campo | Descripción
+
+| ID
+| CU-08
+
+| Nombre
+| Check in
+
+| Autor
+| Brayan Gabriel Fernández Tlapa
+
+| Descripción
+| El recepcionista podrá realizar check in, es decir registrar la llegada del huésped a la habitación y el sistema cambia el estado de la habitación a 'ocupado'.
+
+| Actor(es)
+| Recepcionista
+
+| Disparador
+| El recepcionista selecciona "check in".
+
+| Precondiciones
+| N/A
+
+| Flujo Normal
+| 1. El sistema muestra un buscador de todas las reservas. (Ver EX-01)  +
+2. El recepcionista busca y localiza la reservación en el sistema confirmando la llegada del huésped.  +
+3. El sistema recupera y muestra la reservación con la información. (Ver FA-2a) (Ver EX-01)  +
+4. El recepcionista selecciona la reservación.  +
+5. El sistema cambia el estado de la habitación asignada a "Ocupado". (Ver EX-01)  +
+6. Termina el caso de uso.
+
+| Flujos Alternos
+|
+
+FA-2.a: La reservación no es encontrada → El sistema no encuentra una reserva con los datos proporcionados y termina el caso de uso.
+
+| Excepciones
+|
+
+EX-1: No hay conexión con la base de datos → se muestra mensaje, el huésped acepta y termina el CU.
+
+| Postcondiciones
+| POST-01: La estancia del huésped queda registrada como activa y el estado de la habitación es "Ocupado".
+
+| Reglas de negocio
+| N/A
+|===
+
+[cols="1,3",options="header"]
+|===
+| Campo | Descripción
+
+| ID
+| CU-09
+
+| Nombre
+| Check out
+
+| Autor
+| Brayan Gabriel Fernández Tlapa
+
+| Descripción
+| El recepcionista confirma la salida y en caso de tener consumos adicionales efectúa el cobro. El sistema se encargará de sumar los costos extras y de generar el ticket.
+
+| Actor(es)
+| Recepcionista
+
+| Disparador
+| El recepcionista selecciona la opción de "check out".
+
+| Precondiciones
+| PRE-01: El huésped tiene una estancia activa en el hotel (estado "Ocupado").
+
+| Flujo Normal
+| 1. El sistema recupera y muestra una lista de todas las estancias activas con un buscador. (Ver EX-01)  +
+2. El recepcionista busca la estancia activa del huésped por su nombre o número de habitación. (Ver FA-2a) (Ver FA-2b)  +
+3. El sistema recupera y muestra el estado de cuenta, incluyendo los consumos adicionales. (Ver FA-4a)  +
+4. El recepcionista efectúa el cobro de los cargos adicionales y confirma la salida.  +
+5. El sistema genera el ticket, finaliza la estancia y actualiza el estado de la habitación a "Requiere Limpieza".
+
+| Flujos Alternos
+|
+
+FA-2a: El recepcionista selecciona cancelar → termina el caso de uso.  +
+FA-2b: Campos inválidos → se muestra mensaje de datos inválidos y regresa al paso 1.  +
+
+FA-3a: No hay consumos adicionales → el sistema indica que no hay saldo pendiente y continúa en el paso 5.
+
+| Excepciones
+|
+
+EX-1: No hay conexión con la base de datos → se muestra mensaje, el huésped acepta y termina el CU.
+
+| Postcondiciones
+| POST-01: La estancia del huésped se marca como finalizada.  +
+POST-02: El estado de la habitación se actualiza para el proceso de limpieza.
+
+| Reglas de negocio
+| N/A
+|===
+
+[cols="1,3",options="header"]
+|===
+| Campo | Descripción
+
+| ID
+| CU-10
+
+| Nombre
+| Registrar consumos/servicios
+
+| Autor
+| Brayan Gabriel Fernández Tlapa
+
+| Descripción
+| Añadirá cargos adicionales por consumos extras durante la estancia. El sistema se encargará de llevar el registro de consumos para hacer el cobro correspondiente durante el check out.
+
+| Actor(es)
+| Recepcionista
+
+| Disparador
+| El recepcionista da clic en "registrar servicios y consumos".
+
+| Precondiciones
+| PRE-01: El huésped tiene una estancia activa en el hotel.
+
+| Flujo Normal
+| 1. El sistema recupera y muestra una lista de las estancias activas. (Ver EX-01)  +
+2. El recepcionista busca al huésped y selecciona la opción para añadir un nuevo cargo. (Ver FA-2a) (Ver FA-2b)  +
+3. El sistema recupera y muestra la información del huésped y su estancia. (Ver EX-01)  +
+4. El recepcionista introduce la descripción y el monto del consumo o servicio. (Ver FA-2a)  +
+5. El sistema añade el cargo al estado de cuenta de la estancia del huésped. (Ver EX-01)  +
+6. Termina el caso de uso.
+
+| Flujos Alternos
+|
+
+FA-2a: El recepcionista cancela la estancia → termina el caso de uso.  +
+FA-2b: Campos inválidos → se muestra mensaje de datos inválidos y regresa al paso 1.  +
+
+FA-3a: No se encuentra la estancia → se muestra mensaje de que no se encontraron estancias y regresa al paso 1.
+
+| Excepciones
+|
+
+EX-1: No hay conexión con la base de datos → se muestra mensaje, el huésped acepta y termina el CU.
+
+| Postcondiciones
+| POST-01: Se agregó correctamente un nuevo cargo al registro de consumos de la estancia del huésped.
+
+| Reglas de negocio
+| N/A
+|===
+
+[cols="1,3",options="header"]
+|===
+| Campo | Descripción
+
+| ID
+| CU-11
+
+| Nombre
+| Realizar cambio de habitación
+
+| Autor
+| Brayan Gabriel Fernández Tlapa
+
+| Descripción
+| El recepcionista podrá asignar al huésped una nueva habitación en caso de solicitud o algún imprevisto. El sistema mostrará las habitaciones disponibles y actualizará la habitación del huésped.
+
+| Actor(es)
+| Recepcionista
+
+| Disparador
+| El recepcionista selecciona "modificar estancias".
+
+| Precondiciones
+| PRE-01: El huésped tiene una estancia activa en una habitación.
+
+| Flujo Normal
+| 1. El sistema recupera y muestra una lista con las estancias activas. (Ver EX-01)  +
+2. El recepcionista busca y selecciona una estancia activa. (Ver FA-2a) (Ver FA-2b)  +
+3. El sistema recupera y muestra los detalles de la estancia. (Ver EX-01)  +
+4. El recepcionista selecciona la opción de cambiar habitación. (Ver FA-3a)  +
+5. El sistema recupera y muestra un listado de las habitaciones limpias y disponibles. (Ver EX-01) (Ver FA-5a)  +
+6. El recepcionista selecciona la nueva habitación. (Ver FA-3a)  +
+7. El sistema recalcula el costo y muestra la diferencia a pagar o reembolsar. (Ver EX-01)  +
+8. El recepcionista confirma el cambio.  +
+9. El sistema actualiza la información de la estancia y los estados de ambas habitaciones. (Ver EX-01)  +
+10. Termina el caso de uso.
+
+| Flujos Alternos
+|
+
+FA-2a: El recepcionista selecciona cancelar → termina el caso de uso.  +
+FA-2b: Campos inválidos → se muestra mensaje de datos inválidos y regresa al paso 1.  +
+
+FA-3a: El recepcionista selecciona volver → regresa al paso 1.  +
+
+FA-5a: No hay habitaciones disponibles → se informa y termina el CU.  +
+
+FA-8a: El recepcionista cancela la operación → se muestra mensaje de confirmación y regresa al paso 3.
+
+| Excepciones
+|
+
+EX-1: No hay conexión con la base de datos → se muestra mensaje, el huésped acepta y termina el CU.
+
+| Postcondiciones
+| POST-01: Se asignó correctamente la nueva habitación al huésped.
+
+| Reglas de negocio
+| RN-01: Las modificaciones están sujetas a las políticas de cambio de la cadena de hoteles.
+|===
+
+[cols="1,3",options="header"]
+|===
+| Campo | Descripción
+
+| ID
+| CU-12
+
+| Nombre
+| Hacer reservación en la recepción
+
+| Autor
+| Brayan Gabriel Fernández Tlapa
+
+| Descripción
+| El recepcionista podrá hacer una reservación de la habitación seleccionada, proporcionar los datos y elegir el método de pago.
+
+| Actor(es)
+| Recepcionista
+
+| Disparador
+| El recepcionista selecciona la opción de "hacer reservación".
+
+| Precondiciones
+| PRE-01: Existen habitaciones disponibles.
+
+| Flujo Normal
+| 1. El sistema recupera y muestra una lista de todas las habitaciones disponibles. (Ver EX-01)  +
+2. El recepcionista consulta la disponibilidad por un rango de fechas. (Ver FA-2a) (Ver FA-2b)  +
+3. El sistema muestra las habitaciones y tarifas disponibles. (Ver EX-01)  +
+4. El recepcionista selecciona una habitación. (Ver FA-4a)  +
+5. El sistema recupera y muestra los detalles de la habitación. (Ver EX-01)  +
+6. El recepcionista captura los datos del cliente y selecciona el método de pago. (Ver FA-4a)  +
+7. El sistema confirma la reserva y cambia el estado de la habitación a "Ocupado". (Ver EX-01)  +
+8. Termina el caso de uso.
+
+| Flujos Alternos
+|
+
+FA-2a: El recepcionista selecciona cancelar → termina el caso de uso.  +
+FA-2b: Campos inválidos → se muestra mensaje de datos inválidos y regresa al paso 1.  +
+
+FA-4a: El recepcionista selecciona volver → regresa al paso 1.  +
+
+FA-6a: Datos incompletos → se informa, el recepcionista completa los datos y sigue al paso 5.  +
+FA-6b: Datos inválidos → se informa, el recepcionista completa los datos y sigue al paso 5.
+
+| Excepciones
+|
+
+EX-1: No hay conexión con la base de datos → se muestra mensaje, el huésped acepta y termina el CU.
+
+| Postcondiciones
+| POST-01: Se crea una nueva reservación en el sistema con estado "Confirmada".
+
+| Reglas de negocio
+| N/A
+|===
+
+[cols="1,3",options="header"]
+|===
+| Campo | Descripción
+
+| ID
+| CU-13
+
+| Nombre
+| Modificar estancia de huésped
+
+| Autor
+| Brayan Gabriel Fernández Tlapa
+
+| Descripción
+| El recepcionista puede modificar una reservación activa, por ejemplo, para extender o acortar la estancia de un huésped que ya está en el hotel. El sistema deberá verificar la disponibilidad y recalcular el costo.
+
+| Actor(es)
+| Recepcionista
+
+| Disparador
+| El recepcionista selecciona la opción de "modificar estancias".
+
+| Precondiciones
+| PRE-01: El huésped tiene una estancia activa en una habitación.
+
+| Flujo Normal
+| 1. El sistema recupera y muestra una lista con las estancias activas. (Ver EX-01)  +
+2. El recepcionista busca y selecciona una estancia activa. (Ver FA-2a) (Ver FA-2b)  +
+3. El sistema recupera y muestra los detalles de la estancia. (Ver EX-01)  +
+4. El recepcionista selecciona la opción de modificar la fecha de estancia. (Ver FA-3a)  +
+5. El sistema muestra un seleccionador de fechas.  +
+6. El recepcionista selecciona el nuevo rango de fechas. (Ver FA-3a)  +
+7. El sistema recalcula el costo y muestra la diferencia. (Ver EX-01)  +
+8. El recepcionista confirma el cambio. (Ver FA-8a)  +
+9. El sistema actualiza la fecha de salida y confirma la modificación. (Ver EX-01)  +
+10. Termina el caso de uso.
+
+| Flujos Alternos
+|
+
+FA-2a: El recepcionista selecciona cancelar → termina el caso de uso.  +
+FA-2b: Campos inválidos → se muestra mensaje de datos inválidos y regresa al paso 1.  +
+
+FA-3a: El recepcionista selecciona volver → regresa al paso 1.  +
+
+FA-8a: El recepcionista cancela la operación → se muestra mensaje de confirmación y regresa al paso 3.
+
+| Excepciones
+|
+
+EX-1: No hay conexión con la base de datos → se muestra mensaje, el huésped acepta y termina el CU.
+
+| Postcondiciones
+| POST-01: La fecha de salida y el costo total de la estancia del huésped han sido actualizados.
+
+| Reglas de negocio
+| RN-01: Las modificaciones están sujetas a las políticas de cambio de la cadena de hoteles.
+|===
+
+[cols="1,3",options="header"]
+|===
+| Campo | Descripción
+
+| ID
+| CU-14
+
+| Nombre
+| Registrar tarifa
+
+| Autor
+| Brayan Gabriel Fernández Tlapa
+
+| Descripción
+| El administrador define tarifas diarias.
+
+| Actor(es)
+| Administrador
+
+| Disparador
+| El administrador selecciona "administrar tarifas".
+
+| Precondiciones
+| PRE-01: Existen hoteles en el sistema.  +
+PRE-02: Existen tipos de habitación definidos en el sistema.
+
+| Flujo Normal
+| 1. El sistema recupera y muestra una lista de tarifas registradas. (Ver EX-01)  +
+2. El administrador selecciona "crear tarifa". (Ver FA-2a)  +
+3. El sistema muestra el formulario para registrar una tarifa.  +
+4. El administrador especifica los detalles de la tarifa (tipo de habitación, precio, rango de fechas). (Ver FA-4a)  +
+5. El sistema valida y guarda la nueva tarifa. (Ver FA-5a) (Ver FA-5b) (Ver EX-01)  +
+6. Termina el caso de uso.
+
+| Flujos Alternos
+|
+
+FA-2a: El administrador selecciona volver → termina el caso de uso.  +
+
+FA-4a: El administrador selecciona cancelar → se muestra confirmación, acepta y regresa al paso 1.  +
+
+FA-5a: Datos incompletos → se informa, el administrador completa los datos y sigue al paso 4.  +
+FA-5b: Datos inválidos → se informa, el administrador completa los datos y sigue al paso 4.
+
+| Excepciones
+|
+
+EX-1: No hay conexión con la base de datos → se muestra mensaje, el huésped acepta y termina el CU.
+
+| Postcondiciones
+| POST-01: Una nueva tarifa es registrada en el sistema.
+
+| Reglas de negocio
+| RN-01: Una tarifa se asocia a un tipo de habitación específico.
+
+
+|===
+
+[cols="1,3",options="header"]
+|===
+| Campo | Descripción
+
+| ID
+| CU-15
+
+| Nombre
+| Dar de baja tarifa
+
+| Autor
+| Brayan Gabriel Fernández Tlapa
+
+| Descripción
+| El administrador puede dar de baja una tarifa que esté activa en el sistema.
+
+| Actor(es)
+| Administrador
+
+| Disparador
+| El administrador selecciona "administrar tarifas".
+
+| Precondiciones
+| PRE-01: Existe al menos una tarifa registrada en el sistema.
+
+| Flujo Normal
+| 1. El sistema recupera y muestra una lista de tarifas activas. (Ver EX-01)  +
+2. El administrador selecciona una tarifa y "eliminar tarifa". (Ver FA-2a)  +
+3. El sistema muestra un mensaje de confirmación.  +
+4. El administrador confirma la acción. (Ver FA-4a)  +
+5. El sistema marca como inactiva la tarifa, manteniéndola para reservaciones vinculadas. (Ver EX-01)  +
+6. Termina el caso de uso.
+
+| Flujos Alternos
+|
+
+FA-2a: El administrador selecciona volver → termina el caso de uso.  +
+
+FA-4a: El administrador selecciona cancelar → regresa al paso 1.
+
+| Excepciones
+|
+
+EX-1: No hay conexión con la base de datos → se muestra mensaje, el huésped acepta y termina el CU.
+
+| Postcondiciones
+| POST-01: La tarifa seleccionada ha sido inactivada y ya no puede ser utilizada para nuevas reservaciones.
+
+| Reglas de negocio
+| RN-01: La tarifa se mantendrá para reservaciones actuales o futuras aunque se inactive.
+|===
 
 [options="header"]
 |===
