@@ -1,10 +1,46 @@
+
+== Vista lógica
+Esta vista describe la estructura estática del sistema y la organización de sus responsabilidades funcionales. El objetivo es mostrar la descomposición del sistema en sus elementos lógicos principales (capas y subsistemas), la responsabilidad asignada a cada uno y las dependencias clave entre ellos.
+
+El estilo arquitectónico principal que define esta vista es la Arquitectura en Capas (Layered Architecture), combinada con principios de Ingeniería de Software Basada en Componentes (CBSE) para la organización interna de la lógica de negocio.
+
+=== Diagrama de Paquetes (Capas)
+
+El sistema se descompone en cuatro capas lógicas principales. El principio fundamental es una dependencia estricta hacia abajo: una capa solo puede depender de la capa inmediatamente inferior (o de interfaces definidas en capas inferiores, en el caso de Infraestructura).
+
+==== Descripción de Responsabilidades por Capa
+
+1.  *Capa de Presentación (Presentation Layer):*
+    * *Responsabilidad:* Contiene toda la lógica relacionada con la interfaz de usuario y la interacción con el actor. Es responsable de renderizar las vistas, capturar la entrada del usuario y delegar las acciones a la capa de aplicación.
+    * *Elementos:* Incluye la aplicación web para huéspedes y la aplicación SPA (Single Page Application) para el personal de recepción.
+    * *Drivers Atendidos:* Usabilidad (QAS) y Hardware Modesto (CRN-6). Al ser una SPA ligera, la aplicación de recepción cumple con el requisito de bajo consumo de recursos.
+
+2.  *Capa de Aplicación (Application Layer):*
+    * *Responsabilidad:* Orquesta los casos de uso definidos en el sistema. Contiene los "Servicios de Aplicación" (ej. ServicioDeReservaciones) que traducen las solicitudes de la UI en operaciones del dominio. No contiene lógica de negocio; su trabajo es coordinar.
+    * *Elementos:* ServicioDeReservaciones (Caso de Uso CU-01), ServicioDeEstancias (Casos de Uso CU-08, CU-09), ServicioDeAdministracion.
+    * *Drivers Atendidos:* Seguridad (Control de Acceso) (QAS). Esta capa es responsable de verificar la autorización (ej. que un huésped solo vea sus propias reservas) antes de invocar al dominio.
+
+3.  *Capa de Dominio (Domain Layer):*
+    * *Responsabilidad:* El corazón del sistema. Contiene toda la lógica de negocio, las reglas, las entidades y los agregados (ej. Reservación, Habitación). Es un modelo puro del problema de negocio, sin dependencias de bases de datos o frameworks de UI.
+    * *Elementos:* Agregados (Reservación, Hotel), interfaces de repositorio (IReservationRepository) e interfaces de servicios externos (IPaymentGateway).
+    * *Drivers Atendidos:* Modificabilidad (Reglas de Negocio) (QAS). Las políticas de cancelación están encapsuladas aquí, permitiendo su cambio sin afectar otras capas.
+
+4.  *Capa de Infraestructura (Infrastructure Layer):*
+    * *Responsabilidad:* Implementa los detalles técnicos y las integraciones con servicios externos. Se conecta a la base de datos, implementa la pasarela de pagos, envía correos electrónicos, etc.
+    * *Elementos:* Implementaciones de las interfaces del Dominio (ej. ReservationRepositoryRDBMS, PaymentAdapterStripe).
+    * *Drivers Atendidos:* Modificabilidad (Pasarela de Pago) (QAS), Seguridad (SQLi) (QAS) y Restricción de RDBMS (CON-1).
+
 [[context-view]]
 
-== Diagrama de componentes
+=== Diagrama de paquetes (Capas)
+
+==== Diagrama de componentes
 
 
 
 image::Diagrama de Componentes.bmp[Diagrama de componentes de sistema hotelero, width=600, align=center]
+
+
 
 == Diagrama de Clases UML Simple
 
