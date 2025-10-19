@@ -42,7 +42,7 @@ image::Diagrama de Componentes.bmp[Diagrama de componentes de sistema hotelero, 
 
 
 
-== Diagrama de Clases UML Simple
+=== Diagrama de Clases UML Simple
 
 
 
