@@ -1,0 +1,13 @@
+[[context-view]]
+
+== Diagrama de componentes
+
+
+
+image::Diagrama de Componentes.bmp[Diagrama de componentes de sistema hotelero, width=600, align=center]
+
+== Diagrama de Dominio
+
+
+
+image::Diagrama de Dominio.bmp[Diagrama de dominio de sistema hotelero, width=600, align=center]
