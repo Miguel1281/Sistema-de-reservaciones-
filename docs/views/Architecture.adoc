@@ -6,8 +6,8 @@
 
 image::Diagrama de Componentes.bmp[Diagrama de componentes de sistema hotelero, width=600, align=center]
 
-== Diagrama de Dominio
+== Diagrama de Clases UML Simple
 
 
 
-image::Diagrama de Dominio.bmp[Diagrama de dominio de sistema hotelero, width=600, align=center]
+image::Diagrama de Clases UML Simple.bmp[Diagrama de Clases UML simple de sistema hotelero, width=600, align=center]
