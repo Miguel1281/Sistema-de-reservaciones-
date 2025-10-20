@@ -35,16 +35,13 @@ El sistema se descompone en cuatro capas lógicas principales. El principio fund
 === Diagrama de paquetes (Capas)
 image::DiagramaCapas_Hotel.jpg[Diagrama de capas de sistema hotelero, width=600, align=center]
 
+[[context-view2]]
+
 ==== Diagrama de componentes
+image::Diagrama-de-Componentes.jpg[Diagrama de componentes de sistema hotelero, width=600, align=center]
 
 
-
-image::Diagrama de Componentes.bmp[Diagrama de componentes de sistema hotelero, width=600, align=center]
-
-
-
+[[context-view3]]
 === Diagrama de Clases UML Simple
 
-
-
-image::Diagrama de Clases UML Simple.bmp[Diagrama de Clases UML simple de sistema hotelero, width=600, align=center]
+image::Diagrama-de-Clases-UML-Simple.jpg[Diagrama de Clases UML simple de sistema hotelero, width=600, align=center]
