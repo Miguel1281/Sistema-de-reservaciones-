@@ -1,0 +1,99 @@
+
+== Método de Diseño Arquitectónico: Sistema de Reservaciones de Hoteles
+
+La arquitectura del Sistema de Reservaciones de la Cadena Hotelera no es un producto arbitrario, sino el resultado de un proceso de diseño racional y disciplinado.
+
+. **Diseño Guiado por Atributos (ADD - Attribute-Driven Design):** Se utilizó como el macroproceso para guiar las decisiones de alto nivel. ADD asegura que la arquitectura satisfaga los atributos de calidad más importantes (los "-ilities") de manera explícita y verificable. El proceso es iterativo, descomponiendo el sistema paso a paso y validando cada decisión contra los requisitos que debe cumplir.
+. **Ingeniería de Software Basada en Componentes (CBSE):** Se utilizó como el microproceso dentro de las iteraciones de ADD para la especificación detallada de los elementos del sistema. Siguiendo el método de Cheesman & Daniels, se identificaron componentes, se definieron sus interacciones y se especificaron sus interfaces formales, asegurando una descomposición modular y cohesiva.
+
+Este enfoque combinado garantiza que cada decisión arquitectónica, desde la elección de un patrón hasta la definición de una interfaz, sea trazable a un requisito de negocio o de calidad específico.
+
+=== Paso 0: Establecimiento del Backlog de Impulsores Arquitectónicos
+
+Antes de la primera iteración de diseño, se consolidaron todos los Requisitos Arquitectónicamente Significativos (ASRs) en un backlog priorizado. La fuente principal de estos impulsores fue el Árbol de Utilidad (Utility Tree), que traduce los objetivos de negocio en escenarios de calidad concretos y medibles.
+
+El backlog inicial para el diseño se compuso de los siguientes impulsores de alta prioridad (impacto Alto/Alto y Alto/Medio):
+
+* **Disponibilidad (H/H):** Garantizar la continuidad del negocio sin pérdida de transacciones ante una caída del nodo principal de la base de datos (Failover).
+* **Rendimiento (H/H):** Garantizar que la confirmación de una reserva se complete con una latencia P95 <= 2.5 segundos bajo carga pico.
+* **Rendimiento (H/M):** Soportar una carga de 300 consultas por segundo (QPS) para la verificación de disponibilidad.
+* **Usabilidad (H/M):** Permitir que un recepcionista novato complete un check-in en <= 2 minutos y con <= 4 clics.
+* **Seguridad (H/M):** Proteger contra inyección SQL y evitar que un usuario acceda a reservas ajenas.
+* **Modificabilidad (M/M):** Permitir el reemplazo de la pasarela de pago con un esfuerzo <= 3 días y afectando a <= 2 componentes.
+* **Restricción (CON-1):** El sistema debe utilizar una base de datos relacional (RDBMS) para las transacciones críticas para garantizar consistencia.
+* **Preocupación (CRN-2):** El proceso de reserva (inventario, pago, confirmación) debe ser atómico para evitar datos inconsistentes.
+
+Con este backlog definido, el proceso ADD pudo comenzar.
+
+==== Iteración 1 de ADD: Diseño de la Estructura Fundamental y Aislamiento del Dominio
+
+*Objetivo de la Iteración:* Establecer la estructura macro del sistema para garantizar la modificabilidad y la consistencia transaccional. El foco era aislar la lógica de negocio de las tecnologías externas, sentando las bases para un sistema mantenible a largo plazo.
+
+*Impulsores Seleccionados:*
+
+* Modificabilidad QAS: Reemplazo de la pasarela de pago.
+* Restricción CON-1: Uso de RDBMS.
+* Preocupación CRN-2: Atomicidad en las reservas.
+
+*Proceso y Decisiones Arquitectónicas:*
+
+**Decisión - Patrón de Arquitectura en Capas:** Se seleccionó el patrón **Layered Architecture** como la estructura fundamental del sistema.
+
+
+*Racionalidad:* Este patrón es una táctica directa para **reducir el acoplamiento** y **aumentar la cohesión**. Al separar el sistema en capas (Presentación, Aplicación, Dominio, Infraestructura), se asegura que un cambio en una capa (ej. la base de datos en Infraestructura) no se propague a las otras, abordando directamente el escenario de modificabilidad.
+
+. **Decisión - Aislamiento del Dominio y Principio de Inversión de Dependencias:** Se definió que la capa de Dominio contendría la lógica de negocio pura, sin dependencias externas. Para comunicarse con el mundo exterior, el Dominio define **interfaces** (ej. IReservationRepository, IPaymentGateway). La capa de Infraestructura es la que implementa estas interfaces, invirtiendo así la dirección de la dependencia del código fuente.
+
+
+*Racionalidad:* Esta es una aplicación de las tácticas de **Encapsular** y Diferir el Momento de Enlace (Defer Binding). Satisface CON-1 al permitir que la implementación del RDBMS viva en la capa de Infraestructura sin "contaminar" las reglas de negocio. A su vez, cumple con el QAS de modificabilidad, ya que para cambiar de proveedor de pago, solo se necesita crear una nueva clase que implemente la interfaz IPaymentGateway en la Infraestructura, sin tocar el Dominio.
+
+
+==== Cierre de la Iteración 1
+
+*Impulsores Atendidos:* Modificabilidad (Reemplazo de pasarela), Restricción CON-1, Preocupación CRN-2.
+
+*Decisiones Registradas:* Adopción del patrón **Layered Architecture**; separación estricta entre las capas de Dominio e Infraestructura mediante el uso de interfaces y la inversión de dependencias.
+
+==== Iteración 2 de ADD: Descomposición en Componentes y Especificación de Interacciones
+
+*Objetivo de la Iteración:* Descomponer la funcionalidad del sistema en componentes lógicos y definir sus interacciones para satisfacer los requisitos de **Rendimiento** y **Seguridad**.
+
+*Impulsores Seleccionados:*
+* Rendimiento QAS: Latencia de confirmación (P95 <= 2.5s).
+* Rendimiento QAS: Throughput de consultas (300 QPS).
+* Seguridad QAS: Prevención de Inyección SQL.
+* Seguridad QAS: Control de acceso a reservas.
+* Funcionalidad: Casos de uso de Reservación (CU-01) y Consulta de Disponibilidad (CU-03).
+
+*Proceso y Decisiones (Integrando CBSE):*
+
+. **CBSE - Identificación de Componentes:** A partir de los casos de uso y el modelo de dominio, se agruparon responsabilidades relacionadas para identificar los componentes de primer nivel: **Inventario y Catálogo**, **Reservaciones**, **Gestión de Estancias**, **Pago** y **Administración y Políticas**.
+. **CBSE - Definición de Interacciones:** Se modeló el flujo de la operación "Hacer Reservación". Se determinó que la capa de Presentación no debía invocar directamente a los componentes de dominio. Para orquestar la interacción entre *Inventario*, *Reservaciones* y *Pago*, se necesitaba un coordinador.
+. **Decisión - Introducción de la Capa de Aplicación:** Se añadió la capa de Aplicación, cuya responsabilidad es orquestar los casos de uso. Contiene "Servicios de Aplicación" (ej. ReservationService) que no tienen lógica de negocio, pero que llaman a los componentes de dominio en la secuencia correcta.
+
+
+*Racionalidad:* Esta decisión satisface directamente el QAS de **Control de Acceso**. El ReservationService puede, antes de invocar cualquier lógica, verificar que el ID del usuario autenticado coincide con el propietario de la reserva que se intenta consultar o modificar. Es la implementación de una **barrera de seguridad**.
+
+. **Decisión - Táctica de Caching para Consultas:** Para el componente "Inventario y Catálogo", se decidió aplicar la táctica de **Caching (Mantener Múltiples Copias de Datos)**.
+
+
+*Racionalidad:* Satisfacer el requisito de 300 QPS directamente en la base de datos transaccional crearía una carga insostenible que afectaría la latencia de las reservas. Almacenar en caché los datos de disponibilidad, que cambian con menos frecuencia, permite servir estas lecturas desde una memoria rápida, cumpliendo el objetivo de rendimiento sin comprometer la base de datos principal.
+
+. **CBSE - Especificación de Interfaces:** Las interacciones refinaron las interfaces. La interfaz IReservationRepository ahora requiere métodos como save(reservation) y findById(id), mientras que la interfaz del componente de Inventario requiere checkAvailability(hotelId, roomTypeId, dateRange). Estas especificaciones forman un contrato que guía la implementación.
+. **Decisión - Mandato de Consultas Parametrizadas:** Se estableció como una regla de diseño que toda implementación de repositorios en la capa de Infraestructura *debe* usar consultas parametrizadas o un ORM que las genere por defecto.
++
+
+*Racionalidad:* Esta es la táctica de **Validación de Entradas** y la defensa principal y más efectiva contra ataques de Inyección SQL, atendiendo directamente este QAS de seguridad.
+
+
+==== Cierre de la Iteración 2
+*Impulsores Atendidos:* Rendimiento (Latencia y Throughput), Seguridad (SQLi y Control de Acceso).
+
+*Decisiones Registradas:* Descomposición en componentes lógicos; introducción de la Capa de Aplicación para orquestación y seguridad; uso de Caching para consultas de inventario; especificación de interfaces clave; mandato de uso de consultas parametrizadas.
+
+
+=== Cierre y Verificación del Diseño
+
+Tras estas iteraciones, se revisó el backlog de impulsores. Las decisiones tomadas cubren los requisitos de más alta prioridad. El patrón de Capas junto con la descomposición en componentes crea una estructura lo suficientemente desacoplada y cohesiva para manejar futuros cambios. Las tácticas de Caching, Consultas Parametrizadas y la orquestación en la capa de aplicación abordan directamente los escenarios críticos de rendimiento y seguridad.
+
+El diseño se considera suficiente porque provee un esqueleto robusto y bien justificado. Define la estructura macro y las responsabilidades clave, dejando los detalles de implementación de cada componente para fases posteriores, pero asegurando que dicha implementación se hará sobre una base sólida y alineada con los objetivos del negocio. El proceso ADD aseguró que la arquitectura se enfocara en lo más importante, mientras que el enfoque CBSE proveyó el rigor para detallarla de manera estructurada.
