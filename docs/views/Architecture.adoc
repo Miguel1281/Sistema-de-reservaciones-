@@ -33,6 +33,7 @@ El sistema se descompone en cuatro capas lógicas principales. El principio fund
 [[context-view]]
 
 === Diagrama de paquetes (Capas)
+image::DiagramaCapas_Hotel.jpg[Diagrama de capas de sistema hotelero, width=600, align=center]
 
 ==== Diagrama de componentes
 
