@@ -1,5 +1,5 @@
 
-== Método de Diseño Arquitectónico: Sistema de Reservaciones de Hoteles
+== Método de Diseño Arquitectónico
 
 La arquitectura del Sistema de Reservaciones de la Cadena Hotelera no es un producto arbitrario, sino el resultado de un proceso de diseño racional y disciplinado.
 
