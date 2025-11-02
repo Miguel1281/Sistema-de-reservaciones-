@@ -1,0 +1,21 @@
+== Diagramas de componentes
+=== Componente: Gestor de auditoría
+image::GestorAuditoria.jpeg[Gestor de auditoría, width=600, align=center]
+
+=== Componente: Gestor de estancias
+image::GestorEstancias.jpeg[Gestor de estancias, width=600, align=center]
+
+=== Componente: Gestor de inventario
+image::GestorInventario.jpeg[Gestor de inventario, width=600, align=center]
+
+=== Componente: Gestor de personal
+image::GestorPersonal.jpeg[Gestor de personal, width=600, align=center]
+
+=== Componente: Gestor de politicas
+image::GestorPoliticas.jpeg[Gestor de politicas, width=600, align=center]
+
+=== Componente: Gestor de reservaciones
+image::GestorReservaciones.jpeg[Gestor de reservaciones, width=600, align=center]
+
+=== Componente: Procesador de pagos
+image::ProcesadorPagos.jpeg[Procesador de pagos, width=600, align=center]

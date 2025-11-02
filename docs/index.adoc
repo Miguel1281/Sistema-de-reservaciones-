@@ -10,6 +10,7 @@
 :icons: font
 :source-highlighter: highlightjs
 :imagesdir: images
+:imagesdir: images/Components
 :lang: es
 :chapter-label: Capítulo
 :appendix-caption: Apéndice
@@ -43,6 +44,7 @@ include::views/useCases.adoc[]
 include::views/ASRs.adoc[]
 include::views/designmethod.adoc[]
 include::views/Architecture.adoc[]
+include::views/components.adoc[]
 include::views/functional.adoc[]
 include::views/information.adoc[]
 include::views/concurrency.adoc[]
