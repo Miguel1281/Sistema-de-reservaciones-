@@ -10,7 +10,6 @@
 :icons: font
 :source-highlighter: highlightjs
 :imagesdir: images
-:imagesdir: images/Components
 :lang: es
 :chapter-label: Capítulo
 :appendix-caption: Apéndice
