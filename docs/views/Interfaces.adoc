@@ -1,0 +1,43 @@
+== Diagramas de interfaces
+
+=== Interfaz: IAuthPersonal
+image::Interface diagrams/IAuthPersonal.png[IAuthPersonal, width=600, align=center]
+
+=== Interfaz: IConsultaReserva
+image::Interface diagrams/IConsultaReserva.png[IConsultaReserva, width=600, align=center]
+
+=== Interfaz: IGestionEstancia
+image::Interface diagrams/IGestionEstancia.png[IGestionEstancia, width=600, align=center]
+
+=== Interfaz: IHuespedReserva
+image::Interface diagrams/IHuespedReserva.png[IHuespedReserva, width=600, align=center]
+
+=== Interfaz: IInventarioAdmin
+image::Interface diagrams/IInventarioAdmin.png[IInventarioAdmin, width=600, align=center]
+
+=== Interfaz: IInventarioConsulta
+image::Interface diagrams/IInventarioConsulta.png[IInventarioConsulta, width=600, align=center]
+
+=== Interfaz: ILoggin
+image::Interface diagrams/ILoggin.png[ILoggin, width=600, align=center]
+
+=== Interfaz: IPago
+image::Interface diagrams/IPago.png[IPago, width=600, align=center]
+
+=== Interfaz: IPersonalAdmin
+image::Interface diagrams/IPersonalAdmin.png[IPersonalAdmin, width=600, align=center]
+
+=== Interfaz: IPoliticasAdmin
+image::Interface diagrams/IPoliticasAdmin.png[IPoliticasAdmin, width=600, align=center]
+
+=== Interfaz: IPoliticasConsulta
+image::Interface diagrams/IPoliticasConsulta.png[IPoliticasConsulta, width=600, align=center]
+
+=== Interfaz: IRecepcionReserva
+image::Interface diagrams/IRecepcionReserva.png[IRecepcionReserva, width=600, align=center]
+
+=== Interfaz: IReportes
+image::Interface diagrams/IReportes.png[IReportes, width=600, align=center]
+
+=== Interfaz: ITarifasAdmin
+image::Interface diagrams/ITarifasAdmin.png[ITarifasAdmin, width=600, align=center]
