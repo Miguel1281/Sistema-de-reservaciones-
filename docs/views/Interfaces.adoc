@@ -3,41 +3,591 @@
 === Interfaz: IAuthPersonal
 image::Interface diagrams/IAuthPersonal.png[IAuthPersonal, width=600, align=center]
 
+==== Especificaciones de Operaciones (IAuthPersonal)
+
+===== login(usuario: string, contrasena: string): AuthTokenDTO
+
+Precondiciones:
+
+1. usuario y contrasena no deben ser nulos.
+
+Postcondiciones:
+
+1. Si usuario existe, contrasena es correcta y estado es "Activo", retorna un AuthTokenDTO válido.
+2. De lo contrario, lanza AuthenticationException.
+
+===== verificarPermiso(token: AuthTokenDTO, permisoRequerido: string): boolean
+
+Precondiciones:
+
+1. token debe ser válido.
+
+Postcondiciones:
+
+1. Retorna true si el rol asociado al token tiene el permisoRequerido.
+2. De lo contrario, retorna false.
+
+===== consultarUsuario(usuarioID: string): UsuarioDTO
+
+Precondiciones:
+
+1. usuarioID debe existir.
+
+Postcondiciones:
+
+1. Retorna el UsuarioDTO con los datos del usuario (sin información sensible).
+
+---
+
 === Interfaz: IConsultaReserva
 image::Interface diagrams/IConsultaReserva.png[IConsultaReserva, width=600, align=center]
+
+==== Especificaciones de Operaciones (IConsultaReserva)
+
+===== buscarReservaPorID(reservaID: string): ReservaDTO
+
+Precondiciones:
+
+1. reservaID no debe ser nulo.
+
+Postcondiciones:
+
+1. Retorna el ReservaDTO si se encuentra.
+2. Retorna null o lanza NotFoundException si no existe.
+
+===== buscarReservasPorCliente(clienteID: string): ReservaDTO[]
+
+Precondiciones:
+
+1. clienteID no debe ser nulo.
+
+Postcondiciones:
+
+1. Retorna una lista (posiblemente vacía) de ReservaDTO asociadas al clienteID.
+
+
+===== buscarReservasActivasHotel(hotelID: string): ReservaDTO[]
+
+Precondiciones:
+
+1. hotelID no debe ser nulo.
+
+Postcondiciones:
+
+1. Retorna una lista de ReservaDTO en estado "Confirmada" o "Activa" para el hotelID especificado.
+
+---
 
 === Interfaz: IGestionEstancia
 image::Interface diagrams/IGestionEstancia.png[IGestionEstancia, width=600, align=center]
 
+==== Especificaciones de Operaciones (IGestionEstancia)
+
+===== realizarCheckIn(reservaID: string): EstanciaDTO
+
+Precondiciones:
+
+1. El recepcionista está autenticado.
+2. Una Reserva debe existir (verificada contra IConsultaReserva) y estar en estado "Confirmada".
+
+Postcondiciones:
+
+1. Se crea una nueva entidad Estancia con estado "Activa".
+2. Se actualiza el estado de la Habitacion (en GestorInventario) a "Ocupado".
+3. Retorna la EstanciaDTO creada.
+
+
+===== realizarCheckOut(estanciaID: string): FacturaPreliminarDTO
+
+Precondiciones:
+
+1. La Estancia debe existir y estar en estado "Activa".
+
+Postcondiciones:
+
+1. El estado de la Estancia se actualiza a "Cerrada".
+2. Se actualiza el estado de la Habitacion (en GestorInventario) a "Requiere Limpieza".
+3. Se calcula el total de consumos y se retorna una FacturaPreliminarDTO.
+
+
+===== registrarConsumo(estanciaID: string, consumo: ConsumoDTO): boolean
+
+Precondiciones:
+
+1. La Estancia debe existir y estar "Activa".
+
+Postcondiciones:
+
+1. Un nuevo Consumo es creado y asociado a la Estancia.
+2. Retorna true.
+
+
+===== cambiarHabitacion(estanciaID: string, nuevaHabitacionID: string): boolean
+
+Precondiciones:
+
+1. La Estancia debe estar "Activa".
+2. La nuevaHabitacionID debe estar disponible y limpia (verificada contra IInventarioAdmin).
+
+Postcondiciones:
+
+1. La Estancia se actualiza con la nuevaHabitacionID.
+2. La habitacionID original se actualiza a "Requiere Limpieza".
+3. La nuevaHabitacionID se actualiza a "Ocupada".
+4. Retorna true.
+
+
+===== modificarEstancia(estanciaID: string, nuevasFechas: RangoFechasDTO): boolean
+
+Precondiciones:
+
+1. La Estancia debe estar "Activa".
+2. Si se extiende, la habitación actual debe estar disponible para las nuevasFechas.
+
+Postcondiciones:
+
+1. La fecha de salida de la Estancia es actualizada.
+2. Se recalcula el costo total.
+3. Retorna true.
+
+---
+
 === Interfaz: IHuespedReserva
 image::Interface diagrams/IHuespedReserva.png[IHuespedReserva, width=600, align=center]
+
+==== Especificaciones de Operaciones (IHuespedReserva)
+
+===== crearReserva(detalles: ReservaDTO, cliente: ClienteDTO): string
+
+Precondiciones:
+
+1. detalles.tipoHabitacionID debe estar disponible para las fechas solicitadas (verificado contra IInventarioConsulta).
+2. cliente.datosPago debe ser válido.
+3. El ClienteDTO debe contener datos de un cliente nuevo o un clienteID existente.
+
+Postcondiciones:
+
+1. Se crea una nueva entidad Reserva en el sistema con estado "Pendiente de Pago".
+2. Se inicia la llamada a IPagos.realizarCobro().
+3. Se retorna un reservaID único.
+   (Si el pago falla, la reserva pasa a "Cancelada").
+
+
+===== cancelarReserva(reservaID: string, clienteID: string): boolean
+
+Precondiciones:
+
+1. La Reserva debe existir y pertenecer al clienteID.
+2. La Reserva debe estar en estado "Confirmada".
+
+Postcondiciones:
+
+1. El estado de la Reserva se actualiza a "Cancelada".
+2. Se libera la habitación en el inventario.
+3. Se inicia una llamada a IPagos.gestionarReembolso() si las políticas (consultadas a IPoliticasConsulta) aplican.
+4. Retorna true.
+
+
+===== modificarPeriodoEstancia(reservaID: string, clienteID: string, nuevasFechas: RangoFechasDTO): boolean
+
+Precondiciones:
+
+1. La Reserva debe existir, pertenecer al clienteID y estar "Confirmada".
+2. La solicitud debe cumplir las políticas de cambio.
+3. El tipo de habitación debe estar disponible para las nuevasFechas (verificado contra IInventarioConsulta).
+
+Postcondiciones:
+
+1. La Reserva es actualizada con las nuevasFechas.
+2. Se recalcula el costo (vía IPoliticasConsulta) y se gestiona el cobro/reembolso (vía IPagos).
+3. Retorna true.
+
+
+===== modificarTipoHabitacion(reservaID: string, clienteID: string, nuevoTipoHabitacionID: string): boolean
+
+Precondiciones:
+
+1. La Reserva debe existir, pertenecer al clienteID y estar "Confirmada".
+2. El nuevoTipoHabitacionID debe estar disponible para las fechas de la reserva.
+
+Postcondiciones:
+
+1. La Reserva es actualizada con el nuevoTipoHabitacionID.
+2. Se recalcula el costo y se gestiona el cobro/reembolso diferencial.
+3. Retorna true.
+
+---
 
 === Interfaz: IInventarioAdmin
 image::Interface diagrams/IInventarioAdmin.png[IInventarioAdmin, width=600, align=center]
 
+==== Especificaciones de Operaciones (IInventarioAdmin)
+
+===== registrarHotel(hotel: HotelDTO): string
+
+Precondiciones:
+
+1. El usuario debe ser "Administrador" (verificado por IAuthPersonal).
+2. hotel.nombre no debe existir.
+
+Postcondiciones:
+
+1. Un nuevo Hotel es creado.
+2. Retorna el hotelID generado.
+
+
+===== darDeBajaHotel(hotelID: string): boolean
+
+Precondiciones:
+
+1. El usuario debe ser "Administrador".
+2. El hotelID debe existir.
+3. El hotel no debe tener reservaciones activas o futuras.
+
+Postcondiciones:
+
+1. El Hotel se marca como inactivo.
+2. Retorna true.
+
+===== registrarTipoHabitacion(hotelID: string, tipo: TipoHabitacionDTO): string
+
+Precondiciones:
+
+1. El usuario debe ser "Administrador".
+2. El hotelID debe existir.
+
+Postcondiciones:
+
+1. Un nuevo TipoHabitacion es creado y asociado al Hotel.
+2. Retorna el tipoHabitacionID generado.
+
+===== darDeBajaHabitacion(habitacionID: string): boolean
+
+Precondiciones:
+
+1. El usuario debe ser "Gerente" o "Administrador".
+2. La Habitacion debe existir.
+3. La Habitacion no debe tener reservaciones activas o futuras.
+
+Postcondiciones:
+
+1. El estado de la Habitacion se actualiza a "FueraDeServicio".
+2. Retorna true.
+
+===== actualizarEstadoHabitacion(habitacionID: string, estado: string): boolean
+
+Precondiciones:
+
+1. La habitacionID debe existir.
+2. El estado debe ser uno de los valores permitidos {Disponible, Ocupada, Requiere Limpieza, FueraDeServicio, Bloqueada}.
+
+Postcondiciones:
+
+1. El estado de la Habitacion se actualiza al nuevo estado.
+2. Retorna true.
+
+---
+
 === Interfaz: IInventarioConsulta
 image::Interface diagrams/IInventarioConsulta.png[IInventarioConsulta, width=600, align=center]
+
+==== Especificaciones de Operaciones (IInventarioConsulta)
+
+===== consultarDisponibilidad(consulta: ConsultaDisponibilidadDTO): DisponibilidadDTO[]
+
+Precondiciones:
+
+1. consulta.hotelID (u otro criterio de búsqueda) y consulta.fechas deben ser válidos.
+
+Postcondiciones:
+
+1. Retorna una lista de DisponibilidadDTO (agregando por TipoHabitacion) que cumplen con los criterios.
+2. La respuesta debe cumplir con las métricas de rendimiento (P95 ≤ 500ms).
+
+===== consultarHoteles(criterio: string): HotelDTO[]
+
+Precondiciones:
+
+1. Ninguna.
+
+Postcondiciones:
+
+1. Retorna una lista de HotelDTO que coinciden con el criterio.
+
+===== consultarTiposHabitacion(hotelID: string): TipoHabitacionDTO[]
+
+Precondiciones:
+
+1. hotelID debe existir.
+
+Postcondiciones:
+
+1. Retorna la lista de TipoHabitacionDTO para ese hotelID.
+
+---
 
 === Interfaz: ILoggin
 image::Interface diagrams/ILoggin.png[ILoggin, width=600, align=center]
 
+==== Especificaciones de Operaciones (ILogging)
+
+===== registrarEvento(evento: LogDTO): boolean
+
+Precondiciones:
+
+1. Evento no debe ser nulo.
+
+Postcondiciones:
+
+1. Se crea una nueva EntradaLog y se persiste de forma asíncrona (para no afectar el rendimiento del componente que llama).
+2. Retorna true.
+
+---
+
 === Interfaz: IPago
 image::Interface diagrams/IPago.png[IPago, width=600, align=center]
+
+==== Especificaciones de Operaciones (IPagos)
+
+===== realizarCobro(detallesCobro: CobroDTO): TransaccionDTO
+
+Precondiciones:
+
+1. detallesCobro.monto debe ser > 0.
+2. detallesCobro.datosTarjeta (o método de pago) debe estar presente.
+
+Postcondiciones:
+
+1. Se realiza una llamada a la IPasarelaExterna.
+2. Se crea una TransaccionPago interna.
+3. Si la pasarela aprueba, el estado es "Aprobada"; si no, "Rechazada".
+4. La operación debe ser idempotente (dobles cobros no son posibles).
+5. Retorna la TransaccionDTO.
+
+===== gestionarReembolso(transaccionOriginalID: string, monto: double): TransaccionDTO
+
+Precondiciones:
+
+1. transaccionOriginalID debe existir y estar "Aprobada".
+2. monto debe ser > 0 y <= al monto original.
+
+Postcondiciones:
+
+1. Se realiza una llamada a la IPasarelaExterna para revertir el pago.
+2. Se crea una nueva TransaccionPago (tipo Reembolso) o se actualiza la original a "Reembolsada".
+3. Retorna la TransaccionDTO del reembolso.
+
+---
 
 === Interfaz: IPersonalAdmin
 image::Interface diagrams/IPersonalAdmin.png[IPersonalAdmin, width=600, align=center]
 
+==== Especificaciones de Operaciones (IPersonalAdmin)
+
+===== registrarGerente(gerente: UsuarioDTO): string
+
+Precondiciones:
+
+1. El usuario debe ser "Administrador".
+2. gerente.nombreUsuario no debe existir.
+
+Postcondiciones:
+
+1. Se crea un UsuarioPersonal con rol "Gerente".
+2. Retorna el usuarioID generado.
+
+===== darDeBajaGerente(gerenteID: string): boolean
+
+Precondiciones:
+
+1. El usuario debe ser "Administrador".
+2. El gerenteID debe existir.
+
+Postcondiciones:
+
+1. El UsuarioPersonal se actualiza a estado "Inactivo".
+2. Retorna true.
+
+===== registrarRecepcionista(recepcionista: UsuarioDTO): string
+
+Precondiciones:
+
+1. El usuario debe ser "Gerente".
+2. recepcionista.nombreUsuario no debe existir.
+
+Postcondiciones:
+
+1. Se crea un UsuarioPersonal con rol "Recepcionista" y se asocia al hotel del Gerente.
+2. Retorna el usuarioID generado.
+
+===== darDeBajaRecepcionista(recepcionistaID: string): boolean
+
+Precondiciones:
+
+1. El usuario debe ser "Gerente".
+2. El recepcionistaID debe existir.
+
+Postcondiciones:
+
+1. El UsuarioPersonal se actualiza a estado "Inactivo".
+2. Retorna true.
+
+---
+
 === Interfaz: IPoliticasAdmin
 image::Interface diagrams/IPoliticasAdmin.png[IPoliticasAdmin, width=600, align=center]
+
+==== Especificaciones de Operaciones (IPoliticasAdmin)
+
+===== registrarPolitica(politica: PoliticaDTO): string
+
+Precondiciones:
+
+1. El usuario debe ser "Administrador".
+2. politica.tipo debe ser válido.
+
+Postcondiciones:
+
+1. Se crea una nueva Politica.
+2. Retorna el politicaID generado.
+
+===== darDeBajaPolitica(politicaID: string): boolean
+
+Precondiciones:
+
+1. El usuario debe ser "Administrador".
+2. La politicaID debe existir.
+
+Postcondiciones:
+
+1. La Politica se marca como inactiva.
+2. Retorna true.
+
+---
 
 === Interfaz: IPoliticasConsulta
 image::Interface diagrams/IPoliticasConsulta.png[IPoliticasConsulta, width=600, align=center]
 
+==== Especificaciones de Operaciones (IPoliticasConsulta)
+
+===== calcularPrecioReserva(consulta: ConsultaPrecioDTO): double
+
+Precondiciones:
+
+1. consulta.tipoHabitacionID y consulta.fechas deben ser válidos.
+
+Postcondiciones:
+
+1. Retorna el precio total calculado sumando las Tarifas diarias correspondientes.
+
+===== validarReglasCancelacion(reservaID: string, fechaCancelacion: date): ReglasCancelacionDTO
+
+Precondiciones:
+
+1. reservaID debe existir.
+
+Postcondiciones:
+
+1. Retorna un ReglasCancelacionDTO indicando si aplica reembolso y el monto de penalización (si existe) basado en la Politica de cancelación vigente.
+
+===== obtenerPoliticaOverbooking(hotelID: string, tipoHabitacionID: string): double
+
+Precondiciones:
+
+1. hotelID y tipoHabitacionID deben existir.
+
+Postcondiciones:
+
+1. Retorna el porcentaje de overbooking permitido (ej. 10.0) basado en la Politica de overbooking.
+
+---
+
 === Interfaz: IRecepcionReserva
 image::Interface diagrams/IRecepcionReserva.png[IRecepcionReserva, width=600, align=center]
+
+==== Especificaciones de Operaciones (IRecepcionReserva)
+
+===== crearReservaRecepcion(detalles: ReservaDTO, cliente: ClienteDTO): string
+
+Precondiciones:
+
+1. El recepcionista está autenticado (IAuthPersonal).
+2. La habitación está disponible (verificado contra IInventarioConsulta).
+
+Postcondiciones:
+
+1. Se crea una nueva entidad Reserva con estado "Confirmada" (el pago se maneja en el hotel).
+2. El estado de la habitación en GestorInventario se actualiza a "Ocupado".
+3. Retorna el reservaID.
+
+---
 
 === Interfaz: IReportes
 image::Interface diagrams/IReportes.png[IReportes, width=600, align=center]
 
+==== Especificaciones de Operaciones (IReportes)
+
+===== consultarBitacoraTransacciones(fechas: RangoFechasDTO, tipo: string): LogDTO[]
+
+Precondiciones:
+
+1. El usuario debe ser "Gerente" o "Auditor".
+
+Postcondiciones:
+
+1. Retorna una lista de EntradaLog que coinciden con el rango de fechas y tipo de transacción (ej. "Pago", "Cancelación").
+
+===== rastrearHistorialReserva(reservaID: string): LogDTO[]
+
+Precondiciones:
+
+1. El usuario debe ser "Gerente" o "Auditor".
+2. reservaID debe ser válido.
+
+Postcondiciones:
+
+1. Retorna una lista cronológica de todas las EntradaLog donde contexto.reservaID == reservaID.
+
+===== generarReporteTrazabilidadTarifas(reservaID: string): ReporteTarifaDTO
+
+Precondiciones:
+
+1. El usuario debe ser "Gerente" o "Auditor".
+
+Postcondiciones:
+
+1. Llama a IConsultaReserva e IPoliticasConsulta.
+2. Retorna un ReporteTarifaDTO que muestra qué tarifas estaban vigentes y cuáles se aplicaron a la reserva.
+
+---
+
 === Interfaz: ITarifasAdmin
 image::Interface diagrams/ITarifasAdmin.png[ITarifasAdmin, width=600, align=center]
+
+==== Especificaciones de Operaciones (ITarifasAdmin)
+
+===== registrarTarifa(tarifa: TarifaDTO): string
+
+Precondiciones:
+
+1. El usuario debe ser "Administrador".
+2. La tarifa.tipoHabitacionID debe existir.
+
+Postcondiciones:
+
+1. Se crea una nueva Tarifa.
+2. Retorna el tarifaID generado.
+
+===== actualizarTarifa(tarifaID: string, tarifa: TarifaDTO): boolean
+
+Precondiciones:
+
+1. El usuario debe ser "Administrador".
+2. El tarifaID debe existir.
+
+Postcondiciones:
+
+1. La Tarifa existente es actualizada con los nuevos datos.
+2. Retorna true.
+
+---
