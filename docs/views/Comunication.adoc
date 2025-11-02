@@ -1,8 +1,7 @@
 == Diagramas de comunicación
 
 === CU-01
-
-image::Comunication/CU-10 Registrar consumos.png 
+image::Comunication/CU-10 Registrar consumos.png[Registrar consumos, width=600, align=center]
 
 === CU-02
 
