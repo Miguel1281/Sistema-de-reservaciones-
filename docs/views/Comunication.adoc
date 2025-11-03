@@ -1,7 +1,7 @@
 == Diagramas de comunicación
 
 === CU-01
-image::Comunication/CU-01 Hacer reservación.jpeg[Hacer reservación, width=600, align=center]
+image::Comunication/CU-01.jpeg[Hacer reservación, width=600, align=center]
 
 === CU-02
 image::Comunication/CU-02 Realizar pago de reserva.jpg[Realizar pago de reserva, width=600, align=center]
