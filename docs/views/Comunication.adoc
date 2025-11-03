@@ -88,10 +88,10 @@ image::Comunication/CU-28 Registrar tipo habitación.jpg[Registrar tipo habitaci
 image::Comunication/CU-29 Actualizar tipo habitación.jpg[Actualizar tipo habitación, width=600, align=center]
 
 === CU-30
-image::Comunication/CU-30 Dar de baja tipo habitación.jpg[Dar de baja tipo habitación, width=600, align=center]
+image::Comunication/CU-30 Dar de baja tipo habitacion.jpg[Dar de baja tipo habitación, width=600, align=center]
 
 === CU-31
-image::Comunication/CU-31 Consultar tipo habitacion.jpg[Consultar tipo habitación, width=600, align=center]
+image::Comunication/CU-31 Consultar tipo habitación.jpg[Consultar tipo habitación, width=600, align=center]
 
 === CU-32
 image::Comunication/CU-32 Consultar bitacora.jpg[Consultar bitacora, width=600, align=center]
@@ -106,10 +106,10 @@ image::Comunication/CU-34 Reporte trazabilidad tarifas.jpg[Reporte trazabilidad 
 image::Comunication/CU-35 Registrar habitacion.jpg[Registrar habitacion, width=600, align=center]
 
 === CU-36
-image::Comunication/CU-36 Actualizar habitacion.jpg[Actualizar habitación, width=600, align=center]
+image::Comunication/CU-36 Actualizar habitación.jpg[Actualizar habitación, width=600, align=center]
 
 === CU-37
-image::Comunication/CU-37 Dar de baja habitación.jpg[Dar de baja habitación, width=600, align=center]
+image::Comunication/CU-37 Dar de baja habitacion.jpg[Dar de baja habitación, width=600, align=center]
 
 === CU-38
 image::Comunication/CU-38 Consultar habitación.jpg[Consultar habitación, width=600, align=center]
