@@ -1,51 +1,130 @@
 == Diagramas de comunicación
 
 === CU-01
-image::Comunication/CU-10 Registrar consumos.png[Registrar consumos, width=600, align=center]
+image::Comunication/CU-01 Hacer reservación.jpeg[Hacer reservación, width=600, align=center]
 
 === CU-02
+image::Comunication/CU-02 Realizar pago de reserva.jpg[Realizar pago de reserva, width=600, align=center]
 
 === CU-03
+image::Comunication/CU-03 Consultar disponibilidad.jpg[Consultar disponibilidad, width=600, align=center]
 
 === CU-04
-=== CU-05
-=== CU-06
-=== CU-07
-=== CU-08
-=== CU-09
-=== CU-10
-=== CU-11
-=== CU-12
-=== CU-13
-=== CU-14
-=== CU-15
-=== CU-16
-=== CU-17
-=== CU-18
-=== CU-19
-=== CU-20
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
-=== CU-01
+image::Comunication/CU-04 Cancelar reservación.jpg[Cancelar reservación, width=600, align=center]
 
+=== CU-05
+image::Comunication/CU-05 Consultar reserva con cuenta.jpg[Consultar reserva con cuenta, width=600, align=center]
+
+=== CU-06
+image::Comunication/CU-06 Modificar periodo estancia.jpg[Modificar periodo estancia, width=600, align=center]
+
+=== CU-07
+image::Comunication/CU-07 Modificar tipo habitación.jpg[Modificar tipo habitación, width=600, align=center]
+
+=== CU-08
+image::Comunication/CU-08 Check in.png[Check in, width=600, align=center]
+
+=== CU-09
+image::Comunication/CU-09 Check out.png[Check out, width=600, align=center]
+
+=== CU-10
+image::Comunication/CU-10 Registrar consumos.png[Registrar consumos, width=600, align=center]
+
+=== CU-11
+image::Comunication/CU-11 Realizar cambio de habitacion.png[Realizar cambio de habitacion, width=600, align=center]
+
+=== CU-12
+image::Comunication/CU-12 Hacer reservacion recepcion.png[Hacer reservacion recepcion, width=600, align=center]
+
+=== CU-13
+image::Comunication/CU-13 Modificar estancia huesped.png[Modificar estancia huesped, width=600, align=center]
+
+=== CU-14
+image::Comunication/CU-14 Registrar tarifa.png[Registrar tarifa, width=600, align=center]
+
+=== CU-15
+image::Comunication/CU-15 Actualizar tarifa.png[Actualizar tarifa, width=600, align=center]
+
+=== CU-16
+image::Comunication/CU-16 Dar de baja tarifa.png[Dar de baja tarifa, width=600, align=center]
+
+=== CU-17
+image::Comunication/CU-17 Registrar politica.jpg[Registrar politica, width=600, align=center]
+
+=== CU-18
+image::Comunication/CU-18 Actualizar politicas.jpg[Actualizar politicas, width=600, align=center]
+
+=== CU-19
+image::Comunication/CU-19 Dar de baja politica.jpg[Dar de baja politica, width=600, align=center]
+
+=== CU-20
+image::Comunication/CU-20 Registrar gerente.jpg[Registrar gerente, width=600, align=center]
+
+=== CU-21
+image::Comunication/CU-21 Actualizar gerente.jpg[Actualizar gerente, width=600, align=center]
+
+=== CU-22
+image::Comunication/CU-22 Dar de baja gerente.jpg[Dar de baja gerente, width=600, align=center]
+
+=== CU-23
+image::Comunication/CU-23 Consultar gerente.jpg[Consultar gerente, width=600, align=center]
+
+=== CU-24
+image::Comunication/CU-24 Registrar hotel.jpg[Registrar hotel, width=600, align=center]
+
+=== CU-25
+image::Comunication/CU-25 Actualizar hotel.jpg[Actualizar hotel, width=600, align=center]
+
+=== CU-26
+image::Comunication/CU-26 Dar de baja Hotel.jpg[Dar de baja Hotel, width=600, align=center]
+
+=== CU-27
+image::Comunication/CU-27 Consultar hotel.jpg[Consultar hotel, width=600, align=center]
+
+=== CU-28
+image::Comunication/CU-28 Registrar tipo habitación.jpg[Registrar tipo habitación, width=600, align=center]
+
+=== CU-29
+image::Comunication/CU-29 Actualizar tipo habitación.jpg[Actualizar tipo habitación, width=600, align=center]
+
+=== CU-30
+image::Comunication/CU-30 Dar de baja tipo habitación.jpg[Dar de baja tipo habitación, width=600, align=center]
+
+=== CU-31
+image::Comunication/CU-31 Consultar tipo habitación.jpg[Consultar tipo habitación, width=600, align=center]
+
+=== CU-32
+image::Comunication/CU-32 Consultar bitacora.jpg[Consultar bitacora, width=600, align=center]
+
+=== CU-33
+image::Comunication/CU-33 Rastrear historial reservación.jpg[Rastrear historial reservación, width=600, align=center]
+
+=== CU-34
+image::Comunication/CU-34 Reporte trazabilidad tarifas.jpg[Reporte trazabilidad tarifas, width=600, align=center]
+
+=== CU-35
+image::Comunication/CU-35 Registrar habitacion.jpg[Registrar habitacion, width=600, align=center]
+
+=== CU-36
+image::Comunication/CU-36 Actualizar habitación.jpg[Actualizar habitación, width=600, align=center]
+
+=== CU-37
+image::Comunication/CU-37 Dar de baja habitación.jpg[Dar de baja habitación, width=600, align=center]
+
+=== CU-38
+image::Comunication/CU-38 Consultar habitación.jpg[Consultar habitación, width=600, align=center]
+
+=== CU-39
+image::Comunication/CU-39 Bloquear habitación.jpg[Bloquear habitación, width=600, align=center]
+
+=== CU-40
+image::Comunication/CU-40 Registrar recepcionista.jpg[Registrar recepcionista, width=600, align=center]
+
+=== CU-41
+image::Comunication/CU-41 Actualizar recepcionista.jpg[Actualizar recepcionista, width=600, align=center]
+
+=== CU-42
+image::Comunication/CU-42 Consultar recepcionista.jpg[Consultar recepcionista, width=600, align=center]
+
+=== CU-43
+image::Comunication/CU-43 Dar de baja recepcionista.jpg[Dar de baja recepcionista, width=600, align=center]
