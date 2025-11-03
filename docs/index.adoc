@@ -31,6 +31,7 @@
 | Versión | Fecha      | Autor(es)       | Resumen de cambios significativos
 | 1.0     | 2025-09-29 | Equipo Completo | Creación inicial de la estructura del documento y portada.
 | 1.1     | 2025-10-05 | Equipo Completo | Definición de requerimientos e impulsos arquitectónicos y priorización.
+|1.2    |2025-11-02| Equipo completo| Diagramas de componentes, interfaces y de comunicación.
 |===
 
 
