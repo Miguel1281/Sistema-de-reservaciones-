@@ -49,13 +49,13 @@ image::Comunication/CU-15 Actualizar tarifa.png[Actualizar tarifa, width=600, al
 image::Comunication/CU-16 Dar de baja tarifa.png[Dar de baja tarifa, width=600, align=center]
 
 === CU-17
-image::Comunication/CU-17 Registrar politica.jpg[Registrar politica, width=600, align=center]
+image::Comunication/CU-17 Registrar política.jpg[Registrar politica, width=600, align=center]
 
 === CU-18
-image::Comunication/CU-18 Actualizar politicas.jpg[Actualizar politicas, width=600, align=center]
+image::Comunication/CU-18 Actualizar políticas.jpg[Actualizar politicas, width=600, align=center]
 
 === CU-19
-image::Comunication/CU-19 Dar de baja politica.jpg[Dar de baja politica, width=600, align=center]
+image::Comunication/CU-19 Dar de baja política.jpg[Dar de baja politica, width=600, align=center]
 
 === CU-20
 image::Comunication/CU-20 Registrar gerente.jpg[Registrar gerente, width=600, align=center]
@@ -91,7 +91,7 @@ image::Comunication/CU-29 Actualizar tipo habitación.jpg[Actualizar tipo habita
 image::Comunication/CU-30 Dar de baja tipo habitación.jpg[Dar de baja tipo habitación, width=600, align=center]
 
 === CU-31
-image::Comunication/CU-31 Consultar tipo habitación.jpg[Consultar tipo habitación, width=600, align=center]
+image::Comunication/CU-31 Consultar tipo habitacion.jpg[Consultar tipo habitación, width=600, align=center]
 
 === CU-32
 image::Comunication/CU-32 Consultar bitacora.jpg[Consultar bitacora, width=600, align=center]
@@ -106,7 +106,7 @@ image::Comunication/CU-34 Reporte trazabilidad tarifas.jpg[Reporte trazabilidad 
 image::Comunication/CU-35 Registrar habitacion.jpg[Registrar habitacion, width=600, align=center]
 
 === CU-36
-image::Comunication/CU-36 Actualizar habitación.jpg[Actualizar habitación, width=600, align=center]
+image::Comunication/CU-36 Actualizar habitacion.jpg[Actualizar habitación, width=600, align=center]
 
 === CU-37
 image::Comunication/CU-37 Dar de baja habitación.jpg[Dar de baja habitación, width=600, align=center]
@@ -121,7 +121,7 @@ image::Comunication/CU-39 Bloquear habitación.jpg[Bloquear habitación, width=6
 image::Comunication/CU-40 Registrar recepcionista.jpg[Registrar recepcionista, width=600, align=center]
 
 === CU-41
-image::Comunication/CU-41 Actualizar recepcionista.jpg[Actualizar recepcionista, width=600, align=center]
+image::Comunication/CU-41 Actualizar recpcionista.jpg[Actualizar recepcionista, width=600, align=center]
 
 === CU-42
 image::Comunication/CU-42 Consultar recepcionista.jpg[Consultar recepcionista, width=600, align=center]
