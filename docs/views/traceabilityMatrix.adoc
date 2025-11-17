@@ -1,3 +1,5 @@
+== Matriz de Trazabilidad
+
 .Matriz de Trazabilidad del Sistema de Reservaciones
 [cols="2,3,3,3,1"]
 |===
