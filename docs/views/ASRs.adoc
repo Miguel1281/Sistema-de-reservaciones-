@@ -345,40 +345,77 @@ Permitir al equipo de negocio ajustar la política de penalización por cancelac
 
 == Restricciones y Preocupaciones del Diseño: Sistema de Reservaciones
 
-=== Restricciones (Constraints)
+== Restricciones (Constraints)
 
-* *CON-1: Uso de una base de datos relacional (RDBMS) para transacciones.*
-** *Origen:* Técnico/Negocio.
-** *Descripción:* El sistema debe utilizar obligatoriamente una base de datos relacional para gestionar las transacciones críticas de reserva y pago. Esta decisión busca asegurar la consistencia y evitar problemas como dobles cargos o dobles reservas.
-
-* *CON-2: Modelo de pago completo al reservar.*
+* *CON-1: Arquitectura Centralizada.*
 ** *Origen:* Negocio.
-** *Descripción:* La única modalidad de pago soportada es el pago completo al momento de realizar la reservación. No se considerarán modelos de pago alternativos en la primera versión.
+** *Descripción:* El sistema debe ser una plataforma única y centralizada que reemplace las soluciones locales actuales. No se permite una federación de sistemas independientes.
 
-* *CON-3: Política de overbooking fija del 10%.*
+* *CON-2: Volumen de Escala.*
 ** *Origen:* Negocio.
-** *Descripción:* El sistema debe implementar una política de inventario que contemple un overbooking del 10% por tipo de habitación y fecha.
+** *Descripción:* El sistema debe soportar la operación de más de 5,000 hoteles y 1,000,000 de habitaciones.
 
-* *CON-4: Canales de venta exclusivos (web y app oficial).*
+* *CON-3: Infraestructura de Cliente Ligera.*
+** *Origen:* Técnico / Infraestructura.
+** *Descripción:* La solución de cliente (interfaz para recepcionistas) debe ejecutarse en equipos de cómputo con recursos modestos (hardware limitado).
+
+* *CON-4: Cumplimiento Legal de Privacidad.*
+** *Origen:* Legal.
+** *Descripción:* El sistema debe cumplir estrictamente con las regulaciones locales de privacidad de datos personales y de pago.
+
+* *CON-5: Consistencia Estricta en Reservas (Cero Errores).*
 ** *Origen:* Negocio.
-** *Descripción:* La solución de reservaciones solo se implementará para los canales de venta directos de la cadena, que son el sitio web y la aplicación móvil oficial.
+** *Descripción:* La tasa de incidentes de dobles reservas y dobles cobros debe ser exactamente cero. Esto impone una consistencia fuerte en el manejo de transacciones.
+
+* *CON-6: Política de Overbooking.*
+** *Origen:* Negocio.
+** *Descripción:* El sistema debe implementar obligatoriamente una lógica de overbooking del 10% por tipo de habitación.
+
+* *CON-7: Coherencia de Precios.*
+** *Origen:* Negocio.
+** *Descripción:* El precio mostrado al inicio debe ser exactamente el mismo cobrado al final; no se permiten variaciones durante el flujo de la transacción.
+
+* *CON-8: Canales de Venta Limitados.*
+** *Origen:* Negocio / Alcance.
+** *Descripción:* La solución está restringida inicialmente solo a Web y Aplicación Móvil oficial. No se deben contemplar otros canales (como quioscos o terceros) en la arquitectura inicial.
+
+* *CON-9: Modelo de Pago Total.*
+** *Origen:* Negocio.
+** *Descripción:* Se exige el pago del 100% del monto al momento de reservar. No se permiten modelos de "reserva y paga después".
+
+* *CON-10: Mandato de Tecnología RDBMS.*
+** *Origen:* Técnico.
+** *Descripción:* Es obligatorio el uso de un Sistema Gestor de Base de Datos Relacional (RDBMS) para las transacciones de reserva y pago. No se permite el uso de NoSQL para el núcleo transaccional.
+
+* *CON-11: Prioridad de Consistencia sobre Latencia.*
+** *Origen:* Técnico / Negocio.
+** *Descripción:* Se acepta explícitamente una confirmación "lenta" si eso garantiza la consistencia (evitar doble venta). La velocidad no puede sacrificar la exactitud de los datos.
 
 == Preocupaciones (Concerns)
 
-* *CRN-1: Centralización del inventario y la gestión.*
-** *Objetivo:* Diseñar una arquitectura que reemplace las soluciones locales de cada hotel por una plataforma centralizada. Esto es clave para crear un punto único de acceso a todo el inventario, garantizar la consistencia de los datos y reducir errores operativos.
+* *CRN-1: Escalabilidad y Manejo de Picos.*
+** *Objetivo:* El diseño debe manejar aumentos inesperados de tráfico (picos de demanda) de forma controlada sin caerse, degradando el servicio de forma predecible si es necesario.
 
-* *CRN-2: Coherencia y atomicidad en el proceso de reserva.*
-** *Objetivo:* Garantizar que las operaciones críticas como la retención del inventario, la autorización del pago y la confirmación final de una reserva se traten como un solo proceso atómico. Si una parte del proceso falla, se debe deshacer todo para no dejar datos en un estado inconsistente.
+* *CRN-2: Observabilidad.*
+** *Objetivo:* El sistema debe ser "caja blanca" para operaciones; se requiere capacidad para rastrear cada transacción, tener registros detallados y métricas de rendimiento para entender el estado del sistema en tiempo real.
 
-* *CRN-3: Trazabilidad y auditabilidad de las operaciones.*
-** *Objetivo:* Asegurar que cada operación relevante (reserva, pago, cancelación) quede registrada de forma inmutable para poder ser auditada. El sistema debe tener la capacidad de rastrear cada transacción de principio a fin.
+* *CRN-3: Facilidad de Operación (Usabilidad).*
+** *Objetivo:* Reducir la complejidad operativa para que recepcionistas novatos puedan usar el sistema autónomamente tras solo 10 minutos de instrucción. El diseño de la UI/UX es una preocupación crítica.
 
-* *CRN-4: Mantenibilidad a largo plazo y evolución del sistema.*
-** *Objetivo:* Crear una arquitectura que no solo resuelva los problemas actuales, sino que también esté preparada para cambios futuros, como la integración con sistemas de terceros (agencias de viaje, contabilidad, programas de fidelidad). Esto implica tomar decisiones que favorezcan la modificabilidad.
+* *CRN-4: Atomicidad de la Transacción.*
+** *Objetivo:* Garantizar que la retención de inventario, autorización de pago y confirmación ocurran como un solo proceso atómico (todo o nada) para evitar inconsistencias.
 
-* *CRN-5: Idempotencia en las operaciones de pago.*
-** *Objetivo:* Diseñar el sistema de pagos de tal forma que cada intento de cobro sea único y se procese una sola vez. Esto es crucial para evitar dobles cargos si el cliente reintenta la operación o la red duplica la solicitud.
+* *CRN-5: Idempotencia en Pagos.*
+** *Objetivo:* Diseñar la estructura para garantizar que, ante reintentos de red o errores de usuario, una solicitud de pago repetida solo se procese una única vez.
 
-* *CRN-6: Operatividad en hardware con recursos modestos.*
-** *Objetivo:* Asegurar que la solución destinada al personal de recepción sea intuitiva y pueda ejecutarse de manera fluida en equipos de cómputo con recursos modestos.
+* *CRN-6: Latencia en Liberación de Recursos.*
+** *Objetivo:* Asegurar un alto rendimiento en la gestión de bloqueos; el inventario retenido en reservas fallidas debe liberarse extremadamente rápido (menos de 500ms) para no perder oportunidades de venta.
+
+* *CRN-7: Control Centralizado de Configuración.*
+** *Objetivo:* Garantizar la mantenibilidad y gestión, permitiendo que tarifas y políticas se cambien desde un único punto administrativo para toda la cadena.
+
+* *CRN-8: Extensibilidad para Terceros.*
+** *Objetivo:* Aunque no es para la versión 1, el sistema debe diseñarse "pensando en" futuras integraciones con OTAs (Agencias de viaje online), contabilidad y fidelidad. El diseño no debe "cerrar la puerta" a estas extensiones.
+
+* *CRN-9: Trazabilidad (Auditoría).*
+** *Objetivo:* Más allá de la observabilidad técnica (logs de error), existe una preocupación de negocio por la "Auditoría". Se debe asegurar que cada operación crítica deje un rastro inmutable para los auditores.
