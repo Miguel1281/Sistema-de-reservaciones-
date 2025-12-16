@@ -1,49 +1,70 @@
 == Diagramas de comunicación
 
 === CU-01
-image::Comunication/CU-01.jpeg[Hacer reservación, width=600, align=center]
+image::Comunication/CU1/confirmarReserva.jpg[confirmarReserva, width=600, align=center]
+image::Comunication/CU1/crearReservaPendiente.jpg[crearReservaPendiente, width=600, align=center]
 
 === CU-02
-image::Comunication/CU-02 Realizar pago de reserva.jpg[Realizar pago de reserva, width=600, align=center]
+image::Comunication/CU2/obtenerEstadoPago.jpg[obtenerEstadoPago, width=600, align=center]
+image::Comunication/CU2/procesarPago.jpg[procesarPago, width=600, align=center]
 
 === CU-03
-image::Comunication/CU-03 Consultar disponibilidad.jpg[Consultar disponibilidad, width=600, align=center]
+image::Comunication/CU3/buscarHoteles.jpg[buscarHoteles, width=600, align=center]
+image::Comunication/CU3/obtenerHabitacionesHotel.jpg[obtenerHabitacionesHotel, width=600, align=center]
+image::Comunication/CU3/validarSeleccionFechas.jpg[validarSeleccionFechas, width=600, align=center]
 
 === CU-04
-image::Comunication/CU-04 Cancelar reservación.jpg[Cancelar reservación, width=600, align=center]
+image::Comunication/CU4/confirmarCancelacion.jpg[confirmarCancelacion, width=600, align=center]
+image::Comunication/CU4/cotizarCancelacion.jpg[cotizarCancelacion, width=600, align=center]
 
 === CU-05
-image::Comunication/CU-05 Consultar reserva con cuenta.jpg[Consultar reserva con cuenta, width=600, align=center]
+image::Comunication/CU5/obtenerMisReservas.jpg[obtenerMisReservas, width=600, align=center]
+image::Comunication/CU5/verDetallesReserva.jpg[verDetallesReserva, width=600, align=center]
 
 === CU-06
-image::Comunication/CU-06 Modificar periodo estancia.jpg[Modificar periodo estancia, width=600, align=center]
+image::Comunication/CU6/confirmarModificacion.jpg[confirmarModificacion, width=600, align=center]
+image::Comunication/CU6/cotizarNuevasFechas.jpg[cotizarNuevasFechas, width=600, align=center]
 
 === CU-07
-image::Comunication/CU-07 Modificar tipo habitación.jpg[Modificar tipo habitación, width=600, align=center]
+image::Comunication/CU7/bloquearYCotizarCambio.jpg[bloquearYCotizarCambio, width=600, align=center]
+image::Comunication/CU7/confirmarCambio.jpg[confirmarCambio, width=600, align=center]
+image::Comunication/CU7/obtenerAlternativasDisponibles.jpg[obtenerAlternativasDisponibles, width=600, align=center]
 
 === CU-08
-image::Comunication/CU-08 Check in.png[Check in, width=600, align=center]
+image::Comunication/CU8/buscarReservasDelDia.jpg[buscarReservasDelDia, width=600, align=center]
+image::Comunication/CU8/registrarCheckIn.jpg[registrarCheckIn, width=600, align=center]
 
 === CU-09
-image::Comunication/CU-09 Check out.png[Check out, width=600, align=center]
+image::Comunication/CU9/confirmarSalida.jpg[confirmarSalida, width=600, align=center]
+image::Comunication/CU9/obtenerEstadoCuenta.jpg[obtenerEstadoCuenta, width=600, align=center]
+image::Comunication/CU9/procesarPagoFinal.jpg[procesarPagoFinal, width=600, align=center]
 
 === CU-10
-image::Comunication/CU-10 Registrar consumos.png[Registrar consumos, width=600, align=center]
+image::Comunication/CU10/buscarEstanciaPorHabitacion.jpg[buscarEstanciaPorHabitacion, width=600, align=center]
+image::Comunication/CU10/registrarCargoAdicional.jpg[registrarCargoAdicional, width=600, align=center]
 
 === CU-11
-image::Comunication/CU-11 Realizar cambio de habitacion.png[Realizar cambio de habitacion, width=600, align=center]
+image::Comunication/CU11/buscarDisponibilidadCambio.jpg[buscarDisponibilidadCambio, width=600, align=center]
+image::Comunication/CU11/cotizarDiferenciaCambio.jpg[cotizarDiferenciaCambio, width=600, align=center]
+image::Comunication/CU11/ejecutarCambio.jpg[ejecutarCambio, width=600, align=center]
 
 === CU-12
-image::Comunication/CU-12 Hacer reservacion recepcion.png[Hacer reservacion recepcion, width=600, align=center]
+image::Comunication/CU12/buscarDisponibilidad.jpg[buscarDisponibilidad, width=600, align=center]
+image::Comunication/CU12/crearReservaMosatrador.jpg[crearReservaMosatrador, width=600, align=center]
 
 === CU-13
-image::Comunication/CU-13 Modificar estancia huesped.png[Modificar estancia huesped, width=600, align=center]
+image::Comunication/CU13/aplicarModificacionEstancia.jpg[aplicarModificacionEstancia, width=600, align=center]
+image::Comunication/CU13/cotizarNuevaFechaSalida.jpg[cotizarNuevaFechaSalida, width=600, align=center]
 
 === CU-14
-image::Comunication/CU-14 Registrar tarifa.png[Registrar tarifa, width=600, align=center]
+image::Comunication/CU14/obtenerTrifasVigentes.jpg[obtenerTrifasVigentes, width=600, align=center]
+image::Comunication/CU14/publicarNuevaTarifa.jpg[publicarNuevaTarifa, width=600, align=center]
+image::Comunication/CU14/validarSolapamiento.jpg[validarSolapamiento, width=600, align=center]
 
 === CU-15
-image::Comunication/CU-15 Actualizar tarifa.png[Actualizar tarifa, width=600, align=center]
+image::Comunication/CU15/analizarImpactoBaja.jpg[analizarImpactoBaja, width=600, align=center]
+image::Comunication/CU15/buscarTarifasActivas.jpg[buscarTarifasActivas, width=600, align=center]
+image::Comunication/CU15/ejecutarBajaDefinitiva.jpg[ejecutarBajaDefinitiva, width=600, align=center]
 
 === CU-16
 image::Comunication/CU-16 Dar de baja tarifa.png[Dar de baja tarifa, width=600, align=center]
