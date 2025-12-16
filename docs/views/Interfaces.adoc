@@ -1,593 +1,849 @@
 == Diagramas de interfaces
 
-=== Interfaz: IAuthPersonal
-image::Interface diagrams/IAuthPersonal.png[IAuthPersonal, width=600, align=center]
+=== Interfaces de sistema
 
-==== Especificaciones de Operaciones (IAuthPersonal)
+==== CU1-IHacerReserva
+image::Interface diagrams/CU1-IHacerReserva.jpg[IHacerReserva, width=600, align=center]
+Especificación de Interfaz: IHacerReserva
 
-===== login(usuario: string, contrasena: string): AuthTokenDTO
+Descripción: Interfaz provista por el componente SistemaReservas. Permite a un huésped iniciar el proceso de bloqueo de inventario y confirmar la compra.
 
-Precondiciones:
+Operación: crearReservaPendiente
 
-1. usuario y contrasena no deben ser nulos.
+Firma:
+----
+crearReservaPendiente(solicitud: SolicitudReserva): ResumenReserva
+----
 
-Postcondiciones:
+Pre-condiciones:
 
-1. Si usuario existe, contrasena es correcta y estado es "Activo", retorna un AuthTokenDTO válido.
-2. De lo contrario, lanza AuthenticationException.
+* La fechaLlegada debe ser mayor o igual a la fecha actual del sistema.
+* La fechaSalida debe ser posterior a la fechaLlegada.
+* Debe existir disponibilidad de inventario para el idTipoHabitacion en el idHotel solicitado para el rango de fechas indicado (validado contra ICatalogoMgt).
 
-===== verificarPermiso(token: AuthTokenDTO, permisoRequerido: string): boolean
+Pos-condiciones:
 
-Precondiciones:
-
-1. token debe ser válido.
-
-Postcondiciones:
-
-1. Retorna true si el rol asociado al token tiene el permisoRequerido.
-2. De lo contrario, retorna false.
-
-===== consultarUsuario(usuarioID: string): UsuarioDTO
-
-Precondiciones:
-
-1. usuarioID debe existir.
-
-Postcondiciones:
-
-1. Retorna el UsuarioDTO con los datos del usuario (sin información sensible).
+* Se crea una nueva instancia de Reserva en el sistema con estado PENDIENTE.
+* Se decrementa temporalmente el inventario disponible (bloqueo suave) por el tiempo definido en expiracionRetencion.
+* Se retorna un objeto ResumenReserva que incluye el costo total calculado y la fecha/hora límite para confirmar el pago.
 
 ---
 
-=== Interfaz: IConsultaReserva
-image::Interface diagrams/IConsultaReserva.png[IConsultaReserva, width=600, align=center]
+Operación: confirmarReserva
 
-==== Especificaciones de Operaciones (IConsultaReserva)
+Firma:
+----
+confirmarReserva(idReserva: int, tokenPago: String): ComprobanteReserva
+----
 
-===== buscarReservaPorID(reservaID: string): ReservaDTO
+Pre-condiciones:
 
-Precondiciones:
+* Debe existir una reserva con el idReserva proporcionado.
+* El estado actual de la reserva debe ser PENDIENTE.
+* La fecha/hora actual no debe haber superado la expiracionRetencion establecida previamente.
+* El tokenPago debe ser válido y la transacción financiera debe haber sido aprobada (validado contra IPagosMgt).
 
-1. reservaID no debe ser nulo.
+Pos-condiciones:
 
-Postcondiciones:
-
-1. Retorna el ReservaDTO si se encuentra.
-2. Retorna null o lanza NotFoundException si no existe.
-
-===== buscarReservasPorCliente(clienteID: string): ReservaDTO[]
-
-Precondiciones:
-
-1. clienteID no debe ser nulo.
-
-Postcondiciones:
-
-1. Retorna una lista (posiblemente vacía) de ReservaDTO asociadas al clienteID.
-
-
-===== buscarReservasActivasHotel(hotelID: string): ReservaDTO[]
-
-Precondiciones:
-
-1. hotelID no debe ser nulo.
-
-Postcondiciones:
-
-1. Retorna una lista de ReservaDTO en estado "Confirmada" o "Activa" para el hotelID especificado.
+* El estado de la reserva cambia a CONFIRMADA.
+* El bloqueo de inventario se hace permanente.
+* Se genera y retorna un ComprobanteReserva con un codigoConfirmacion único y el idTransaccion asociado.
 
 ---
 
-=== Interfaz: IGestionEstancia
-image::Interface diagrams/IGestionEstancia.png[IGestionEstancia, width=600, align=center]
+==== CU2-IRealizarPagoReserva
+image::Interface diagrams/CU2-IRealizarPagoReserva.jpg[IRealizarPagoReserva, width=600, align=center]
+Especificación de Interfaz: IRealizarPagoReserva
 
-==== Especificaciones de Operaciones (IGestionEstancia)
+Descripción: Interfaz provista por el componente SistemaPagos. Encapsula la lógica de comunicación con la pasarela bancaria y el procesamiento seguro de transacciones financieras.
 
-===== realizarCheckIn(reservaID: string): EstanciaDTO
+Operación: procesarPago
 
-Precondiciones:
+Firma:
+----
+procesarPago(solicitud: SolicitudEjecucionPago): ConfirmacionPago
+----
 
-1. El recepcionista está autenticado.
-2. Una Reserva debe existir (verificada contra IConsultaReserva) y estar en estado "Confirmada".
+Pre-condiciones:
 
-Postcondiciones:
+* El idReserva contenido en la solicitud debe corresponder a una reserva existente en el sistema.
+* El monto debe ser mayor a cero y coincidir con el saldo pendiente o el depósito requerido.
+* Los DetallesMetodoPago deben ser sintácticamente válidos (ej. la fechaExpiracion debe ser futura, el numeroTarjetaEncriptada debe cumplir el algoritmo de validación).
 
-1. Se crea una nueva entidad Estancia con estado "Activa".
-2. Se actualiza el estado de la Habitacion (en GestorInventario) a "Ocupado".
-3. Retorna la EstanciaDTO creada.
+Pos-condiciones:
 
-
-===== realizarCheckOut(estanciaID: string): FacturaPreliminarDTO
-
-Precondiciones:
-
-1. La Estancia debe existir y estar en estado "Activa".
-
-Postcondiciones:
-
-1. El estado de la Estancia se actualiza a "Cerrada".
-2. Se actualiza el estado de la Habitacion (en GestorInventario) a "Requiere Limpieza".
-3. Se calcula el total de consumos y se retorna una FacturaPreliminarDTO.
-
-
-===== registrarConsumo(estanciaID: string, consumo: ConsumoDTO): boolean
-
-Precondiciones:
-
-1. La Estancia debe existir y estar "Activa".
-
-Postcondiciones:
-
-1. Un nuevo Consumo es creado y asociado a la Estancia.
-2. Retorna true.
-
-
-===== cambiarHabitacion(estanciaID: string, nuevaHabitacionID: string): boolean
-
-Precondiciones:
-
-1. La Estancia debe estar "Activa".
-2. La nuevaHabitacionID debe estar disponible y limpia (verificada contra IInventarioAdmin).
-
-Postcondiciones:
-
-1. La Estancia se actualiza con la nuevaHabitacionID.
-2. La habitacionID original se actualiza a "Requiere Limpieza".
-3. La nuevaHabitacionID se actualiza a "Ocupada".
-4. Retorna true.
-
-
-===== modificarEstancia(estanciaID: string, nuevasFechas: RangoFechasDTO): boolean
-
-Precondiciones:
-
-1. La Estancia debe estar "Activa".
-2. Si se extiende, la habitación actual debe estar disponible para las nuevasFechas.
-
-Postcondiciones:
-
-1. La fecha de salida de la Estancia es actualizada.
-2. Se recalcula el costo total.
-3. Retorna true.
+* Se genera un intento de transacción en la pasarela de pagos externa.
+* Se crea una instancia de ConfirmacionPago con la marcaTiempo actual.
+* Si la pasarela aprueba el cargo, el atributo estado será APROBADO y se generará un codigoAutorizacion.
+* Si la pasarela rechaza el cargo (fondos insuficientes, fraude), el atributo estado será RECHAZADO.
 
 ---
 
-=== Interfaz: IHuespedReserva
-image::Interface diagrams/IHuespedReserva.png[IHuespedReserva, width=600, align=center]
+Operación: obtenerEstadoPago
 
-==== Especificaciones de Operaciones (IHuespedReserva)
+Firma:
+----
+obtenerEstadoPago(idReserva: int): EstadoTransaccion
+----
 
-===== crearReserva(detalles: ReservaDTO, cliente: ClienteDTO): string
+Pre-condiciones:
 
-Precondiciones:
+* Debe existir al menos un intento de pago registrado asociado al idReserva.
 
-1. detalles.tipoHabitacionID debe estar disponible para las fechas solicitadas (verificado contra IInventarioConsulta).
-2. cliente.datosPago debe ser válido.
-3. El ClienteDTO debe contener datos de un cliente nuevo o un clienteID existente.
+Pos-condiciones:
 
-Postcondiciones:
-
-1. Se crea una nueva entidad Reserva en el sistema con estado "Pendiente de Pago".
-2. Se inicia la llamada a IPagos.realizarCobro().
-3. Se retorna un reservaID único.
-   (Si el pago falla, la reserva pasa a "Cancelada").
-
-
-===== cancelarReserva(reservaID: string, clienteID: string): boolean
-
-Precondiciones:
-
-1. La Reserva debe existir y pertenecer al clienteID.
-2. La Reserva debe estar en estado "Confirmada".
-
-Postcondiciones:
-
-1. El estado de la Reserva se actualiza a "Cancelada".
-2. Se libera la habitación en el inventario.
-3. Se inicia una llamada a IPagos.gestionarReembolso() si las políticas (consultadas a IPoliticasConsulta) aplican.
-4. Retorna true.
-
-
-===== modificarPeriodoEstancia(reservaID: string, clienteID: string, nuevasFechas: RangoFechasDTO): boolean
-
-Precondiciones:
-
-1. La Reserva debe existir, pertenecer al clienteID y estar "Confirmada".
-2. La solicitud debe cumplir las políticas de cambio.
-3. El tipo de habitación debe estar disponible para las nuevasFechas (verificado contra IInventarioConsulta).
-
-Postcondiciones:
-
-1. La Reserva es actualizada con las nuevasFechas.
-2. Se recalcula el costo (vía IPoliticasConsulta) y se gestiona el cobro/reembolso (vía IPagos).
-3. Retorna true.
-
-
-===== modificarTipoHabitacion(reservaID: string, clienteID: string, nuevoTipoHabitacionID: string): boolean
-
-Precondiciones:
-
-1. La Reserva debe existir, pertenecer al clienteID y estar "Confirmada".
-2. El nuevoTipoHabitacionID debe estar disponible para las fechas de la reserva.
-
-Postcondiciones:
-
-1. La Reserva es actualizada con el nuevoTipoHabitacionID.
-2. Se recalcula el costo y se gestiona el cobro/reembolso diferencial.
-3. Retorna true.
+* Retorna el valor actual de la enumeración EstadoTransaccion correspondiente al último intento de pago realizado para esa reserva (no modifica ningún dato, es una operación de consulta segura/idempotente).
 
 ---
 
-=== Interfaz: IInventarioAdmin
-image::Interface diagrams/IInventarioAdmin.png[IInventarioAdmin, width=600, align=center]
+==== CU3-IConsultarDisponibilidad
+image::Interface diagrams/CU3-IConsultarDisponibilidad.jpg[IConsultarDisponibilidad, width=600, align=center]
+Especificación de Interfaz: IConsultarDisponibilidad
 
-==== Especificaciones de Operaciones (IInventarioAdmin)
+Descripción: Interfaz provista por el componente SistemaReservas. Permite a los usuarios explorar el catálogo, ver detalles de alojamiento y verificar disponibilidad en tiempo real antes de iniciar una reserva.
 
-===== registrarHotel(hotel: HotelDTO): string
+Operación: buscarHoteles
 
-Precondiciones:
+Firma:
+----
+buscarHoteles(filtro: CriterioUbicacion): ResumenHotel[]
+----
 
-1. El usuario debe ser "Administrador" (verificado por IAuthPersonal).
-2. hotel.nombre no debe existir.
+Pre-condiciones:
 
-Postcondiciones:
+* El objeto filtro no debe ser nulo.
+* Al menos uno de los atributos de búsqueda (ciudad o pais) debe contener una cadena de texto no vacía.
 
-1. Un nuevo Hotel es creado.
-2. Retorna el hotelID generado.
+Pos-condiciones:
 
-
-===== darDeBajaHotel(hotelID: string): boolean
-
-Precondiciones:
-
-1. El usuario debe ser "Administrador".
-2. El hotelID debe existir.
-3. El hotel no debe tener reservaciones activas o futuras.
-
-Postcondiciones:
-
-1. El Hotel se marca como inactivo.
-2. Retorna true.
-
-===== registrarTipoHabitacion(hotelID: string, tipo: TipoHabitacionDTO): string
-
-Precondiciones:
-
-1. El usuario debe ser "Administrador".
-2. El hotelID debe existir.
-
-Postcondiciones:
-
-1. Un nuevo TipoHabitacion es creado y asociado al Hotel.
-2. Retorna el tipoHabitacionID generado.
-
-===== darDeBajaHabitacion(habitacionID: string): boolean
-
-Precondiciones:
-
-1. El usuario debe ser "Gerente" o "Administrador".
-2. La Habitacion debe existir.
-3. La Habitacion no debe tener reservaciones activas o futuras.
-
-Postcondiciones:
-
-1. El estado de la Habitacion se actualiza a "FueraDeServicio".
-2. Retorna true.
-
-===== actualizarEstadoHabitacion(habitacionID: string, estado: string): boolean
-
-Precondiciones:
-
-1. La habitacionID debe existir.
-2. El estado debe ser uno de los valores permitidos {Disponible, Ocupada, Requiere Limpieza, FueraDeServicio, Bloqueada}.
-
-Postcondiciones:
-
-1. El estado de la Habitacion se actualiza al nuevo estado.
-2. Retorna true.
+* Retorna una colección de objetos ResumenHotel que coinciden parcialmente o totalmente con los criterios de ubicación.
+* Si no hay coincidencias, retorna una lista vacía (no debe retornar error/null).
 
 ---
 
-=== Interfaz: IInventarioConsulta
-image::Interface diagrams/IInventarioConsulta.png[IInventarioConsulta, width=600, align=center]
+Operación: obtenerHabitacionesHotel
 
-==== Especificaciones de Operaciones (IInventarioConsulta)
+Firma:
+----
+obtenerHabitacionesHotel(idHotel: String): DetalleHabitacion[]
+----
 
-===== consultarDisponibilidad(consulta: ConsultaDisponibilidadDTO): DisponibilidadDTO[]
+Pre-condiciones:
 
-Precondiciones:
+* El idHotel proporcionado debe corresponder a un hotel activo en el ICatalogoMgt.
 
-1. consulta.hotelID (u otro criterio de búsqueda) y consulta.fechas deben ser válidos.
+Pos-condiciones:
 
-Postcondiciones:
-
-1. Retorna una lista de DisponibilidadDTO (agregando por TipoHabitacion) que cumplen con los criterios.
-2. La respuesta debe cumplir con las métricas de rendimiento (P95 ≤ 500ms).
-
-===== consultarHoteles(criterio: string): HotelDTO[]
-
-Precondiciones:
-
-1. Ninguna.
-
-Postcondiciones:
-
-1. Retorna una lista de HotelDTO que coinciden con el criterio.
-
-===== consultarTiposHabitacion(hotelID: string): TipoHabitacionDTO[]
-
-Precondiciones:
-
-1. hotelID debe existir.
-
-Postcondiciones:
-
-1. Retorna la lista de TipoHabitacionDTO para ese hotelID.
+* Retorna la lista completa de tipos de habitación asociados a ese hotel.
+* La información retornada (DetalleHabitacion) incluye datos descriptivos estáticos (fotos, descripción, capacidad) y la tarifaBase referencial (no la final, ya que esa depende de las fechas).
 
 ---
 
-=== Interfaz: ILoggin
-image::Interface diagrams/ILoggin.png[ILoggin, width=600, align=center]
+Operación: validarSeleccionFechas
 
-==== Especificaciones de Operaciones (ILogging)
+Firma:
+----
+validarSeleccionFechas(solicitud: SolicitudFechas): DisponibilidadCalculada
+----
 
-===== registrarEvento(evento: LogDTO): boolean
+Pre-condiciones:
 
-Precondiciones:
+* fechaLlegada debe ser igual o posterior a la fecha actual.
+* fechaSalida debe ser estrictamente posterior a fechaLlegada.
+* idTipoHabitacion debe existir en el catálogo.
+* cantidadHabitaciones debe ser mayor a 0.
 
-1. Evento no debe ser nulo.
+Pos-condiciones:
 
-Postcondiciones:
-
-1. Se crea una nueva EntradaLog y se persiste de forma asíncrona (para no afectar el rendimiento del componente que llama).
-2. Retorna true.
-
----
-
-=== Interfaz: IPago
-image::Interface diagrams/IPago.png[IPago, width=600, align=center]
-
-==== Especificaciones de Operaciones (IPagos)
-
-===== realizarCobro(detallesCobro: CobroDTO): TransaccionDTO
-
-Precondiciones:
-
-1. detallesCobro.monto debe ser > 0.
-2. detallesCobro.datosTarjeta (o método de pago) debe estar presente.
-
-Postcondiciones:
-
-1. Se realiza una llamada a la IPasarelaExterna.
-2. Se crea una TransaccionPago interna.
-3. Si la pasarela aprueba, el estado es "Aprobada"; si no, "Rechazada".
-4. La operación debe ser idempotente (dobles cobros no son posibles).
-5. Retorna la TransaccionDTO.
-
-===== gestionarReembolso(transaccionOriginalID: string, monto: double): TransaccionDTO
-
-Precondiciones:
-
-1. transaccionOriginalID debe existir y estar "Aprobada".
-2. monto debe ser > 0 y <= al monto original.
-
-Postcondiciones:
-
-1. Se realiza una llamada a la IPasarelaExterna para revertir el pago.
-2. Se crea una nueva TransaccionPago (tipo Reembolso) o se actualiza la original a "Reembolsada".
-3. Retorna la TransaccionDTO del reembolso.
+* Se consulta el inventario dinámico en ICatalogoMgt para cada noche del rango.
+* Si hay inventario suficiente para todas las noches:
+** estaDisponible es TRUE.
+** tarifaTotalCalculada contiene la suma de los precios de cada noche (aplicando temporadas si las hubiera).
+* Si falta inventario en al menos una noche:
+** estaDisponible es FALSE.
+** mensajeAviso indica la causa (ej. "Sin disponibilidad para la noche del 15/Oct").
 
 ---
 
-=== Interfaz: IPersonalAdmin
-image::Interface diagrams/IPersonalAdmin.png[IPersonalAdmin, width=600, align=center]
+==== CU4-ICancelarReserva
+image::Interface diagrams/CU4-ICancelarReserva.jpg[ICancelarReserva, width=600, align=center]
+Especificación de Interfaz: ICancelarReserva
 
-==== Especificaciones de Operaciones (IPersonalAdmin)
+Descripción: Interfaz provista por el componente SistemaReservas. Gestiona el ciclo de vida de la terminación anticipada de un contrato de hospedaje, calculando penalizaciones según políticas vigentes y procesando devoluciones.
 
-===== registrarGerente(gerente: UsuarioDTO): string
+Operación: cotizarCancelacion
 
-Precondiciones:
+Firma:
+----
+cotizarCancelacion(idReserva: int): ResumenPenalizacion
+----
 
-1. El usuario debe ser "Administrador".
-2. gerente.nombreUsuario no debe existir.
+Pre-condiciones:
 
-Postcondiciones:
+* El idReserva debe existir y su estado actual debe ser CONFIRMADA o PENDIENTE.
+* La fecha actual no debe ser posterior a la fecha de Check-out de la reserva.
 
-1. Se crea un UsuarioPersonal con rol "Gerente".
-2. Retorna el usuarioID generado.
+Pos-condiciones:
 
-===== darDeBajaGerente(gerenteID: string): boolean
-
-Precondiciones:
-
-1. El usuario debe ser "Administrador".
-2. El gerenteID debe existir.
-
-Postcondiciones:
-
-1. El UsuarioPersonal se actualiza a estado "Inactivo".
-2. Retorna true.
-
-===== registrarRecepcionista(recepcionista: UsuarioDTO): string
-
-Precondiciones:
-
-1. El usuario debe ser "Gerente".
-2. recepcionista.nombreUsuario no debe existir.
-
-Postcondiciones:
-
-1. Se crea un UsuarioPersonal con rol "Recepcionista" y se asocia al hotel del Gerente.
-2. Retorna el usuarioID generado.
-
-===== darDeBajaRecepcionista(recepcionistaID: string): boolean
-
-Precondiciones:
-
-1. El usuario debe ser "Gerente".
-2. El recepcionistaID debe existir.
-
-Postcondiciones:
-
-1. El UsuarioPersonal se actualiza a estado "Inactivo".
-2. Retorna true.
+* Se consulta la PoliticaCancelacion asociada al hotel y tarifa en ICatalogoMgt.
+* Se calculan los montos matemáticos (Pagado - Penalización = Reembolso).
+* Se genera un tokenValidacion temporal (con tiempo de vida corto) que vincula este cálculo específico con la reserva.
+* No se altera el estado de la reserva ni del inventario en este paso.
 
 ---
 
-=== Interfaz: IPoliticasAdmin
-image::Interface diagrams/IPoliticasAdmin.png[IPoliticasAdmin, width=600, align=center]
+Operación: confirmarCancelacion
 
-==== Especificaciones de Operaciones (IPoliticasAdmin)
+Firma:
+----
+confirmarCancelacion(idReserva: int, tokenValidacion: String): ReciboCancelacion
+----
 
-===== registrarPolitica(politica: PoliticaDTO): string
+Pre-condiciones:
 
-Precondiciones:
+* El tokenValidacion debe coincidir con el generado en la cotización previa y no debe haber expirado.
+* La reserva no debe haber sufrido cambios de estado desde la cotización.
 
-1. El usuario debe ser "Administrador".
-2. politica.tipo debe ser válido.
+Pos-condiciones:
 
-Postcondiciones:
-
-1. Se crea una nueva Politica.
-2. Retorna el politicaID generado.
-
-===== darDeBajaPolitica(politicaID: string): boolean
-
-Precondiciones:
-
-1. El usuario debe ser "Administrador".
-2. La politicaID debe existir.
-
-Postcondiciones:
-
-1. La Politica se marca como inactiva.
-2. Retorna true.
+* El estado de la reserva cambia definitivamente a CANCELADA.
+* Se libera el inventario (habitaciones) en ICatalogoMgt para que pueda ser vendido a otros.
+* Si corresponde reembolso (montoAReembolsar > 0), se envía una orden de devolución a IPagosMgt y se obtiene el idTransaccionReembolso.
+* Se retorna el ReciboCancelacion como prueba legal de la operación.
 
 ---
 
-=== Interfaz: IPoliticasConsulta
-image::Interface diagrams/IPoliticasConsulta.png[IPoliticasConsulta, width=600, align=center]
+==== CU5-IConsultarReservaCuenta
+image::Interface diagrams/CU5-IConsultarReservaCuenta.jpg[IConsultarReservaCuenta, width=600, align=center]
+Especificación de Interfaz: IConsultarReservaCuenta
 
-==== Especificaciones de Operaciones (IPoliticasConsulta)
+Descripción: Interfaz provista por el componente SistemaReservas. Permite a los usuarios autenticados acceder a su historial de transacciones, verificando estados actuales y desgloses financieros de sus estancias pasadas, presentes o futuras.
 
-===== calcularPrecioReserva(consulta: ConsultaPrecioDTO): double
+Operación: obtenerMisReservas
 
-Precondiciones:
+Firma:
+----
+obtenerMisReservas(idUsuario: int): ResumenReserva[]
+----
 
-1. consulta.tipoHabitacionID y consulta.fechas deben ser válidos.
+Pre-condiciones:
 
-Postcondiciones:
+* El idUsuario debe corresponder a una cuenta activa en el sistema (IClienteMgt).
+* El usuario debe estar autenticado en la sesión actual.
 
-1. Retorna el precio total calculado sumando las Tarifas diarias correspondientes.
+Pos-condiciones:
 
-===== validarReglasCancelacion(reservaID: string, fechaCancelacion: date): ReglasCancelacionDTO
-
-Precondiciones:
-
-1. reservaID debe existir.
-
-Postcondiciones:
-
-1. Retorna un ReglasCancelacionDTO indicando si aplica reembolso y el monto de penalización (si existe) basado en la Politica de cancelación vigente.
-
-===== obtenerPoliticaOverbooking(hotelID: string, tipoHabitacionID: string): double
-
-Precondiciones:
-
-1. hotelID y tipoHabitacionID deben existir.
-
-Postcondiciones:
-
-1. Retorna el porcentaje de overbooking permitido (ej. 10.0) basado en la Politica de overbooking.
+* Retorna una colección de objetos ResumenReserva asociados a ese usuario.
+* La lista se ordena por defecto cronológicamente (de la más reciente a la más antigua).
+* Si el usuario no tiene historial, retorna una lista vacía (no null).
 
 ---
 
-=== Interfaz: IRecepcionReserva
-image::Interface diagrams/IRecepcionReserva.png[IRecepcionReserva, width=600, align=center]
+Operación: verDetallesReserva
 
-==== Especificaciones de Operaciones (IRecepcionReserva)
+Firma:
+----
+verDetallesReserva(idReserva: int): DetalleReservaCompleto
+----
 
-===== crearReservaRecepcion(detalles: ReservaDTO, cliente: ClienteDTO): string
+Pre-condiciones:
 
-Precondiciones:
+* El idReserva debe existir en el repositorio de reservas.
+* (Seguridad) La reserva debe pertenecer al usuario que realiza la consulta (o a un administrador autorizado).
 
-1. El recepcionista está autenticado (IAuthPersonal).
-2. La habitación está disponible (verificado contra IInventarioConsulta).
+Pos-condiciones:
 
-Postcondiciones:
-
-1. Se crea una nueva entidad Reserva con estado "Confirmada" (el pago se maneja en el hotel).
-2. El estado de la habitación en GestorInventario se actualiza a "Ocupado".
-3. Retorna el reservaID.
-
----
-
-=== Interfaz: IReportes
-image::Interface diagrams/IReportes.png[IReportes, width=600, align=center]
-
-==== Especificaciones de Operaciones (IReportes)
-
-===== consultarBitacoraTransacciones(fechas: RangoFechasDTO, tipo: string): LogDTO[]
-
-Precondiciones:
-
-1. El usuario debe ser "Gerente" o "Auditor".
-
-Postcondiciones:
-
-1. Retorna una lista de EntradaLog que coinciden con el rango de fechas y tipo de transacción (ej. "Pago", "Cancelación").
-
-===== rastrearHistorialReserva(reservaID: string): LogDTO[]
-
-Precondiciones:
-
-1. El usuario debe ser "Gerente" o "Auditor".
-2. reservaID debe ser válido.
-
-Postcondiciones:
-
-1. Retorna una lista cronológica de todas las EntradaLog donde contexto.reservaID == reservaID.
-
-===== generarReporteTrazabilidadTarifas(reservaID: string): ReporteTarifaDTO
-
-Precondiciones:
-
-1. El usuario debe ser "Gerente" o "Auditor".
-
-Postcondiciones:
-
-1. Llama a IConsultaReserva e IPoliticasConsulta.
-2. Retorna un ReporteTarifaDTO que muestra qué tarifas estaban vigentes y cuáles se aplicaron a la reserva.
+* Retorna un objeto DetalleReservaCompleto con toda la información extendida.
+* Se calcula y retorna el desglose financiero actualizado en la lista de ItemFactura (incluyendo cargos extras consumidos hasta el momento si la reserva está activa).
 
 ---
 
-=== Interfaz: ITarifasAdmin
-image::Interface diagrams/ITarifasAdmin.png[ITarifasAdmin, width=600, align=center]
+==== CU6-IModificarPeriodoEstancia
+image::Interface diagrams/CU6-IModificarPeriodoEstancia.jpg[IModificarPeriodoEstancia, width=600, align=center]
+Especificación de Interfaz: IModificarPeriodoEstancia
 
-==== Especificaciones de Operaciones (ITarifasAdmin)
+Descripción: Interfaz provista por el componente SistemaReservas. Permite alterar la duración de una estancia ya reservada, gestionando la disponibilidad del nuevo periodo y los ajustes financieros correspondientes (cargos adicionales o reembolsos) sin cancelar la reserva original.
 
-===== registrarTarifa(tarifa: TarifaDTO): string
+Operación: cotizarNuevasFechas
 
-Precondiciones:
+Firma:
+----
+cotizarNuevasFechas(idReservas: int, nuevasFechas: RangoFechas): CotizacionCambio
+----
 
-1. El usuario debe ser "Administrador".
-2. La tarifa.tipoHabitacionID debe existir.
+Pre-condiciones:
 
-Postcondiciones:
+* El idReserva debe existir y estar en estado CONFIRMADA.
+* La fecha de check-in original no debe haber pasado (no se pueden modificar fechas de reservas ya iniciadas o pasadas).
+* El objeto nuevasFechas debe contener un rango válido y futuro.
 
-1. Se crea una nueva Tarifa.
-2. Retorna el tarifaID generado.
+Pos-condiciones:
 
-===== actualizarTarifa(tarifaID: string, tarifa: TarifaDTO): boolean
+* Se verifica disponibilidad en ICatalogoMgt para el nuevo rango.
+* Si hay disponibilidad:
+** esPosible es TRUE.
+** Se calcula la diferenciaPrecio (Precio Nuevo - Precio Viejo).
+** Se determina el accionFinanciera (ej. si diferencia > 0 $\rightarrow$ COBRO_ADICIONAL).
+** Se genera un tokenCotizacion temporal.
+* Si no hay disponibilidad:
+** esPosible es FALSE.
+** tokenCotizacion es nulo.
+* No se modifica la reserva original todavía.
 
-Precondiciones:
+---
 
-1. El usuario debe ser "Administrador".
-2. El tarifaID debe existir.
+Operación: confirmarModificacion
 
-Postcondiciones:
+Firma:
+----
+confirmarModificacion(idReserva: int, tokenCotizacion: String): ConfirmacionCambio
+----
 
-1. La Tarifa existente es actualizada con los nuevos datos.
-2. Retorna true.
+Pre-condiciones:
+
+* El tokenCotizacion debe ser válido, coincidir con la reserva y no haber expirado (el inventario consultado en la cotización debe seguir disponible).
+* Si la accionFinanciera requería cobro, el pago debe haber sido autorizado previamente o en este instante (vía colaboración con SistemaPagos).
+
+Pos-condiciones:
+
+* Se actualizan las fechas de entrada/salida en la entidad Reserva.
+* Se actualiza el bloqueo de inventario en ICatalogoMgt (liberando los días que ya no se usan y tomando los nuevos).
+* Se registra la transacción financiera de ajuste.
+* Se retorna ConfirmacionCambio con los datos actualizados.
+
+---
+
+==== CU7-IModificarTipoHabitacion
+image::Interface diagrams/CU7-IModificarTipoHabitacion.jpg[IModificarTipoHabitacion, width=600, align=center]
+Especificación de Interfaz: IModificarTipoHabitacion
+
+Descripción: Interfaz provista por el componente SistemaReservas. Permite realizar cambios en la categoría de alojamiento (Upgrades/Downgrades) de una reserva confirmada, gestionando inventarios temporales y ajustes de tarifas.
+
+Operación: obtenerAlternativasDisponibles
+
+Firma:
+----
+obtenerAlternativasDisponibles(idReserva: int): OpcionMejora[]
+----
+
+Pre-condiciones:
+
+* El idReserva debe existir y corresponder a una reserva activa (CONFIRMADA) que aún no ha realizado Check-in.
+
+Pos-condiciones:
+
+* Consulta ICatalogoMgt usando las fechas originales de la reserva.
+* Retorna una lista de tipos de habitación que tienen disponibilidad completa para esas fechas, excluyendo el tipo actual.
+* Calcula la diferencia de precio para cada opción.
+
+---
+
+Operación: bloquearYCotizarCambio
+
+Firma:
+----
+bloquearYCotizarCambio(idReserva: int, idNuevoTipo: String): CotizacionActualizada
+----
+
+Pre-condiciones:
+
+* El idNuevoTipo debe ser uno de los retornados previamente como disponible.
+
+Pos-condiciones:
+
+* Realiza un bloqueo temporal ("Soft Hold") en el inventario del nuevo tipo de habitación.
+* Retorna un objeto CotizacionActualizada con un tokenBloqueo único y un tiempo de expiración (ej. 5 minutos).
+* Define el monto exacto a pagar o reembolsar.
+
+---
+
+Operación: confirmarCambio
+
+Firma:
+----
+confirmarCambio(tokenBloqueo: String): ResultadoCambio
+----
+
+Pre-condiciones:
+
+* El tokenBloqueo debe ser válido y no haber expirado.
+* Si hay saldo pendiente, el pago debe haber sido autorizado (colaboración implícita con SistemaPagos).
+
+Pos-condiciones:
+
+* Convierte el bloqueo temporal en permanente.
+* Libera el inventario de la habitación anterior (la devuelve al pool disponible).
+* Actualiza la referencia de idTipoHabitacion en la entidad Reserva.
+* Retorna ResultadoCambio con cambioExitoso = TRUE.
+
+---
+
+==== CU8-ICheckIn
+image::Interface diagrams/CU8-ICheckIn.jpg[ICheckIn, width=600, align=center]
+Especificación de Interfaz: ICheckIn
+
+Descripción: Interfaz provista por el componente SistemaRecepcion. Facilita al personal de front-desk la localización de reservas previstas para el día actual y la ejecución del proceso de entrada, incluyendo la asignación final de habitación y validación de saldos.
+
+Operación: buscarReservasDelDia
+
+Firma:
+----
+buscarReservasDelDia(criterio: CriterioBusqueda): ResumenRecepcion
+----
+
+Pre-condiciones:
+
+* El sistema debe tener acceso operativo a IReservaMgt.
+* El objeto criterio debe contener al menos un parámetro de búsqueda no nulo (ej. idReserva o apellidoHuesped).
+
+Pos-condiciones:
+
+* Retorna un objeto (o colección) ResumenRecepcion con las reservas cuya fechaLlegada coincide con la fecha actual del sistema.
+* Incluye información crítica para la decisión del recepcionista: estado del pago (PAGADO/PENDIENTE) y estado de la reserva (CONFIRMADA).
+* Si no se encuentran coincidencias, retorna nulo o una lista vacía.
+
+---
+
+Operación: registrarCheckIn
+
+Firma:
+----
+registrarCheckIn(idReserva: int): ConfirmacionIngreso
+----
+
+Pre-condiciones:
+
+* La reserva identificada por idReserva debe existir y tener fecha de llegada igual a la fecha actual.
+* El estado de la reserva debe ser CONFIRMADA.
+* El saldo pendiente debe ser cero (o estar dentro del límite de crédito autorizado según la política del hotel).
+* Debe existir una habitación física disponible y limpia (estadoFisico = LIMPIA) del tipo reservado en ICatalogoMgt.
+
+Pos-condiciones:
+
+* El estado de la reserva cambia a EN_CASA (Check-In completado).
+* Se asigna un número de habitación físico específico a la estancia.
+* Se cambia el estado de la habitación física a OCUPADA en el catálogo.
+* Se genera y retorna un objeto ConfirmacionIngreso con la fecha/hora exacta de entrada.
+
+---
+
+==== CU9-ICheckOut
+image::Interface diagrams/CU9-ICheckOut.jpg[ICheckOut, width=600, align=center]
+Especificación de Interfaz: ICheckOut
+
+Descripción: Interfaz provista por el componente SistemaRecepcion. Gestiona el cierre administrativo y financiero de la estancia, consolidando cargos, procesando pagos finales y liberando la habitación para limpieza.
+
+Operación: obtenerEstadoCuenta
+
+Firma:
+----
+obtenerEstadoCuenta(idEstancia: int): EstadoCuentaConsolidado
+----
+
+Pre-condiciones:
+
+* La estancia identificada debe existir y estar activa (estado EN_CASA o CHECK_IN).
+* No se debe haber ejecutado el cierre definitivo previamente.
+
+Pos-condiciones:
+
+* Se comunica con IEstanciaMgt para sumar todos los consumos registrados (minibar, restaurante, lavandería) hasta el momento exacto de la consulta.
+* Retorna un EstadoCuentaConsolidado con el desglose matemático: (CargosAlojamiento + ConsumosExtras) - TotalPagadoPreviamente = SaldoPendiente.
+* No altera datos, es una operación de consulta (idempotente).
+
+---
+
+Operación: procesarPagoFinal
+
+Firma:
+----
+procesarPagoFinal(idEstancia: String, pago: DatosPago): ReciboPago
+----
+
+Pre-condiciones:
+
+* Debe existir un saldoPendiente mayor a cero calculado en el paso anterior.
+* Los DatosPago deben ser válidos y autorizados por IPagosMgt.
+
+Pos-condiciones:
+
+* Registra la transacción financiera vinculada a la estancia.
+* Actualiza el acumulado de totalPagadoPreviamente.
+* Retorna un ReciboPago donde el nuevoSaldoPendiente debería ser idealmente 0.00.
+
+---
+
+Operación: confirmarSalida
+
+Firma:
+----
+confirmarSalida(idEstancia: String): ConfirmacionCierre
+----
+
+Pre-condiciones:
+
+* Regla de Negocio Crítica: El saldoPendiente de la estancia debe ser estrictamente 0.00 (Política de "Saldo Cero").
+* La llave de la habitación debe haber sido devuelta (validación física/operativa).
+
+Pos-condiciones:
+
+* Cambia el estado de la estancia a CHECK_OUT (Finalizada).
+* En ICatalogoMgt, cambia el estado físico de la habitación asociada de OCUPADA a SUCIA (o POR_LIMPIAR), dejándola lista para el equipo de limpieza pero no disponible aún para venta inmediata.
+* Genera la marca de tiempo oficial de salida en ConfirmacionCierre.
+
+---
+
+==== CU10-IRegistrarConsumosServicios
+image::Interface diagrams/CU10-IRegistrarConsumosServicios.jpg[IRegistrarConsumosServicios, width=600, align=center]
+Especificación de Interfaz: IRegistrarConsumosServicios
+
+Descripción: Interfaz provista por el componente SistemaRecepcion. Permite imputar cargos adicionales (restaurante, minibar, lavandería, etc.) a la cuenta de una habitación ocupada, validando previamente la identidad del huésped.
+
+Operación: buscarEstanciaPorHabitacion
+
+Firma:
+----
+buscarEstanciaPorHabitacion(numeroHabitacion: String): ResumenCuenta
+----
+
+Pre-condiciones:
+
+* El numeroHabitacion debe corresponder a una habitación física existente en el hotel.
+* La habitación debe tener estado físico OCUPADA en el ICatalogoMgt.
+
+Pos-condiciones:
+
+* Consulta IEstanciaMgt para encontrar la estancia activa asociada a esa habitación.
+* Si existe una estancia activa (EN_CASA), retorna un objeto ResumenCuenta con el nombre del titular y el saldo actual para verificación visual.
+* Si la habitación está vacía o en mantenimiento, retorna nulo.
+
+---
+
+Operación: registrarCargoAdicional
+
+Firma:
+----
+registrarCargoAdicional(idEstancia: int, detalle: DetalleCargo): ReciboCargo
+----
+
+Pre-condiciones:
+
+* La estancia identificada por idEstancia debe estar en estado activo (EN_CASA).
+* Los valores monetarios (precioUnitario) y numéricos (cantidad) deben ser positivos.
+* El tipoServicio debe ser válido (ej. "Restaurante", "Minibar").
+
+Pos-condiciones:
+
+* Calcula el monto total del cargo (cantidad * precioUnitario).
+* Registra el movimiento en el folio de la estancia a través de IEstanciaMgt.
+* Actualiza el saldo pendiente de la cuenta del huésped.
+* Retorna un ReciboCargo con el montoTotalCargo aplicado y el nuevoSaldoTotal acumulado.
+
+---
+
+==== CU11-IRealizarCambioHabitacion
+image::Interface diagrams/CU11-IRealizarCambioHabitacion.jpg[IRealizarCambioHabitacion, width=600, align=center]
+Especificación de Interfaz: IRealizarCambioHabitacion
+
+Descripción: Interfaz provista por el componente SistemaReservas. Gestiona el traslado de un huésped de una habitación física a otra durante una estancia activa, manejando la actualización de inventario, estados de limpieza y ajustes de tarifas si aplica.
+
+Operación: buscarDisponibilidadCambio
+
+Firma:
+----
+buscarDisponibilidadCambio(idEstancia: int): HabitacionCandidata[]
+----
+
+Pre-condiciones:
+
+* La estancia identificada debe estar activa (EN_CASA).
+* No debe haber un proceso de Check-Out iniciado para esa estancia.
+
+Pos-condiciones:
+
+* Consulta en ICatalogoMgt las habitaciones físicas que estén actualmente VACIA y LIMPIA.
+* Filtra las habitaciones disponibles para asegurar que no estén reservadas para entrar hoy por otro huésped.
+* Retorna una lista de HabitacionCandidata con detalles de ubicación (piso, número) y estado.
+
+---
+
+Operación: cotizarDiferenciaCambio
+
+Firma:
+----
+cotizarDiferenciaCambio(idEstancia: int, idNuevaHabitacion: int): ResumenCotizacion
+----
+
+Pre-condiciones:
+
+* La idNuevaHabitacion debe ser una de las retornadas en la búsqueda anterior.
+
+Pos-condiciones:
+
+* Compara la tarifa de la categoría de la habitación actual vs. la nueva categoría (si son diferentes).
+* Calcula el cargoAdicional prorrateado por las noches restantes de la estancia.
+* Genera un tokenCotizacion temporal que bloquea la nueva habitación por un breve periodo.
+* Determina el motivoCambio (si el precio es 0, puede ser un cambio operativo/mantenimiento; si es mayor a 0, es un upgrade).
+
+---
+
+Operación: ejecutarCambio
+
+Firma:
+----
+ejecutarCambio(idEstancia: int, tokenCotizacion: String): ResultadosReasignacion
+----
+
+Pre-condiciones:
+
+* El tokenCotizacion debe ser válido y no haber expirado.
+* La habitación nueva debe seguir libre física y lógicamente.
+
+Pos-condiciones:
+
+* Actualiza la referencia de habitación en la entidad Estancia.
+* En ICatalogoMgt:
+** Marca la habitación anterior como SUCIA (requiere limpieza inmediata).
+** Marca la habitación nueva como OCUPADA.
+* Registra la fecha y hora exacta del movimiento en ResultadosReasignacion.
+* Si hubo cargo económico, registra la transacción en la cuenta de la estancia.
+
+---
+
+==== CU12-IHacerReservaRecepcion
+image::Interface diagrams/CU12-IHacerReservaRecepcion.jpg[IHacerReservaRecepcion, width=600, align=center]
+Especificación de Interfaz: IHacerReservaRecepcion
+
+Descripción: Interfaz provista por el componente SistemaRecepcion. Permite al personal de mostrador gestionar reservas para clientes que se presentan físicamente en el hotel ("Walk-in"), con capacidades extendidas para asignar habitaciones específicas o gestionar inventario en rotación (sucias/limpias).
+
+Operación: buscarDisponibilidad
+
+Firma:
+----
+buscarDisponibilidad(criterios: CriteriosBusqueda): OpcionDisponible[]
+----
+
+Pre-condiciones:
+
+* fechaLlegada debe ser igual a la fecha actual (típico de Walk-in) o futura.
+* cantidadPersonas debe ser mayor a 0.
+
+Pos-condiciones:
+
+* Consulta el inventario físico en ICatalogoMgt.
+* Si incluirHabitacionesSucias == TRUE, considera disponibles aquellas habitaciones con estado físico SUCIA que no estén bloqueadas por mantenimiento (asumiendo que Housekeeping las liberará pronto).
+* Retorna una lista de OpcionDisponible con la tarifa calculada al momento.
+* Si no hay habitaciones (ni limpias ni sucias recuperables), retorna lista vacía.
+
+---
+
+Operación: crearReservaMostrador
+
+Firma:
+----
+crearReservaMostrador(solicitud: SolicitudMostrador): ReciboReserva
+----
+
+Pre-condiciones:
+
+* El idTipoHabitacionSeleccionada debe tener inventario físico disponible para las fechas.
+* El montoCobrado debe cubrir total o parcialmente la estancia según las reglas del hotel para Walk-ins.
+* Los datosHuesped deben ser completos y válidos.
+
+Pos-condiciones:
+
+* Crea la reserva directamente en estado CONFIRMADA.
+* Realiza el cobro inmediato a través de la colaboración con IPagosMgt (efectivo o tarjeta presente).
+* Bloquea una habitación física específica (numeroHabitacionPreasignada).
+* Retorna un ReciboReserva que sirve como comprobante de pago inicial y asignación.
+
+---
+
+==== CU13-IModificarEstanciaHuesped
+image::Interface diagrams/CU13-IModificarEstanciaHuesped.jpg[IModificarEstanciaHuesped, width=600, align=center]
+Especificación de Interfaz: IModificarEstanciaHuesped
+
+Descripción: Interfaz provista por el componente SistemaReservas. Permite alterar la fecha de salida de una estancia en curso (extensión o salida anticipada), verificando la disponibilidad de la habitación física actual y gestionando los ajustes tarifarios necesarios.
+
+Operación: cotizarNuevaFechaSalida
+
+Firma:
+----
+cotizarNuevaFechaSalida(idEstancia: int, nuevaFechaSalida: Date): CotizacionModificacion
+----
+
+Pre-condiciones:
+
+* La estancia identificada debe estar activa (estado EN_CASA).
+* La nuevaFechaSalida debe ser posterior a la fecha actual del sistema.
+* La nueva fecha debe ser diferente a la fecha de salida original.
+
+Pos-condiciones:
+
+* Calcula los diasDiferencia (positivos si extiende, negativos si acorta).
+* Verifica en ICatalogoMgt si la habitación física actual está disponible para los días extra (en caso de extensión).
+* Si la habitación actual está comprometida con otra reserva futura:
+** Marca requiereCambioHabitacion = TRUE.
+** Verifica si hay otras habitaciones disponibles para proponer el cambio.
+* Calcula el saldoAPagarDevolver basado en las tarifas vigentes para los nuevos días.
+* Genera un tokenCotizacion temporal.
+
+---
+
+Operación: aplicarModificacionEstancia
+
+Firma:
+----
+aplicarModificacionEstancia(tokenCotizacion: String): ConfirmacionCambioFecha
+----
+
+Pre-condiciones:
+
+* El tokenCotizacion debe ser válido y no haber expirado.
+* Si la operación implica un cargo extra, el pago debe haber sido procesado exitosamente.
+
+Pos-condiciones:
+
+* Actualiza la fecha de salida en la entidad Estancia.
+* Actualiza el bloqueo de inventario en ICatalogoMgt:
+** Si extendió: bloquea los días adicionales.
+** Si acortó: libera los días remanentes para venta inmediata.
+* Registra el ajuste financiero en la cuenta de la estancia.
+* Retorna ConfirmacionCambioFecha con el nuevo estado del inventario.
+
+---
+
+==== CU14-IRegistrarTarifa
+image::Interface diagrams/CU14-IRegistrarTarifa.jpg[IRegistrarTarifa, width=600, align=center]
+Especificación de Interfaz: IRegistrarTarifa
+
+Descripción: Interfaz provista por el componente SistemaTarifas. Herramienta administrativa para la gestión de ingresos (Revenue Management), permitiendo visualizar el calendario actual de precios y publicar nuevas tarifas garantizando la integridad referencial (sin solapamientos de fechas).
+
+Operación: obtenerTarifasVigentes
+
+Firma:
+----
+obtenerTarifasVigentes(filtro: CriterioTarifa): ResumenTarifa[]
+----
+
+Pre-condiciones:
+
+* El idHotel debe existir en el sistema.
+* El anioConsulta y mesConsulta deben formar una fecha válida.
+
+Pos-condiciones:
+
+* Consulta en ICatalogoMgt todas las tarifas activas para ese hotel y tipo de habitación en el periodo solicitado.
+* Retorna una lista de ResumenTarifa ordenada cronológicamente para facilitar la visualización de "huecos" donde se pueden insertar nuevos precios.
+
+---
+
+Operación: validarSolapamiento
+
+Firma:
+----
+validarSolapamiento(borrador: BorradorTarifa): InformeViabilidad
+----
+
+Pre-condiciones:
+
+* fechaInicio debe ser anterior a fechaFin.
+* precioBase debe ser mayor a cero.
+* idTipoHabitacion debe ser válido.
+
+Pos-condiciones:
+
+* Verifica matemáticamente si el rango de fechas propuesto choca con alguna tarifa ya existente para ese mismo tipo de habitación.
+* Si no hay choques: esPublicada (o esViable) = TRUE y tarifasConflictivas está vacío.
+* Si hay choques: esPublicada = FALSE y devuelve la lista de tarifas que estorban en tarifasConflictivas.
+
+---
+
+Operación: publicarNuevaTarifa
+
+Firma:
+----
+publicarNuevaTarifa(tarifaValidada: BorradorTarifa): ConfirmacionPublicacion
+----
+
+Pre-condiciones:
+
+* La tarifa debe haber superado la validación de solapamiento previamente (o forzar la validación aquí mismo).
+* El usuario (auditor) debe tener permisos de Administrador o Revenue Manager.
+
+Pos-condiciones:
+
+* Inserta el nuevo registro de tarifa en la base de datos a través de ICatalogoMgt.
+* Genera un idTarifa único.
+* Retorna ConfirmacionPublicacion con la fecha de alta y la firma del usuario responsable (auditoriaUsuario) para trazabilidad.
+
+---
+
+==== CU15-IDarBajaTarifa
+image::Interface diagrams/CU15-IDarBajaTarifa.jpg[IDarBajaTarifa, width=600, align=center]
+Especificación de Interfaz: IDarBajaTarifa
+
+Descripción: Interfaz provista por el componente SistemaTarifas. Permite la eliminación lógica o desactivación de planes de precios, asegurando previamente que dicha acción no corrompa reservas existentes ni genere inconsistencias financieras.
+
+Operación: buscarTarifasActivas
+
+Firma:
+----
+buscarTarifasActivas(filtro: CriterioBaja): TarifaCandidata[]
+----
+
+Pre-condiciones:
+
+* El usuario debe tener permisos de administración.
+* El idHotel debe ser válido.
+
+Pos-condiciones:
+
+* Consulta ICatalogoMgt para encontrar tarifas cuya fecha de fin de vigencia sea futura o que estén marcadas como activas.
+* Retorna una lista de TarifaCandidata con información resumen (precio, fechas) para que el usuario seleccione cuál desea eliminar.
+
+---
+
+Operación: analizarImpactoBaja
+
+Firma:
+----
+analizarImpactoBaja(idTarifa: int): InformeImpacto
+----
+
+Pre-condiciones:
+
+* El idTarifa debe existir en el sistema.
+
+Pos-condiciones:
+
+* Realiza una consulta cruzada con IReservaMgt: "¿Cuántas reservas futuras tienen asignada esta tarifa?".
+* Si cantidadReservasAfectadas == 0:
+** esSeguroEliminar = TRUE.
+** advertenciaLegal indica "Eliminación segura".
+* Si cantidadReservasAfectadas > 0:
+** esSeguroEliminar = FALSE (o requiere confirmación especial).
+** advertenciaLegal alerta sobre el riesgo de inconsistencia.
+* Genera y retorna un tokenValidacion que firma digitalmente este análisis.
+
+---
+
+Operación: ejecutarBajaDefinitiva
+
+Firma:
+----
+ejecutarBajaDefinitiva(idTarifa: int, tokenValidacion: String): ConfirmacionBaja
+----
+
+Pre-condiciones:
+
+* El tokenValidacion debe coincidir con el generado en el análisis de impacto y no haber expirado.
+* Si el análisis previo indicaba riesgo, el usuario debe haber aceptado explícitamente la advertencia (implícito en el uso del token).
+
+Pos-condiciones:
+
+* En ICatalogoMgt, cambia el estado de la tarifa a INACTIVA o ELIMINADA (Soft Delete).
+* La tarifa deja de aparecer en búsquedas futuras de disponibilidad.
+* Retorna ConfirmacionBaja con el nombre del usuario responsable para auditoría.
 
 ---

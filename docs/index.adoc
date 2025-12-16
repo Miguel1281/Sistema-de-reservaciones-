@@ -33,6 +33,7 @@
 | 1.1     | 2025-10-05 | Equipo Completo | Definición de requerimientos e impulsos arquitectónicos y priorización.
 |1.2    |2025-11-02| Equipo completo| Diagramas de componentes, interfaces y de comunicación.
 |1.3    |2025-11-16| Equipo completo| Matriz de trazabilidad.
+|1.4    |2025-12-15| Brayan Gabriel Fernández Tlapa| Actualiza modelo de conceptos de negocio y los diagramas de interfaces de sistema (1-15).
 |===
 
 

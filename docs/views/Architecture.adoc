@@ -30,18 +30,14 @@ El sistema se descompone en cuatro capas lógicas principales. El principio fund
     * *Elementos:* Implementaciones de las interfaces del Dominio (ej. ReservationRepositoryRDBMS, PaymentAdapterStripe).
     * *Drivers Atendidos:* Modificabilidad (Pasarela de Pago) (QAS), Seguridad (SQLi) (QAS) y Restricción de RDBMS (CON-1).
 
-[[context-view]]
 
-=== Diagrama de paquetes (Capas)
+
+==== Diagrama de paquetes (Capas)
 image::DiagramaCapas_Hotel.jpg[Diagrama de capas de sistema hotelero, width=600, align=center]
 
-[[context-view2]]
-
-==== Diagrama de componentes
+=== Diagrama de componentes
 image::Diagrama-de-Componentes.jpg[Diagrama de componentes de sistema hotelero, width=600, align=center]
 
+=== Modelo de conceptos de negocio
 
-[[context-view3]]
-=== Diagrama de Clases UML Simple
-
-image::Diagrama-de-Clases-UML-Simple.jpg[Diagrama de Clases UML simple de sistema hotelero, width=600, align=center]
+image::Modelo de conceptos de negocio.jpg[Modelo de conceptos de negocio de sistema hotelero, width=600, align=center]
