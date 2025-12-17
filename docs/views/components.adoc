@@ -1,23 +1,23 @@
 == Diagramas de Componentes
 
 
-==== Sistema de Reservas
+=== Sistema de Reservas
 image::Components/SistemaReservas.png[Sistema de Reservas, width=600, align=center]
 
-==== Sistema de Recepción
+=== Sistema de Recepción
 image::Components/SistemaRecepcion.png[Sistema de Recepción, width=600, align=center]
 
-==== Sistema de Inventario
+=== Sistema de Inventario
 image::Components/SistemaInventario.png[Sistema de Inventario, width=600, align=center]
 
-==== Sistema de Pagos
+=== Sistema de Pagos
 image::Components/SistemaPagos.png[Sistema de Pagos, width=600, align=center]
 
-==== Sistema de Administración de Personal
+=== Sistema de Administración de Personal
 image::Components/SistemaAministracionPersonal.png[Sistema de Administración de Personal, width=600, align=center]
 
-==== Sistema de Políticas
+=== Sistema de Políticas
 image::Components/SistemaPoliticas.png[Sistema de Políticas, width=600, align=center]
 
-==== Sistema de Tarifas
+=== Sistema de Tarifas
 image::Components/SistemaTarifas.png[Sistema de Tarifas, width=600, align=center]
