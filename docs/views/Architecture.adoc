@@ -1,42 +1,22 @@
-
 == Vista lógica
-Esta vista describe la estructura estática del sistema y la organización de sus responsabilidades funcionales. El objetivo es mostrar la descomposición del sistema en sus elementos lógicos principales (capas y subsistemas), la responsabilidad asignada a cada uno y las dependencias clave entre ellos.
 
-El estilo arquitectónico principal que define esta vista es la Arquitectura en Capas (Layered Architecture), combinada con principios de Ingeniería de Software Basada en Componentes (CBSE) para la organización interna de la lógica de negocio.
+La estructura estática del sistema de reservaciones se ha diseñado siguiendo estrictamente el patrón de Arquitectura en capas (Layered Architecture), complementado con el enfoque de Diseño basado en componentes. Esta decisión estructural no es arbitraria; responde a la necesidad de organizar la complejidad del negocio hotelero separando claramente las responsabilidades técnicas de las funcionales. Como se observa en el diagrama de paquetes, el sistema se descompone en cuatro estratos horizontales —Presentación, Aplicación, Dominio e Infraestructura—, donde cada capa posee una dependencia estricta únicamente hacia las capas inferiores. A continuación, se detalla cómo esta organización satisface los atributos de calidad (QAS) críticos para el negocio.
 
-=== Diagrama de Paquetes (Capas)
+=== Capa de presentación: usabilidad y restricciones de hardware
+En el nivel superior se encuentra la Capa de presentación, cuya única responsabilidad es la interacción con los usuarios. El diagrama distingue explícitamente dos componentes clave: la "Aplicación Web" para huéspedes y la "SPA (Single Page Application)" para el personal de recepción. Esta separación es fundamental para satisfacer el atributo de calidad de Usabilidad, permitiendo interfaces especializadas: una enfocada en la conversión de ventas para el cliente y otra optimizada para la eficiencia operativa del empleado. Además, la decisión de implementar el módulo de recepción como una SPA ligera responde directamente a la restricción de Hardware modesto, garantizando que el sistema pueda operar con fluidez en los equipos con recursos limitados disponibles en el mostrador del hotel, sin sacrificar la experiencia de usuario.
 
-El sistema se descompone en cuatro capas lógicas principales. El principio fundamental es una dependencia estricta hacia abajo: una capa solo puede depender de la capa inmediatamente inferior (o de interfaces definidas en capas inferiores, en el caso de Infraestructura).
+=== Capa de aplicación: seguridad y desacoplamiento
+Inmediatamente debajo reside la Capa de aplicación. En el diagrama, esta capa actúa como una frontera de orquestación que no contiene reglas de negocio complejas, sino que coordina los flujos de trabajo (como los "Servicios de Aplicación"). Su función arquitectónica principal es satisfacer el atributo de Seguridad, específicamente el control de acceso. Al obligar a que todas las peticiones de la interfaz de usuario pasen por estos servicios coordinadores, el sistema asegura un punto centralizado para verificar la autorización antes de que cualquier operación llegue al dominio. Esto previene accesos no autorizados a datos sensibles de otros huéspedes y desacopla la lógica de presentación de la lógica vital del negocio.
 
-==== Descripción de Responsabilidades por Capa
+=== Capa de dominio: modificabilidad y núcleo del negocio
+El corazón del diagrama es la Capa de dominio. Aquí se encapsulan los subsistemas funcionales ("SistemaReservas", "SistemaInventario", etc.) y las entidades del negocio, manteniéndolas completamente aisladas de detalles técnicos como bases de datos o frameworks web. Esta pureza estructural es la clave para satisfacer el atributo de Modificabilidad. Por ejemplo, las reglas de cancelación o las políticas de precios, que son propensas a cambios frecuentes por estrategia comercial, residen aquí. Al estar aisladas, pueden modificarse sin riesgo de romper la interfaz de usuario o el código de base de datos. Además, el diagrama muestra el uso de interfaces (abstracciones) para repositorios y servicios externos, aplicando el principio de Inversión de Dependencias para que el dominio defina "qué" necesita sin importar "cómo" se implementa.
 
-1.  *Capa de Presentación (Presentation Layer):*
-    * *Responsabilidad:* Contiene toda la lógica relacionada con la interfaz de usuario y la interacción con el actor. Es responsable de renderizar las vistas, capturar la entrada del usuario y delegar las acciones a la capa de aplicación.
-    * *Elementos:* Incluye la aplicación web para huéspedes y la aplicación SPA (Single Page Application) para el personal de recepción.
-    * *Drivers Atendidos:* Usabilidad (QAS) y Hardware Modesto (CRN-6). Al ser una SPA ligera, la aplicación de recepción cumple con el requisito de bajo consumo de recursos.
+=== Capa de infraestructura: flexibilidad tecnológica y seguridad de datos
+Finalmente, la Capa de infraestructura soporta al sistema implementando las interfaces definidas por el dominio. En el diagrama, esto se visualiza con componentes concretos como el "Repositorio RDBMS" y el "Adaptador de Pagos". Esta estructura favorece nuevamente la Modificabilidad y la Portabilidad: si en el futuro se decide cambiar de proveedor de pagos (por ejemplo, de Stripe a PayPal) o de motor de base de datos, solo será necesario crear una nueva implementación en esta capa sin tocar una sola línea del código de negocio. Asimismo, esta capa es responsable de proteger la integridad de los datos, previniendo vulnerabilidades técnicas como la inyección SQL, satisfaciendo así los requisitos de seguridad técnica.
 
-2.  *Capa de Aplicación (Application Layer):*
-    * *Responsabilidad:* Orquesta los casos de uso definidos en el sistema. Contiene los "Servicios de Aplicación" (ej. ServicioDeReservaciones) que traducen las solicitudes de la UI en operaciones del dominio. No contiene lógica de negocio; su trabajo es coordinar.
-    * *Elementos:* ServicioDeReservaciones (Caso de Uso CU-01), ServicioDeEstancias (Casos de Uso CU-08, CU-09), ServicioDeAdministracion.
-    * *Drivers Atendidos:* Seguridad (Control de Acceso) (QAS). Esta capa es responsable de verificar la autorización (ej. que un huésped solo vea sus propias reservas) antes de invocar al dominio.
+En conclusión, la estructura de paquetes propuesta refleja una jerarquía donde la estabilidad aumenta conforme se desciende de nivel. Las capas superiores (UI) pueden cambiar frecuentemente para adaptarse a tendencias visuales, mientras que el dominio permanece estable protegiendo las reglas de oro del negocio. Este diseño garantiza un sistema mantenible, seguro y capaz de evolucionar junto con las necesidades estratégicas de la cadena hotelera.
 
-3.  *Capa de Dominio (Domain Layer):*
-    * *Responsabilidad:* El corazón del sistema. Contiene toda la lógica de negocio, las reglas, las entidades y los agregados (ej. Reservación, Habitación). Es un modelo puro del problema de negocio, sin dependencias de bases de datos o frameworks de UI.
-    * *Elementos:* Agregados (Reservación, Hotel), interfaces de repositorio (IReservationRepository) e interfaces de servicios externos (IPaymentGateway).
-    * *Drivers Atendidos:* Modificabilidad (Reglas de Negocio) (QAS). Las políticas de cancelación están encapsuladas aquí, permitiendo su cambio sin afectar otras capas.
-
-4.  *Capa de Infraestructura (Infrastructure Layer):*
-    * *Responsabilidad:* Implementa los detalles técnicos y las integraciones con servicios externos. Se conecta a la base de datos, implementa la pasarela de pagos, envía correos electrónicos, etc.
-    * *Elementos:* Implementaciones de las interfaces del Dominio (ej. ReservationRepositoryRDBMS, PaymentAdapterStripe).
-    * *Drivers Atendidos:* Modificabilidad (Pasarela de Pago) (QAS), Seguridad (SQLi) (QAS) y Restricción de RDBMS (CON-1).
-
-
-
-==== Diagrama de paquetes (Capas)
-image::DiagramaCapas_Hotel.jpg[Diagrama de capas de sistema hotelero, width=600, align=center]
-
-=== Diagrama de componentes
-image::Diagrama-de-Componentes.jpg[Diagrama de componentes de sistema hotelero, width=600, align=center]
+image::../images/Diagramas de paquetes.png[Diagrama de paquetes, align="center"]
 
 === Modelo de conceptos de negocio
 
