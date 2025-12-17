@@ -41,3 +41,4 @@ En la etapa final, el sistema aprovecha el paralelismo para optimizar el Rendimi
 
 . Rama Crítica (Persistencia): La actualización del estado a CONFIRMADA y la ocupación definitiva del inventario ocurren en el hilo principal bajo una política de Consistencia Fuerte. El sistema no considera la venta como finalizada hasta que este dato es persistente.
 . Rama No Crítica (Notificación): El envío del comprobante al correo electrónico opera bajo Consistencia Eventual. Se acepta que exista un leve retraso entre la confirmación en pantalla y la llegada del correo, priorizando la velocidad de respuesta de la UI sobre la sincronización inmediata de la mensajería.
+
