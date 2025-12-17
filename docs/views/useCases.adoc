@@ -1811,18 +1811,21 @@ a|
 |Rodrigo Luna Vázquez
 
 |Descripción
-|El administrador podrá ver la información completa del tipo de habitación seleccionado.
+|El ADMINISTRADOR podrá ver la información completa del tipo de HABITACIÓN seleccionado.
+
+|Actor(es)
+|Administrador
 
 |Disparador
-|El administrador selecciona un tipo de habitación y da clic en “Mostrar información”.
+|El ADMINISTRADOR selecciona un tipo de HABITACIÓN y da clic en “Mostrar información”.
 
 |Precondiciones
 a|
-PRE-01: Existe al menos un tipo de habitación registrado en el sistema.
+PRE-01: Existe al menos un tipo de HABITACIÓN registrado en el sistema.
 
 |Flujo normal
 a|
-. El sistema muestra toda la información detallada del tipo de habitación seleccionado (nombre, descripción, capacidad, precio, etc.). Ver (EX01).
+. El sistema muestra toda la información detallada del tipo de HABITACIÓN seleccionado (nombre, descripción, capacidad, precio). Ver (EX01).
 . Termina el caso de uso.
 
 |Flujo alterno
@@ -1830,7 +1833,10 @@ a|
 
 |Excepciones
 a|
-EX01: Sin conexión a la base de datos. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos. Termina el caso de uso.
+*EX01: Sin conexión a la base de datos*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
 
 |Postcondiciones
 a|
@@ -1845,16 +1851,19 @@ POST-01: El sistema muestra la información completa del tipo de habitación.
 |CU-32
 
 |Nombre
-|Consultar Bitácora de Transaccion
+|Consultar Bitácora de Transacciones
 
 |Autor
 |Rodrigo Luna Vázquez
 
 |Descripción
-|El gerente puede consultar un registro detallado de todas las transacciones críticas del sistema, como reservaciones, pagos, cancelaciones y check-ins/outs, para asegurar la trazabilidad.
+|El GERENTE puede consultar un registro detallado de todas las transacciones críticas del sistema, como RESERVA(s), PAGO(s), cancelaciones y check-ins/outs, para asegurar la trazabilidad.
+
+|Actor(es)
+|Gerente
 
 |Disparador
-|El gerente selecciona la opción “Consultar historial de transacciones”
+|El GERENTE selecciona la opción “Consultar historial de transacciones”
 
 |Precondiciones
 a|
@@ -1862,18 +1871,22 @@ PRE-01: Existen transacciones registradas en el sistema.
 
 |Flujo normal
 a|
-. El sistema presenta una interfaz con opciones para filtrar las transacciones ya sea por rango de fechas, tipo de operación, hotel, etc.
-. El gerente aplica los filtros deseados y ejecuta la consulta.
-. El sistema busca y muestra una lista con el registro detallado de las transacciones que coinciden con los criterios de búsqueda. Ver (FA 3.1). Ver (EX01).
+. El sistema muestra un filtro de búsqueda con opciones para obtener las transacciones registradas ya sea por rango de fechas, tipo de operación, hotel.
+. El GERENTE aplica los filtros deseados y ejecuta la consulta.
+. El sistema busca y muestra una lista con la información detallada de las transacciones que coinciden con los criterios de búsqueda. Ver (FA 3.1). Ver (EX01).
 . Termina el caso de uso.
 
 |Flujo alterno
 a|
-FA 3.1: No se encuentran transacciones. El sistema muestra un mensaje indicando que no se encontraron resultados para la consulta. El sistema regresa a la ventana con las opciones para filtrar la busqueda
+*FA 3.1 No se encuentran transacciones.*
 
+. El sistema muestra un mensaje indicando que no se encontraron resultados para la consulta y regresa al paso 1 del flujo normal.
 |Excepciones
 a|
-EX01: Sin conexión a la base de datos. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos. Termina el caso de uso.
+*EX01 Sin conexión a la base de datos.*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
 
 |Postcondiciones
 a|
@@ -1892,31 +1905,40 @@ POST-01: El sistema muestra en pantalla las transacciones que cumplen con los cr
 |Rodrigo Luna Vázquez
 
 |Descripción
-|El gerente puede seleccionar una reservación específica y ver todo su ciclo de vida: creación, modificaciones, pagos, cambios de habitación, hasta el check-out.
+|El GERENTE puede seleccionar una RESERVACIÓN específica y ver todo su ciclo de vida: creación, modificaciones, pagos, cambios de habitación, hasta el check-out.
+
+|Actor(es)
+|Gerente
 
 |Disparador
-|El gerente busca una reservación y selecciona la opción “Ver historial”.
+|El GERENTE busca una RESERVACIÓN y selecciona la opción “Ver historial”.
 
 |Precondiciones
 a|
-PRE-01: Existe al menos una reservación registrada en el sistema.
+PRE-01: Existe al menos una RESERVACIÓN registrada en el sistema.
 
 |Flujo normal
 a|
-. El sistema muestra una ventana para buscar una reservación ya sea por folio, nombre del huésped, etc.
-. El gerente ingresa los datos y busca la reservación.
-. El sistema muestra la reservación encontrada. Ver (FA 3.1).
-. El gerente selecciona la opción para ver su historial.
+. El sistema muestra una ventana para filtrar y buscar  una RESERVACIÓN ya sea por folio, nombre del huésped, fecha.
+. El GERENTE ingresa los datos y busca la RESERVACIÓN.
+. El sistema muestra la RESERVACIÓN encontrada. Ver (FA 3.1).
+. El GERENTE selecciona la opción para ver su historial.
 . El sistema muestra un registro cronológico y detallado de todos los eventos asociados a la reservación. Ver (EX01).
 . Termina el caso de uso.
 
 |Flujo alterno
 a|
-FA 3.1: No se encuentra la reservación. Si no existe ninguna reservación que coincida con los criterios de búsqueda el sistema muestra un mensaje indicando que no se encontró la reservación. El sistema regresa a la ventana con las opciones para filtrar la busqueda
+*FA 3.1 No se encuentra la reservación.*
+
+. El sistema muestra un mensaje indicando que no se encontró RESERVACIÓN con los filtros seleccionados.
+. Regresa al paso 1 del flujo normal
 
 |Excepciones
 a|
-EX01: Sin conexión a la base de datos. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos. Termina el caso de uso.
+*EX01 Sin conexión a la base de datos.*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
 
 |Postcondiciones
 a|
@@ -1935,30 +1957,37 @@ POST-01: El sistema muestra en pantalla el historial completo del ciclo de vida 
 |Rodrigo Luna Vázquez
 
 |Descripción
-|El gerente puede generar un reporte que muestre qué tarifa y política de overbooking estaba vigente y fue aplicada en una transacción específica, asegurando la coherencia de precios.
+|El GERENTE puede generar un reporte que muestre qué tarifa y política de overbooking estaba vigente y fue aplicada en una transacción específica, asegurando la coherencia de precios.
+
+|Actor(es)
+|Gerente
 
 |Disparador
-|El gerente selecciona la opción “Consultar historial de tarifas aplicadas”.
+|El GERENTE selecciona la opción “Consultar historial de tarifas aplicadas”.
 
 |Precondiciones
 a|
-PRE-01: Existen transacciones de reservación registradas en el sistema con tarifas y políticas asociadas.
+PRE-01: Existen transacciones de RESERVACIÓN registradas en el sistema con tarifas y políticas asociadas.
 
 |Flujo normal
 a|
-. El sistema muestra una ventana para definir los parámetros del reporte por transacción específica, rango de fechas, hotel, entre otros
-. El gerente establece los criterios para el reporte y ejecuta la solicitud.
-. El sistema busca las transacciones que coinciden con los criterios y recupera la información de la tarifa y la política de overbooking que se aplicó en el momento de cada transacción. Ver (FA 3.1).
-. El sistema genera y muestra el reporte detallado. Ver (EX01).
-. Termina el caso de uso..
+. El sistema muestra una ventana para definir los parámetros del reporte por transacción específica, rango de fechas, hotel, entre otros.
+. El GERENTE establece los criterios llenando los campos correspondientes para el reporte y ejecuta la solicitud.
+. El sistema busca las transacciones que coinciden con los criterios y recupera la información de la tarifa y la política de overbooking que se aplicó en el momento de cada transacción. Y muestra en pantalla el reporte detallado. Ver (FA 3.1). Ver (EX01).
+. Termina el caso de uso.
 
 |Flujo alterno
 a|
-FA 3.1: No se encuentran datos. Si no existen registros que coincidan con los parámetros especificados por el gerente el sistema muestra un mensaje indicando que no se encontraron datos para generar el reporte.
+*FA 3.1 No se encuentran datos.*
+
+. El sistema muestra un mensaje indicando que no se encontraron datos para generar el reporte solicitado.
 
 |Excepciones
 a|
-EX01: Sin conexión a la base de datos. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos. Termina el caso de uso.
+*EX01 Sin conexión a la base de datos.*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
 
 |Postcondiciones
 a|
@@ -1977,37 +2006,49 @@ POST-01: El sistema muestra en pantalla el reporte de trazabilidad de tarifas y 
 |Rodrigo Luna Vázquez
 
 |Descripción
-|El gerente gestiona altas de habitaciones dentro del catálogo.
+|El GERENTE puede dar de alta una nueva HABITACION en el catálogo.
+
+|Actor(es)
+|Gerente
 
 |Disparador
-|El gerente selecciona la opción “Registrar nueva habitación”.
+|El GERENTE selecciona la opción “Registrar nueva habitación”.
 
 |Precondiciones
 a|
-PRE-01: Existe al menos un tipo de habitación registrado en el sistema
-PRE-02: El hotel al que se asignará la habitación ya está registrado.
+PRE-01: Existe al menos un tipo de HABITACIÓN registrado en el sistema
+PRE-02: Existe al menos un HOTEL registrado en el sistema
 
 |Flujo normal
 a|
-. El sistema presenta un formulario para ingresar los datos de la nueva habitación
-. El gerente completa la información requerida.
-. El gerente guarda la nueva habitación. Ver (FA 3.1).
+. El sistema muestra un formulario para ingresar los datos de la nueva HABITACIÓN
+. El GERENTE completa la información requerida, selecciona el tipo de HABITACION, HOTEL y da clic en guardar. Ver (FA 3.1).
 . El sistema valida que los datos sean correctos Ver (FA 4.1).
-. El sistema guarda la nueva habitación en la base de datos y muestra un mensaje de éxito. Ver (EX01).
+. El sistema guarda la nueva HABITACIÓN en la base de datos y muestra un mensaje de éxito. Ver (EX01).
 . Termina el caso de uso.
 
 |Flujo alterno
 a|
-FA 3.1: Cancelar operación. El gerente cancela el registro de la habitación. El sistema descarta los datos y regresa a la pantalla anterior.
-FA 4.1: Datos inválidos o duplicados. El gerente ingresa datos inválidos El sistema muestra un mensaje de error específico y permite al gerente corregir los datos sin perder la información ya ingresada.
+*FA 3.1 Cancelar operación.*
+
+. El GERENTE cancela el registro de la HABITACIÓN.
+. El sistema limpia los datos y regresa al paso 1 del flujo normal.
+
+*FA 4.1 Datos inválidos o duplicados.*
+
+. El sistema muestra un mensaje de error específico
+. El GERENTE corrige e ingresa nuevamente los datos sin perder la información ya ingresada.
 
 |Excepciones
 a|
-EX01: Sin conexión a la base de datos. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos. Termina el caso de uso.
+*EX01 Sin conexión a la base de datos.*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
 
 |Postcondiciones
 a|
-POST-01: Se registra la nueva habitación en la base de datos, asociada al hotel correspondiente.
+POST-01: Se registra la nueva HABITACIÓN en la base de datos, asociada al HOTEL correspondiente.
 |===
 
 [width="100%",cols="2,10",options="header"]
@@ -2022,36 +2063,49 @@ POST-01: Se registra la nueva habitación en la base de datos, asociada al hotel
 |Rodrigo Luna Vázquez
 
 |Descripción
-|El gerente podrá actualizar las habitaciones existentes en el catálogo.
+|El GERENTE podrá actualizar cualquier HABITACIÓN existente en el catálogo.
+
+|Actor(es)
+|Gerente
 
 |Disparador
-|El gerente selecciona una habitación y da clic en “Actualizar habitación”.
+|El GERENTE selecciona una HABITACIÓN y da clic en “Actualizar habitación”.
 
 |Precondiciones
 a|
-PRE-01: Existe al menos una habitación registrada en el sistema.
+PRE-01: Existe al menos una HABITACIÓN registrada en el sistema.
 
 |Flujo normal
 a|
-. El sistema muestra la información actual de la habitación en un formulario editable.
-. El gerente modifica los campos
-. El gerente guarda los cambios. Ver (FA 3.1).
+. El sistema muestra la información actual de la HABITACIÓN en un formulario editable.
+. El GERENTE modifica los campos y da clic en guardar. Ver (FA 3.1).
 . El sistema valida los datos actualizados. Ver (FA 4.1).
-. El sistema actualiza la información de la habitación en la base de datos y muestra un mensaje de confirmación. Ver (EX01).
+. El sistema actualiza la información de la HABITACIÓN en la base de datos y muestra un mensaje de confirmación. Ver (EX01).
 . Termina el caso de uso.
 
 |Flujo alterno
 a|
-FA 3.1: Cancelar operación. El gerente cancela la actualización. El sistema descarta los cambios y regresa a la lista de habitaciones.
-FA 4.1: Datos inválidos. El gerente ingresa datos inválidos o deja campos requeridos vacíos. El sistema muestra un mensaje de error y permite al gerente corregir los datos sin perder la información ya ingresada.
+*FA 3.1 Cancelar operación.*
+
+. El GERENTE cancela la actualización.
+. El sistema descarta los cambios y regresa a la lista de habitaciones.
+
+*FA 4.1 Datos inválidos.*
+
+. El GERENTE ingresa datos inválidos o deja campos requeridos vacíos.
+. El sistema muestra un mensaje de error.
+. El GERENTE corrige e ingresa nuevamente los datos sin perder la información ya ingresada.
 
 |Excepciones
 a|
-EX01: Sin conexión a la base de datos. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos. Termina el caso de uso.
+*EX01 Sin conexión a la base de datos.*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
 
 |Postcondiciones
 a|
-POST-01: La información de la habitación seleccionada se actualiza correctamente en la base de datos.
+POST-01: La información de la HABITACIÓN seleccionada se actualiza correctamente en la base de datos.
 |===
 
 [width="100%",cols="2,10",options="header"]
@@ -2066,36 +2120,50 @@ POST-01: La información de la habitación seleccionada se actualiza correctamen
 |Rodrigo Luna Vázquez
 
 |Descripción
-|El gerente podrá dar de baja una habitación en caso de ser requerido.
+|El GERENTE podrá dar de baja una HABITACIÓN en caso de ser requerido.
+
+|Actor(es)
+|Gerente
 
 |Disparador
-|El gerente selecciona una habitación y da clic en “Dar de baja”.
+|El GERENTE selecciona una habitación y da clic en “Dar de baja”.
 
 |Precondiciones
 a|
-PRE-01: Existe al menos una habitación registrada en el sistema.
+PRE-01: Existe al menos una HABITACIÓN registrada en el sistema.
 
 |Flujo normal
 a|
-. El sistema verifica que la habitación no tenga reservaciones activas o futuras. Ver (FA 1.1).
-. El sistema solicita una confirmación para la baja.
-. El gerente confirma la acción. Ver (FA 3.1).
-. El sistema cambia el estado de la habitación para que no esté disponible en el sistema. Ver (EX01).
-. El sistema muestra un mensaje que confirma que la habitación ha sido dada de baja.
+. El sistema verifica que la HABITACIÓN no tenga RESERVAS activas o futuras. Ver (FA 1.1).
+. El sistema solicita una confirmación para la baja mostrando un mensaje de confirmación en pantalla.
+. El GERENTE confirma la acción. Ver (FA 3.1).
+. El sistema cambia el estado de la HABITACIÓN para que no esté disponible en el sistema. Ver (EX01).
+. El sistema muestra un mensaje que confirma que la HABITACIÓN ha sido dada de baja.
 . Termina el caso de uso.
 
 |Flujo alterno
 a|
-FA 1.1: La habitación tiene reservaciones. El sistema detecta que la habitación tiene reservaciones activas o futuras. "El sistema muestra un mensaje de aviso, informando que la habitación no puede ser dada de baja y muestra las reservaciones asociadas. " Termina el caso de uso.
-FA 3.1: Cancelar operación. El administrador cancela la solicitud de confirmación. El sistema regresa a la lista de habitaciones.
+*FA 1.1: La HABITACIÓN tiene reservaciones.*
+
+. El sistema detecta que la HABITACIÓN tiene RESERVA activas o futuras.
+. El sistema muestra un mensaje de aviso, informando que la HABITACIÓN no puede ser dada de baja y muestra la/s RESERVA(s) asociadas.
+. Regresa al menú principal
+. Termina el caso de uso.
+
+*FA 3.1: Cancelar operación.*
+. El GERENTE cancela la solicitud de confirmación.
+. El sistema regresa a la lista de habitaciones.
 
 |Excepciones
 a|
-EX01: Sin conexión a la base de datos. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos. Termina el caso de uso.
+*EX01: Sin conexión a la base de datos.*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
 
 |Postcondiciones
 a|
-POST-01: Se actualiza el estado de la habitación en la base de datos.
+POST-01: Se actualiza el estado de la HABITACIÓN en la base de datos.
 |===
 
 [width="100%",cols="2,10",options="header"]
@@ -2110,18 +2178,21 @@ POST-01: Se actualiza el estado de la habitación en la base de datos.
 |Rodrigo Luna Vázquez
 
 |Descripción
-|El gerente podrá ver toda la información de la habitación.
+|El GERENTE podrá ver toda la información de la HABITACIÓN.
+
+|Actor(es)
+|Gerente
 
 |Disparador
-|El gerente selecciona una habitación y da clic en “Mostrar información”.
+|El GERENTE selecciona una HBAITACIÓN y da clic en “Mostrar información”.
 
 |Precondiciones
 a|
-PRE-01: Existe al menos una habitación registrada en el sistema.
+PRE-01: Existe al menos una HABITACIÓN registrada en el sistema.
 
 |Flujo normal
 a|
-. El sistema muestra toda la información detallada de la habitación seleccionada Ver (EX01).
+. El sistema muestra toda la información detallada de la HABITACIÓN seleccionada Ver (EX01).
 . Termina el caso de uso.
 
 |Flujo alterno
@@ -2129,7 +2200,10 @@ a|
 
 |Excepciones
 a|
-EX01: Sin conexión a la base de datos. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos. Termina el caso de uso.
+*EX01: Sin conexión a la base de datos.*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
 
 |Postcondiciones
 a|
@@ -2142,45 +2216,57 @@ POST-01: El sistema muestra la información completa de la habitación seleccion
 |CU-39
 
 |Nombre
-|Bloquear/Desbloquear Habitaciones
+|Bloquear	 Habitaciones
 
 |Autor
 |Rodrigo Luna Vázquez
 
 |Descripción
-|El gerente puede bloquear o desbloquear un conjunto de habitaciones para que no estén disponibles para la venta por motivos administrativos.
+|El GERENTE puede bloquear o desbloquear una HABITACIÓN para que no esté disponible para la venta por motivos administrativos.
+
+|Actor(es)
+|Gerente
 
 |Disparador
-|El gerente selecciona una o más habitaciones y elige la opción “Cambiar estado de disponibilidad”.
+|El GERENTE selecciona una HABITACIÓN y elige la opción “Cambiar estado de disponibilidad”.
 
 |Precondiciones
 a|
-PRE-01: Existe al menos una habitación registrada en el sistema.
+PRE-01: Existe al menos una HABITACIÓN registrada en el sistema.
 
 |Flujo normal
 a|
-. El gerente selecciona una o varias habitaciones disponibles.
-. "El gerente elige la opción ""Bloquear"". "
-. El sistema verifica que las habitaciones no tengan reservaciones futuras. Ver (FA 3.1).
+. El GERENTE selecciona una HABITACIÓN disponible y elige la opcion de “Bloquear”.
+. El sistema verifica que la HABITACIÓN no tenga RESERVA activa o futura. Ver (FA 3.1).
 . El sistema solicita un motivo para el bloqueo
-. El gerente ingresa el motivo y confirma la acción. Ver (FA 5.1).
-. "El sistema actualiza el estado de las habitaciones a ""Bloqueada"", haciéndolas no disponibles para la venta. Ver (EX01). "
+. El GERENTE ingresa el motivo y confirma la acción. Ver (FA 5.1).
+. "El sistema actualiza el estado de la HABITACIÓN a ""Bloqueada"", haciéndola no disponible para la venta. Ver (EX01). "
 . El sistema muestra un mensaje de éxito.
 . Termina el caso de uso.
 
 |Flujo alterno
 a|
-FA 3.1: Habitación con reservaciones. El sistema detecta que una o más de las habitaciones seleccionadas tienen reservaciones futuras. "El sistema muestra un mensaje de error, informando qué habitaciones no se pueden bloquear y las reservaciones asociadas." Termina el caso de uso.
-FA 5.1: Cancelar operación. El gerente cancela la acción de bloqueo. El sistema regresa a la pantalla anterior.
-FA 6.1: Desbloquear habitación. "El gerente selecciona una o varias habitaciones con estado ""Bloqueada"". " "El gerente elige la opción ""Desbloquear"". " El sistema solicita confirmación. El gerente confirma la acción. El sistema revierte el estado de las habitaciones a disponible integrándolas de nuevo al inventario para la venta. Ver (EX01). El sistema muestra un mensaje de éxito. Termina el caso de uso.
+*FA 3.1: HABITACIÓN con RESERVA.*
+
+. El sistema detecta que la HABITACIÓN seleccionada tiene RESERVA activa o futura.
+. El sistema muestra un mensaje de error, informando qué habitaciones no se pueden bloquear y las reservaciones asociadas.
+. Termina el caso de uso.
+
+*FA 5.1: Cancelar operación.*
+
+. El GERENTE cancela la acción de bloqueo.
+. El sistema regresa a la pantalla anterior.
 
 |Excepciones
 a|
-EX01: Sin conexión a la base de datos. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos. Termina el caso de uso.
+*EX01: Sin conexión a la base de datos.*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
 
 |Postcondiciones
 a|
-POST-01: Se actualiza el estado de disponibilidad de la(s) habitación(es) seleccionada(s) en la base de datos.
+POST-01: Se actualiza el estado de disponibilidad de la HABITACIÓN en la base de datos.
 |===
 
 [width="100%",cols="2,10",options="header"]
@@ -2195,36 +2281,48 @@ POST-01: Se actualiza el estado de disponibilidad de la(s) habitación(es) selec
 |Rodrigo Luna Vázquez
 
 |Descripción
-|El gerente podrá registrar a un recepcionista para su hotel.
+|El GERENTE podrá registrar a un RECEPCIONISTA para su HOTEL.
+
+|Actor(es)
+|Gerente
 
 |Disparador
-|El gerente selecciona la opción “Registrar nuevo recepcionista”.
+|El GERENTE selecciona la opción “Registrar nuevo recepcionista”.
 
 |Precondiciones
 a|
-PRE-01: El gerente ha iniciado sesión en el sistema y tiene un hotel asignado.
+PRE-01: El GERENTE ha iniciado sesión en el sistema y tiene un HOTEL asignado.
 
 |Flujo normal
 a|
-. El sistema muestra un formulario para ingresar los datos del nuevo recepcionista
-. El gerente completa la información requerida.
-. El gerente guarda la información. Ver (FA 3.1).
-. El sistema valida que los datos sean válidos Ver (FA 4.1).
-. "El sistema crea el nuevo usuario recepcionista, lo asocia al hotel del gerente y muestra un mensaje de éxito. Ver (EX01). "
+. El sistema muestra un formulario para ingresar los datos del nuevo RECEPCIONISTA
+. El GERENTE completa la información requerida.
+. El sistema valida que los datos sean válidos y guarda la información. Ver (FA 3.1). Ver (FA 4.1).
+. El sistema crea el nuevo usuario RECEPCIONISTA, lo asocia al HOTEL del GERENTE y muestra un mensaje de éxito. Ver (EX01). "
 . Termina el caso de uso.
 
 |Flujo alterno
 a|
-FA 3.1: Cancelar operación. El gerente cancela el registro del recepcionista. El sistema descarta los datos y regresa a la pantalla anterior.
-FA 4.1: Datos inválidos. "El gerente ingresa datos inválidos, como un formato de correo electrónico incorrecto o campos requeridos vacíos. " El sistema muestra un mensaje de error y permite al gerente corregir los datos sin perder la información ya ingresada.
+*FA 3.1: Cancelar operación.*
+
+. El GERENTE cancela el registro del RECEPCIONISTA.
+. El sistema descarta los datos y regresa a la pantalla anterior.
+
+*FA 4.1: Datos inválidos.*
+
+. El sistema muestra un mensaje de error
+. El GERENTE corrige e ingresa nuevamente los datos sin perder la información ya ingresada.
 
 |Excepciones
 a|
-EX01: Sin conexión a la base de datos. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos. Termina el caso de uso.
+*EX01: Sin conexión a la base de datos.*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
 
 |Postcondiciones
 a|
-POST-01: Se registra el nuevo recepcionista en la base de datos, asociado al hotel correspondiente.
+POST-01: Se registra el nuevo RECEPCIONISTA en la base de datos, asociado al HOTEL correspondiente.
 |===
 
 [width="100%",cols="2,10",options="header"]
@@ -2239,36 +2337,49 @@ POST-01: Se registra el nuevo recepcionista en la base de datos, asociado al hot
 |Rodrigo Luna Vázquez
 
 |Descripción
-|El gerente podrá actualizar la información del recepcionista.
+|El GERENTE podrá actualizar la información del RECEPCIONISTA.
+
+|Actor(es)
+|Gerente
 
 |Disparador
-|El gerente selecciona un recepcionista y da clic en “Actualizar recepcionista”.
+|El GERENTE selecciona un RECEPCIONISTA y da clic en “Actualizar recepcionista”.
 
 |Precondiciones
 a|
-PRE-01: Existe al menos un recepcionista registrado en el sistema del hotel.
+PRE-01: Existe al menos un RECEPCIONISTA registrado en el sistema del HOTEL.
 
 |Flujo normal
 a|
-. El sistema muestra los datos del recepcionista en un formulario editable.
-. El gerente modifica los campos necesarios.
-. El gerente guarda los cambios. Ver (FA 3.1).
+. El sistema muestra los datos del RECEPCIONISTA en un formulario editable.
+. El GERNTE modifica los campos necesarios y da clic en guardar. Ver (FA 3.1).
 . El sistema valida los datos. Ver (FA 4.1).
-. El sistema actualiza la información del recepcionista y muestra un mensaje que confirma la operación. Ver (EX01).
+. El sistema actualiza la información del RECEPCIONISTA y muestra un mensaje que confirma la operación. Ver (EX01).
 . Termina el caso de uso.
 
 |Flujo alterno
 a|
-FA 3.1: Cancelar operación. El gerente cancela la actualización de la información. El sistema descarta los cambios y regresa a la lista de recepcionistas.
-FA 4.1: Datos inválidos. El gerente ingresa campos vacíos o inválidos en el formulario. El sistema muestra un mensaje de error y permite al gerente corregir los datos.
+*FA 3.1: Cancelar operación.*
+
+. El GERENTE cancela la actualización de la información.
+. El sistema descarta los cambios y regresa a la lista de recepcionistas.
+
+*FA 4.1: Datos inválidos.*
+
+. El sistema muestra un mensaje de error
+. El GERENTE corrige e ingresa nuevamente los datos
+. Regresa al paso 2 del flujo normal.
 
 |Excepciones
 a|
-EX01: Sin conexión a la base de datos. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos. Termina el caso de uso.
+*EX01: Sin conexión a la base de datos.*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
 
 |Postcondiciones
 a|
-POST-01: Se actualiza la información del recepcionista en la base de datos.
+POST-01: Se actualiza la información del RECEPCIONISTA en la base de datos.
 |===
 
 [width="100%",cols="2,10",options="header"]
@@ -2283,18 +2394,21 @@ POST-01: Se actualiza la información del recepcionista en la base de datos.
 |Rodrigo Luna Vázquez
 
 |Descripción
-|El gerente podrá ver la información completa de un recepcionista.
+|El GERENTE podrá ver la información completa de un RECEPCIONISTA.
+
+|Actor(es)
+|Gerente
 
 |Disparador
-|El gerente selecciona un recepcionista y da clic en “Mostrar información”.
+|El GERENTE selecciona un RECEPCIONISTA y da clic en “Mostrar información”.
 
 |Precondiciones
 a|
-PRE-01: Existe al menos un recepcionista registrado en el sistema del hotel.
+PRE-01: Existe al menos un RECEPCIONISTA registrado en el sistema.
 
 |Flujo normal
 a|
-. El sistema muestra toda la información detallada del recepcionista seleccionado. Ver (EX01).
+. El sistema muestra toda la información detallada del RECEPCIONISTA seleccionado. Ver (EX01).
 . Termina el caso de uso.
 
 |Flujo alterno
@@ -2302,11 +2416,14 @@ a|
 
 |Excepciones
 a|
-EX01: Sin conexión a la base de datos. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos. Termina el caso de uso.
+*EX01: Sin conexión a la base de datos.*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
 
 |Postcondiciones
 a|
-POST-01: El sistema muestra la información del recepcionista seleccionado.
+POST-01: El sistema muestra la información del RECEPCIONISTA seleccionado.
 |===
 
 [width="100%",cols="2,10",options="header"]
@@ -2321,32 +2438,43 @@ POST-01: El sistema muestra la información del recepcionista seleccionado.
 |Rodrigo Luna Vázquez
 
 |Descripción
-|El gerente podrá dar de baja a un recepcionista de su hotel.
+|El GERENTE podrá dar de baja a un RECEPCIONISTA de su HOTEL.
+
+|Actor(es)
+|Gerente
 
 |Disparador
-|El gerente selecciona un recepcionista y da clic en “Dar de baja”.
+|El GERENTE selecciona un RECEPCIONISTA y da clic en “Dar de baja”.
 
 |Precondiciones
 a|
-PRE-01: Existe al menos un recepcionista registrado en el sistema del hotel.
+PRE-01: Existe al menos un RECEPCIONISTA registrado en el sistema del HOTEL.
 
 |Flujo normal
 a|
 . El sistema solicita una confirmación para la baja.
-. El gerente confirma la acción. Ver (FA 2.1).
-. "El sistema cambia el estado del recepcionista a inactivo, revocando su acceso al sistema. Ver (EX01). "
-. El sistema muestra un mensaje que confirma que el recepcionista ha sido dado de baja.
+. El GERENTE confirma la acción. Ver (FA 2.1).
+. "El sistema cambia el estado del RECEPCIONISTA a “Dado de baja”, revocando su acceso al sistema. Ver (EX01). "
+. El sistema muestra un mensaje que confirma que el RECEPCIONISTA ha sido dado de baja.
 . Termina el caso de uso.
 
 |Flujo alterno
 a|
-FA 2.1: Cancelar operación. El gerente cancela la solicitud de confirmación. El sistema regresa a la lista de recepcionistas.
+*FA 2.1: Cancelar operación.*
+
+. El GERENTE cancela la solicitud de confirmación.
+. El sistema regresa a la lista de recepcionistas.
 
 |Excepciones
 a|
-EX01: Sin conexión a la base de datos. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos. Termina el caso de uso.
+*EX01: Sin conexión a la base de datos.*
+
+. El sistema muestra un mensaje para notificar que se perdió la conexión a la base de datos.
+. Termina el caso de uso.
 
 |Postcondiciones
 a|
-POST-01: Se actualiza el estado del recepcionista en la base de datos.
+POST-01: Se actualiza el estado del RECEPCIONISTA en la base de datos.
 |===
+
+
