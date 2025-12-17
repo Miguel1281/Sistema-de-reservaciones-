@@ -1,21 +1,23 @@
-== Diagramas de componentes
-=== Componente: Gestor de auditoría
-image::Components/GestorAuditoria.jpeg[Gestor de auditoría, width=600, align=center]
+== Diagramas de Componentes
 
-=== Componente: Gestor de estancias
-image::Components/GestorEstancias.jpeg[Gestor de estancias, width=600, align=center]
 
-=== Componente: Gestor de inventario
-image::Components/GestorInventario.jpeg[Gestor de inventario, width=600, align=center]
+==== Sistema de Reservas
+image::Components/SistemaReservas.png[Sistema de Reservas, width=600, align=center]
 
-=== Componente: Gestor de personal
-image::Components/GestorPersonal.jpeg[Gestor de personal, width=600, align=center]
+==== Sistema de Recepción
+image::Components/SistemaRecepcion.png[Sistema de Recepción, width=600, align=center]
 
-=== Componente: Gestor de politicas
-image::Components/GestorPoliticas.jpeg[Gestor de politicas, width=600, align=center]
+==== Sistema de Inventario
+image::Components/SistemaInventario.png[Sistema de Inventario, width=600, align=center]
 
-=== Componente: Gestor de reservaciones
-image::Components/GestorReservaciones.jpeg[Gestor de reservaciones, width=600, align=center]
+==== Sistema de Pagos
+image::Components/SistemaPagos.png[Sistema de Pagos, width=600, align=center]
 
-=== Componente: Procesador de pagos
-image::Components/ProcesadorPagos.jpeg[Procesador de pagos, width=600, align=center]
+==== Sistema de Administración de Personal
+image::Components/SistemaAministracionPersonal.png[Sistema de Administración de Personal, width=600, align=center]
+
+==== Sistema de Políticas
+image::Components/SistemaPoliticas.png[Sistema de Políticas, width=600, align=center]
+
+==== Sistema de Tarifas
+image::Components/SistemaTarifas.png[Sistema de Tarifas, width=600, align=center]
