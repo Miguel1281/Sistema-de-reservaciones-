@@ -1,0 +1,43 @@
+== Diagramas de secuencia de operaciones criticas
+
+=== Operacion para hacer reserva
+image::Sequence/hacerReserva.jpg[Hacer Reserva, width=600, align=center]
+
+==== Descripción del Modelo de Proceso y Concurrencia
+
+El diagrama de secuencia para el caso de uso CU-01 Hacer Reserva ilustra el comportamiento dinámico del sistema, diseñando una orquestación que equilibra la integridad estricta de los datos crítica para el inventario hotelero con la experiencia de usuario y el rendimiento. A continuación, se detalla el modelo de ejecución, las políticas de consistencia y los patrones de interacción aplicados.
+
+===== Patrones de Interacción y Comunicación
+
+La arquitectura sigue un patrón de controlador-servicio donde el componente SistemaReservas (Controller) orquesta la lógica de negocio delegando responsabilidades a gestores especializados (ClienteMgt, CatalogoMgt, ReservaMgt).
+
+* Comunicación Síncrona (Bloqueante): Las interacciones críticas para la toma de decisiones del usuario se diseñaron de manera sincrónica. Específicamente, las llamadas desde la interfaz de usuario (UI) hacia el backend para la validación de datos, la verificación de disponibilidad y el procesamiento del pago bloquean el flujo principal. Esto es necesario para garantizar que el HUESPED reciba retroalimentación inmediata sobre el éxito o fracaso de su intento de compra, evitando estados de incertidumbre en la interfaz.
+
+* Comunicación Asíncrona (No Bloqueante): En la etapa final de confirmación, se cambia a un patrón asíncrono Fire-and-Forget para el envío de notificaciones por correo electrónico. Esto desacopla el tiempo de respuesta del servidor SMTP de la experiencia del usuario, permitiendo que la pantalla de Reserva Exitosa se muestre milisegundos antes, mejorando la percepción de rendimiento.
+
+===== Modelo de Concurrencia y Gestión de Transacciones
+
+El punto más crítico del sistema es la gestión del inventario compartido. Para satisfacer el atributo de calidad de Integridad, se implementa un modelo de concurrencia pesimista en la fase inicial del proceso.
+
+* Transacción ACID y Bloqueo Pesimista:
+La operación de reservar una habitación se encapsula en una Transacción Atómica que inicia con la verificación de disponibilidad y termina con la creación de la reserva en estado Pendiente. Dentro de esta transacción, se aplica una política de Consistencia Fuerte mediante un bloqueo de base de datos a nivel de fila Row Lock.
++
+Este bloqueo asegura que, si dos usuarios intentan reservar la última habitación disponible simultáneamente, la base de datos serializará las peticiones. El primer proceso obtendrá el bloqueo y el segundo fallará inmediatamente o esperará un tiempo mínimo, evitando así la condición de carrera descrita en la excepción EX-01 Overbooking no controlado. El bloqueo tiene un Time-to-Live implícito gestionado por la expiración de la reserva pendiente quince minutos, liberando el recurso si el pago no se concreta.
+
+* Transacción de Compensación:
+Dado que el pago es un proceso externo que no puede participar en la transacción de base de datos local, se utiliza un patrón de Transacción de Compensación (Saga orquestada simple). Si el pago falla o excede el tiempo de espera, el sistema no simplemente lanza un error, sino que ejecuta activamente operaciones de reversión: invoca a liberarInventario() y actualiza el estado a CANCELADA. Esto garantiza la consistencia final del sistema incluso ante fallos distribuidos.
+
+===== Calidad de Servicio y Tolerancia a Fallos
+
+La interacción con la pasarela de pagos (IPagosMgt) introduce riesgos de disponibilidad y latencia externos. Para mitigar esto, se definen estrictamente los parámetros de calidad de servicio:
+
+* Timeouts: Se establece un tiempo de espera de quince segundos para la llamada de pago. Si el servicio externo no responde en este umbral, el sistema aborta la operación para liberar los hilos de ejecución del servidor y los bloqueos de base de datos, protegiendo la Disponibilidad general del sistema ante fallos de terceros.
+
+* Política de Reintentos (Zero-Retry): Para las transacciones financieras, se aplica una política de cero reintentos automáticos. Esto responde a una regla de seguridad financiera para evitar cargos duplicados accidentales. Si hay un error, el usuario debe iniciar un nuevo intento conscientemente.
+
+===== Paralelismo y Políticas de Consistencia Mixta
+
+En la etapa final, el sistema aprovecha el paralelismo para optimizar el Rendimiento. El diagrama muestra un bloque de ejecución paralela (par) que divide el flujo en dos ramas con diferentes políticas de consistencia:
+
+. Rama Crítica (Persistencia): La actualización del estado a CONFIRMADA y la ocupación definitiva del inventario ocurren en el hilo principal bajo una política de Consistencia Fuerte. El sistema no considera la venta como finalizada hasta que este dato es persistente.
+. Rama No Crítica (Notificación): El envío del comprobante al correo electrónico opera bajo Consistencia Eventual. Se acepta que exista un leve retraso entre la confirmación en pantalla y la llegada del correo, priorizando la velocidad de respuesta de la UI sobre la sincronización inmediata de la mensajería.
