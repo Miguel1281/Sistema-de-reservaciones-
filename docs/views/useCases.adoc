@@ -1,8 +1,12 @@
 == Diagrama de casos de uso
 
-image::Casos de uso gerente.png[Diagrama de casos de uso Gerente, width=600, align=center]
+image::CU-Huesped.jpg[Diagrama de casos de uso Huesped, width=600, align=center]
+
+image::CU-Recepcionista.jpg[Diagrama de casos de uso Recepcionista, width=600, align=center]
 
 image::Casos de uso administrador.png[Diagrama de casos de uso Administrador, width=600, align=center]
+
+image::Casos de uso gerente.png[Diagrama de casos de uso Gerente, width=600, align=center]
 
 image::DiagramaCU_Hotel.png[Diagrama de casos de uso de sistema hotelero, width=600, align=center]
 
