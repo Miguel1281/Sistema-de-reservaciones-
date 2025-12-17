@@ -595,7 +595,7 @@ POST-02: El estado de la HABITACIÓN es "Requiere Limpieza".
 | CU-10
 
 | Nombre
-| Registrar consumos/servicios
+| Registrar consumo/servicio
 
 | Autor
 | Brayan Gabriel Fernández Tlapa
@@ -1114,7 +1114,7 @@ a|
 |CU-18
 
 |Nombre
-|Actualizar políticas
+|Actualizar política
 
 |Autor
 |Miguel Angel Méndez Ronzón
@@ -1845,7 +1845,7 @@ POST-01: El sistema muestra la información completa del tipo de habitación.
 |CU-32
 
 |Nombre
-|Consultar Bitácora de Transacciones
+|Consultar Bitácora de Transaccion
 
 |Autor
 |Rodrigo Luna Vázquez
