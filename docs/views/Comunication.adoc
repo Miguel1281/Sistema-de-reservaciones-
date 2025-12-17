@@ -67,49 +67,62 @@ image::Comunication/CU15/buscarTarifasActivas.jpg[buscarTarifasActivas, width=60
 image::Comunication/CU15/ejecutarBajaDefinitiva.jpg[ejecutarBajaDefinitiva, width=600, align=center]
 
 === CU-16
-image::Comunication/CU-16 Dar de baja tarifa.png[Dar de baja tarifa, width=600, align=center]
+image::Comunication/CU16/actualizarTarifa.png[actualizarTarifa, width=600, align=center]
+image::Comunication/CU16/obtenerTarifas.png[obtenerTarifas, width=600, align=center]
 
 === CU-17
-image::Comunication/CU-17 Registrar política.jpg[Registrar politica, width=600, align=center]
+image::Comunication/CU17/registrarPolitica.png[registrarPolitica, width=600, align=center]
 
 === CU-18
-image::Comunication/CU-18 Actualizar políticas.jpg[Actualizar politicas, width=600, align=center]
+image::Comunication/CU18/actualizarPolitica.png[actualizarPolitica, width=600, align=center]
+image::Comunication/CU18/obtenerPoliticas.png[obtenerPoliticas, width=600, align=center]
 
 === CU-19
-image::Comunication/CU-19 Dar de baja política.jpg[Dar de baja politica, width=600, align=center]
+image::Comunication/CU19/darDeBajaPolitica.png[darDeBajaPolitica, width=600, align=center]
+image::Comunication/CU19/obtenerPolitcas.png[obtenerPolitcas, width=600, align=center]
 
 === CU-20
-image::Comunication/CU-20 Registrar gerente.jpg[Registrar gerente, width=600, align=center]
+image::Comunication/CU20/obtenerHoteles.png[obtenerHoteles, width=600, align=center]
+image::Comunication/CU20/registrarGerente.png[registrarGerente, width=600, align=center]
 
 === CU-21
-image::Comunication/CU-21 Actualizar gerente.jpg[Actualizar gerente, width=600, align=center]
+image::Comunication/CU21/actualizarGerente.png[actualizarGerente, width=600, align=center]
+image::Comunication/CU21/obtenerGerentes.png[obtenerGerentes, width=600, align=center]
 
 === CU-22
-image::Comunication/CU-22 Dar de baja gerente.jpg[Dar de baja gerente, width=600, align=center]
+image::Comunication/CU22/daDeBajaGerente.png[daDeBajaGerente, width=600, align=center]
+image::Comunication/CU22/obtenerGerentes.png[obtenerGerentes, width=600, align=center]
+image::Comunication/CU22/obtenerHoteles.png[obtenerHoteles, width=600, align=center]
 
 === CU-23
-image::Comunication/CU-23 Consultar gerente.jpg[Consultar gerente, width=600, align=center]
+image::Comunication/CU23/consultarGerente.png[consultarGerente, width=600, align=center]
+image::Comunication/CU23/obtenerGerentes.png[obtenerGerentes, width=600, align=center]
 
 === CU-24
-image::Comunication/CU-24 Registrar hotel.jpg[Registrar hotel, width=600, align=center]
+image::Comunication/CU24/obtenerGerentes.png[obtenerGerentes, width=600, align=center]
+image::Comunication/CU24/registrarHotel.png[registrarHotel, width=600, align=center]
 
 === CU-25
-image::Comunication/CU-25 Actualizar hotel.jpg[Actualizar hotel, width=600, align=center]
+image::Comunication/CU25/actualizarHotel.png[actualizarHotel, width=600, align=center]
+image::Comunication/CU25/obtenerGerentes.png[obtenerGerentes, width=600, align=center]
 
 === CU-26
-image::Comunication/CU-26 Dar de baja Hotel.jpg[Dar de baja Hotel, width=600, align=center]
+image::Comunication/CU26/darDeBajaHotel.png[darDeBajaHotel, width=600, align=center]
+image::Comunication/CU26/obtenerHoteles.png[obtenerHoteles, width=600, align=center]
 
 === CU-27
-image::Comunication/CU-27 Consultar hotel.jpg[Consultar hotel, width=600, align=center]
+image::Comunication/CU27/consultarHotel.png[consultarHotel, width=600, align=center]
+image::Comunication/CU27/obtenerHoteles.png[obtenerHoteles, width=600, align=center]
 
 === CU-28
-image::Comunication/CU-28 Registrar tipo habitación.jpg[Registrar tipo habitación, width=600, align=center]
+image::Comunication/CU28/registrarTipoHabitacion.png[registrarTipoHabitacion, width=600, align=center]
 
 === CU-29
-image::Comunication/CU-29 Actualizar tipo habitación.jpg[Actualizar tipo habitación, width=600, align=center]
+image::Comunication/CU29/actualizarTipoHabitacion.png[actualizarTipoHabitacion, width=600, align=center]
 
 === CU-30
-image::Comunication/CU-30 Dar de baja tipo habitacion.jpg[Dar de baja tipo habitación, width=600, align=center]
+image::Comunication/CU30/darDeBajaTipoHabitacion.png[darDeBajaTipoHabitacion, width=600, align=center]
+image::Comunication/CU30/obtenerTiposHabitaciones.png[obtenerTiposHabitaciones, width=600, align=center]
 
 === CU-31
 image::Comunication/CU-31 Consultar tipo habitación.jpg[Consultar tipo habitación, width=600, align=center]

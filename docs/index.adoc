@@ -35,6 +35,7 @@
 |1.3    |2025-11-16| Equipo completo| Matriz de trazabilidad.
 |1.4    |2025-12-15| Brayan Gabriel Fernández Tlapa| Actualiza modelo de conceptos de negocio y los diagramas de interfaces de sistema (CU 1-15).
 |1.5    |2025-12-15| Brayan Gabriel Fernández Tlapa| Actualiza diagramas de comunicacion (CU 1-15).
+|1.6    | 2025-12-16 | Miguel Angel Mendez Ronzon    | Actualización de diagramas de comunicación del CU15 al CU16.
 |===
 
 
