@@ -1,3 +1,4 @@
+
 == Aspectos Transversales (Cross-Cutting Concerns)
 
 En la arquitectura del sistema hotelero, ciertas responsabilidades no pueden confinarse a un unico componente o capa, ya que su implementacion afecta la integridad, seguridad y operatividad de todo el sistema. Esta seccion detalla la estrategia para gestionar tres aspectos transversales criticos: Seguridad, Observabilidad (Auditoria) y Gestion de Transacciones, asegurando una aplicacion uniforme de politicas y patrones a traves de los distintos microservicios y capas de la aplicacion.
@@ -33,3 +34,6 @@ Estrategias y Tacticas:
 * Transacciones ACID para Procesos Criticos: Para operaciones de nucleo como HacerReserva y CheckIn, se impone una consistencia fuerte. Se utiliza un modelo de gestion de transacciones gestionado por el contenedor en la capa de Servicios. Esto asegura que la logica de negocio no se contamine con codigo de gestion de conexiones (commit y rollback). Si una operacion falla, el marco de trabajo revierte automaticamente cualquier cambio en el inventario, garantizando la atomicidad definida en las restricciones de integridad.
 
 * Idempotencia en Operaciones Financieras: Para manejar los reintentos de pago sin duplicar cobros, se aplica el patron de Idempotencia de manera transversal en el servicio de Pagos. Cada solicitud de cobro debe incluir una clave de idempotencia unica. Si el servicio recibe una peticion duplicada, el sistema reconoce la clave y devuelve el resultado de la transaccion original en lugar de ejecutar un nuevo cobro.
+
+
+

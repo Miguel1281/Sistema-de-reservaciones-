@@ -46,3 +46,9 @@ La estructura de red protege los activos de informacion criticos del sistema.
 ==== Modificabilidad y Mantenibilidad
 
 La arquitectura de microservicios facilita la evolucion del sistema. Para cambiar la logica de calculo de impuestos asociada al ASR-Modificabilidad, solo es necesario redesplegar el Pod: Tarifas y su esquema DB_Tarifas, sin detener las reservas o la recepcion.
+
+
+
+
+
+
