@@ -4,100 +4,71 @@
 [cols="2,3,3,3,1"]
 |===
 |ID Driver
-|Descripción del Driver (CU, ASR, CON)
+|Descripción del Driver
 |Táctica / Decisión Arquitectónica
 |Artefactos de Diseño
 |Estado
 
-|QAS-Modificabilidad
-|Propagación de cambio: Reemplazar pasarela de pago
-|Patrón: Arquitectura en Capas (Layered Architecture)
-|Vista Lógica: Separación estricta de capas (Presentación, Aplicación, Dominio, Infraestructura).
-|Cumple
-
-|QAS-Modificabilidad
-|Propagación de cambio: Reemplazar pasarela de pago
-|Patrón: Inversión de Dependencias (DIP) y Aislamiento del Dominio
-|Capa de Dominio: Define la interfaz +IPaymentGateway+.
-Capa de Infraestructura: Implementa +IPaymentGateway+ (ej. +PaymentAdapterStripe+).
-|Cumple
-
-|CON-1
-|Restricción: Uso de RDBMS para transacciones
-|Patrón: Inversión de Dependencias (DIP) / Abstracción de Persistencia
-|Capa de Dominio: Define interfaces de repositorio (ej. +IReservationRepository+).
-Capa de Infraestructura: Implementa los repositorios (ej. +ReservationRepositoryRDBMS+).
-|Cumple
-
-|CRN-2
-|Preocupación: Atomicidad en las reservas
-|Patrón: Arquitectura en Capas y Aislamiento del Dominio
-|Capa de Dominio: Encapsula la lógica de negocio y las reglas transaccionales.
-Capa de Aplicación: Orquesta el flujo atómico (inventario, pago, confirmación).
-|Cumple
-
-|CU-01, CU-03, QAS-Rend, QAS-Seg
-|Funcionalidad de Reservación/Consulta y drivers de Rendimiento/Seguridad asociados.
-|Táctica: Descomposición en Componentes (CBSE)
-|Vista Lógica / Vista de Componentes: Identificación de componentes lógicos (Inventario, Reservaciones, Gestión de Estancias, Pago, Administración y Políticas).
-|Cumple
-
-|CU-01, CU-03, QAS-Seguridad
-|Funcionalidad de Reservación/Consulta y Control de Acceso.
-|Táctica: Introducción de Capa de Aplicación (Orquestación)
-|Capa de Aplicación: Contiene "Servicios de Aplicación" (ej. +ServicioDeReservaciones+) para coordinar casos de uso y aplicar barreras de seguridad.
-|Cumple
-
-|QAS-Rendimiento
-|Throughput: 300 QPS en consultas
-|Táctica: Caching (Mantener Múltiples Copias de Datos)
-|Componente: Inventario y Catálogo (Servicio de búsqueda de inventario).
-|Cumple
-
-|QAS-Seguridad
-|Resistencia a ataques: Inyección SQL
-|Táctica: Validación de Entradas (Consultas Parametrizadas / ORM)
-|Capa de Infraestructura: Mandato sobre todas las implementaciones de repositorios (ej. +ReservationRepositoryRDBMS+).
-|Cumple
-
 |QAS-Disponibilidad
 |Recuperación ante caída de BD
-|Táctica: Redundancia / Conmutación por error (Failover)
-|Capa de Infraestructura: Requisito sobre la configuración de la RDBMS.
-|Cumple
-
-|QAS-Disponibilidad
-|Detección de caída de Pasarela de Pago
-|Táctica: Asincronía / Patrón de Reintento (Reservar como "retenida" y reintentar pago)
-|Capa de Aplicación: Flujo de confirmación de reserva.
-Componente: ProcesadorPagos.
+|Redundancia Activa/Pasiva (Failover): Implementación de clúster de base de datos con replicación Maestro-Esclavo.
+|Vista Despliegue: Nodo Database Cluster (Master/Slave).
+Vista Lógica: Capa Infraestructura.
 |Cumple
 
 |QAS-Usabilidad
-|Eficiencia de uso: Check-in ágil
-|Táctica: Cliente Ligero (SPA)
-|Capa de Presentación: +Aplicación SPA (Recepción)+.
+|Eficiencia: Check-in ágil
+|Cliente Ligero (Single Page Application): Descarga de la carga de renderizado al navegador del cliente.
+|Vista Despliegue: Nodo Dispositivo Cliente (Navegador).
+Vista Lógica: Componente SPA Recepción.
+|Cumple
+
+|QAS-Disponibilidad
+|Detección caída Pasarela de Pago
+|Aislamiento de Fallos y Asincronía: Despliegue del servicio de pagos en un Pod aislado y uso de llamadas asíncronas.
+|Vista Despliegue: Pod Servicio Pagos.
+Vista Proceso: Fragmento ref CU-02 (Manejo de error).
 |Cumple
 
 |CRN-3
-|Preocupación: Trazabilidad y auditabilidad
-|Táctica: Registro de Eventos (Logging) Centralizado
-|Componente: GestorAuditoria.
-Interfaz: ILoggin.
-Diagramas de Comunicación: (ej. +CU-08+, +CU-15+, +CU-28+, etc.).
+|Trazabilidad y auditabilidad
+|Registro Centralizado (Log Aggregation): Envío asíncrono de eventos a un repositorio de logs central.
+|Vista Lógica: Componente GestorAuditoria.
+Asp. Transversales: Estrategia de Observabilidad.
 |Cumple
 
 |CRN-5
-|Preocupación: Idempotencia en operaciones de pago
-|Táctica: Token de Transacción Único (Implícito en la especificación de la interfaz)
-|Componente: ProcesadorPagos.
-Interfaz: IPago (Especificación requiere idempotencia).
-Caso de Uso: CU-02 (RN-01).
+|Idempotencia en pagos
+|Token de Transacción Único: Implementación del patrón de Idempotencia para evitar cobros dobles ante reintentos.
+|Vista Proceso: Validación en flujo de pago.
+Asp. Transversales: Gestión de Transacciones.
 |Cumple
 
-|CRN-6
-|Preocupación: Operatividad en hardware modesto
-|Táctica: Cliente Ligero (SPA)
-|Capa de Presentación: +Aplicación SPA (Recepción)+.
+|ASR-Seguridad
+|Resistencia a Inyección SQL / XSS
+|Validación de Entradas y ORM: Mandato de uso de Repositorios con consultas parametrizadas.
+|Vista Lógica: Capa Infraestructura (Repositorios).
+Asp. Transversales: Seguridad (Defensa en Profundidad).
+|Cumple
+
+|CON-10
+|Restricción: Mandato RDBMS
+|Persistencia Relacional: Uso de PostgreSQL como motor de base de datos.
+|Vista Despliegue: Nodo PostgreSQL Instance.
+Vista Lógica: Entidades ER y DAOs.
+|Cumple
+
+|ASR-Modificabilidad
+|Cambio de reglas de negocio
+|Microservicios (Separación de Dominios): Desacoplamiento de la lógica de Tarifas y Reservas.
+|Vista Despliegue: Pods independientes (Tarifas, Reservas).
+Vista Lógica: Diagrama de Paquetes.
+|Cumple
+
+|CU-01
+|Hacer Reserva
+|Orquestación Sincrónica y Transacción ACID: Coordinación centralizada para garantizar la consistencia del inventario.
+|Vista Proceso: Diagrama de Secuencia CU-01.
+Vista Lógica: Componente SistemaReservas.
 |Cumple
 |===
