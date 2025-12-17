@@ -42,3 +42,46 @@ En la etapa final, el sistema aprovecha el paralelismo para optimizar el Rendimi
 . Rama Crítica (Persistencia): La actualización del estado a CONFIRMADA y la ocupación definitiva del inventario ocurren en el hilo principal bajo una política de Consistencia Fuerte. El sistema no considera la venta como finalizada hasta que este dato es persistente.
 . Rama No Crítica (Notificación): El envío del comprobante al correo electrónico opera bajo Consistencia Eventual. Se acepta que exista un leve retraso entre la confirmación en pantalla y la llegada del correo, priorizando la velocidad de respuesta de la UI sobre la sincronización inmediata de la mensajería.
 
+=== Operación de check-out
+image::Sequence/checkOut.png[Check out, width=600, align=center]
+
+==== Descripción del modelo de proceso y concurrencia
+
+El diagrama de secuencia para el caso de uso CU-09 Check out ilustra el proceso de finalización de estancia, diseñado para garantizar la liquidación de saldos pendientes antes de liberar los recursos del hotel.
+A continuación, se detalla el modelo de ejecución y las políticas aplicadas para asegurar la integridad financiera y del inventario.
+
+===== Patrones de interacción y comunicación
+
+La arquitectura mantiene el patrón de orquestación donde el Sistema de Recepción delega tareas a los gestores de Pagos y Estancias.
+
+* Comunicación síncrona (bloqueante): Las interacciones relacionadas con el cálculo del estado de cuenta, el procesamiento del pago y la validación final de salida son estrictamente síncronas.
+Esto es fundamental para que el RECEPCIONISTA tenga confirmación inmediata de que la deuda ha sido saldada antes de permitir la partida del huésped.
+
+* Comunicación asíncrona (no bloqueante): Una vez confirmada la operación crítica, se utiliza un patrón asíncrono para tareas secundarias como la generación y envío del comprobante fiscal o factura por correo electrónico, liberando la interfaz de usuario rápidamente.
+
+===== Modelo de concurrencia y gestión de transacciones
+
+La gestión del estado de la habitación es el punto crítico para evitar inconsistencias en el inventario.
+
+* Transacción ACID y bloqueo pesimista:
+Las operaciones de "Finalizar estancia" y "Liberar habitación" se encapsulan en una única Transacción Atómica. Se aplica un bloqueo para asegurar que la habitación pase de estado "Ocupada" a "Requiere limpieza" en el mismo instante en que se cierra la cuenta.
+Esto previene que una habitación aparezca disponible para una nueva reserva antes de que el sistema registre formalmente la salida del ocupante anterior.
+
+* Transacción de compensación:
+Dado que el cobro mediante tarjeta es un proceso externo, si el pago es exitoso pero ocurre un error fatal al intentar cerrar la estancia en la base de datos local, el sistema debe iniciar una transacción de compensación (ej. reversión del cargo o alerta a gerencia) para mantener la consistencia eventual.
+
+===== Calidad de servicio y tolerancia a fallos
+
+Debido a la dependencia de pasarelas de pago externas durante la salida:
+
+* Timeouts: Se define un tiempo de espera estricto para la respuesta del procesador de pagos. Si excede el límite, la operación se aborta para no bloquear la estación de trabajo.
+
+* Política de reintentos (zero-retry): Al igual que en la reserva, no se reintentan automáticamente los cobros fallidos para evitar duplicidad de cargos. El recepcionista debe reiniciar el flujo conscientemente.
+
+===== Paralelismo y políticas de consistencia mixta
+
+El sistema aprovecha el procesamiento en segundo plano para optimizar la percepción de velocidad al finalizar:
+
+. Rama crítica (persistencia): La actualización del inventario y el cierre de la cuenta ocurren en el hilo principal con consistencia fuerte. El sistema no confirma la salida hasta que estos datos están persistidos.
+
+. Rama no crítica (notificación): El envío del detalle de la cuenta por correo electrónico se maneja con consistencia eventual, permitiendo un leve retraso sin afectar la operación operativa del hotel
