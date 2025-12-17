@@ -36,3 +36,88 @@ Preocupaciones (Concerns):
 
 === Glosario
 
+==== Estrategia y Negocio (Contexto del Problema)
+
+Gestión Reactiva::
+Modelo de operación actual (AS-IS) donde la administración responde caóticamente a los incidentes debido a la falta de información centralizada. El sistema busca erradicar esto para permitir una toma de decisiones estratégica.
+
+Silos de Información::
+Condición problemática actual donde cada hotel opera su propia base de datos aislada, impidiendo una visión global de la cadena y generando inconsistencias.
+
+Precios Dinámicos::
+Estrategia competitiva implementada en el sistema para ajustar tarifas en tiempo real según la oferta y la demanda, transformando la gestión de un costo a una ventaja de ingresos.
+
+Revenue Management (Gestión de Ingresos)::
+Práctica administrativa soportada por el sistema para gestionar precios y disponibilidad de forma inteligente con el fin de maximizar la rentabilidad.
+
+Overbooking Controlado::
+Política de negocio que permite vender más capacidad de la real bajo reglas estrictas para optimizar la ocupación, diferenciándose de las "sobreventas accidentales" por error.
+
+Punto Único de Acceso::
+Solución arquitectónica para centralizar la gestión de todo el inventario de la cadena, permitiendo cambios masivos de tarifas o políticas desde un solo lugar.
+
+==== Dominio Hotelero y Operaciones
+
+Walk-in::
+Cliente que se presenta físicamente en el mostrador sin reservación previa solicitando alojamiento inmediato (Reservación de mostrador).
+
+Bloqueo Suave (Soft Hold)::
+Mecanismo temporal de retención de inventario durante el proceso de reserva. El sistema aparta la habitación brevemente antes del pago para evitar que otro usuario la gane mientras se completa la transacción.
+
+Inventario Físico vs. Lógico::
+Distinción entre las habitaciones reales del hotel (físico) y la disponibilidad comercial (lógico). Una habitación "Sucia" existe físicamente pero no está disponible lógicamente para venta inmediata.
+
+Estados Físicos de Habitación::
+Clasificación operativa que incluye estados como LIMPIA (lista para asignar), SUCIA (requiere limpieza) y OCUPADA (asignada a un huésped).
+
+Folio (Cuenta de Estancia)::
+Registro financiero asociado a una estancia donde se acumulan los cargos por alojamiento y consumos adicionales para su liquidación final.
+
+Política de Saldo Cero::
+Regla de negocio estricta que impide realizar el Check-out si existe algún monto pendiente de pago en el folio del huésped.
+
+Coherencia de Precios::
+Regla que garantiza que el precio mostrado al inicio de la búsqueda sea idéntico al cobrado al final, evitando discrepancias ocultas.
+
+==== Arquitectura y Diseño de Software
+
+Arquitectura en Capas (Layered Architecture)::
+Patrón estructural que organiza el sistema en estratos (Presentación, Aplicación, Dominio, Infraestructura) con dependencias estrictas hacia abajo.
+
+Single Page Application (SPA)::
+Tecnología web usada en el módulo de recepción para ofrecer una experiencia fluida y rápida, optimizada para equipos con hardware modesto.
+
+Inversión de Dependencias::
+Principio aplicado en el Dominio donde se definen interfaces (abstracciones) para repositorios y servicios, desacoplando la lógica de negocio de la tecnología concreta.
+
+Idempotencia::
+Propiedad técnica crítica en los pagos. Garantiza que si una operación de cobro se envía múltiples veces (por error de red o reintento), el sistema solo la procese una vez efectiva.
+
+Concurrencia de Inventario::
+Capacidad del sistema para manejar múltiples solicitudes simultáneas sobre la misma habitación sin generar dobles reservas (race conditions).
+
+Degradación Predecible::
+Capacidad del sistema para reducir su funcionalidad de forma controlada ante picos de demanda excesivos, evitando una caída total del servicio.
+
+==== Seguridad, Infraestructura y Datos
+
+RBAC (Role-Based Access Control)::
+Modelo de seguridad donde los permisos se otorgan según el rol del usuario (Recepcionista, Gerente) y no su identidad individual.
+
+Defensa en Profundidad::
+Estrategia de seguridad que aplica controles en múltiples niveles (red, aplicación, datos) en lugar de confiar solo en el perímetro.
+
+ACID (Atomicidad, Consistencia, Aislamiento, Durabilidad)::
+Propiedades de transacción exigidas para procesos críticos como HacerReserva para asegurar la integridad del inventario.
+
+Correlation ID (Trace ID)::
+Identificador único que acompaña a cada petición HTTP a través de todos los microservicios, permitiendo rastrear la traza completa de una operación en los logs.
+
+JWT (JSON Web Token)::
+Mecanismo de tokens seguros para propagar la identidad del usuario desde el frontend hacia los servicios de backend.
+
+Baja Lógica (Soft Delete)::
+Método de eliminación donde los registros (como tarifas antiguas) no se borran físicamente, sino que se marcan como "inactivos" para mantener la historia.
+
+Log Aggregator::
+Componente centralizado que recolecta logs de todos los servicios, evitando el uso de archivos locales efímeros y facilitando la auditoría.
