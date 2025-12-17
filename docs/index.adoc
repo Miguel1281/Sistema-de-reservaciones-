@@ -37,6 +37,7 @@
 |1.5    |2025-12-15| Brayan Gabriel Fernández Tlapa| Actualiza diagramas de comunicacion (CU 1-15).
 |1.6    | 2025-12-16 | Miguel Angel Mendez Ronzon    | Actualización de diagramas de comunicación del CU15 al CU16.
 |1.7    | 2025-12-16 | Miguel Angel Mendez Ronzon    | Se agregan los diade interfaz del CU16 al CU30.
+|1.8    | 2025-12-16 | Brayan Gabriel Fernández Tlapa    | Se agrega el diagrama de despliegue
 |===
 
 
