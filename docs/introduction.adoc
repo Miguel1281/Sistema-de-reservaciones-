@@ -2,7 +2,7 @@
 
 === Visión del Sistema
 
-El proyecto busca crear una solucion integral y centralizada de gestion hotelera para una cadena con mas de 5000 hoteles. Diseñado pra los clientes y el personal operativo y administrativo, quienes necesitan de una plataforma confiable para gestionar el inventario, tarifas y reservaciones. El sistema permitirá a los clientes realizar reservaciones en linea y de forma presencial, mientras que el personal podra gestionar las operaciones diarias de manera eficiente.
+El proyecto busca crear una solucion integral y centralizada de gestion hotelera para una cadena con mas de 5000 hoteles. Diseñado para los clientes y el personal operativo y administrativo, quienes necesitan de una plataforma confiable para gestionar el inventario, tarifas y reservaciones. El sistema permitirá a los clientes realizar reservaciones en linea y de forma presencial, mientras que el personal podra gestionar las operaciones diarias de manera eficiente.
 
 A diferencia de las soluciones actuales, que son propensas a errores, nuestra plataforma ofrecerá un unico punto de acceso a todo el inventario, garantizando la consistencia, reduciendo errores y mejorando la eficiencia, con el oobjetivo de transformar la gestión de reservaciones de un costo operativo a una ventaja competitiva.
 
