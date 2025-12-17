@@ -1209,4 +1209,323 @@ Pos-condiciones:
 * El tipo de habitación se marca como ELIMINADO o DESCONTINUADO.
 ---
 
-prueba de version
+=== Interfaces de Negocio
+
+==== ICatalogoMgt
+image::Interface diagrams/business interfaces/ICatalogoMgt.png[ICatalogoMgt, width=600, align=center]
+Especificación de Interfaz: ICatalogoMgt
+
+Descripción: Interfaz provista por el componente SistemaInventario.
+Centraliza la gestión integral del inventario (hoteles, habitaciones, tipos), la configuración comercial (tarifas) y el control de disponibilidad física y lógica.
+
+Operación: verificarDisponibilidad
+Firma:
+----
+verificarDisponibilidad(criterios: CriterioBusqueda): ResultadoDisponibilidad
+----
+Pre-condiciones: Rango de fechas válido y hotel activo.
+Pos-condiciones: Retorna mapa de disponibilidad por tipo de habitación.
+
+Operación: bloquearInventario
+Firma:
+----
+bloquearInventario(idTipoHabitacion: String, fechas: RangoFechas, cantidad: int): TokenBloqueo
+----
+Pre-condiciones: Disponibilidad suficiente verificada.
+Pos-condiciones: Decrementa cupo disponible temporalmente.
+
+Operación: liberarInventario
+Firma:
+----
+liberarInventario(tokenBloqueo: String): Confirmacion
+----
+Pre-condiciones: Token válido.
+Pos-condiciones: Restituye el cupo al inventario general.
+
+Operación: actualizarEstadoHabitacion
+Firma:
+----
+actualizarEstadoHabitacion(numeroHabitacion: String, nuevoEstado: EstadoFisico): Confirmacion
+----
+Pre-condiciones: Habitación existente.
+Pos-condiciones: Cambia estado (LIMPIA/SUCIA/MANTENIMIENTO).
+
+Operación: registrarHotel
+Firma:
+----
+registrarHotel(datos: DatosHotel): ConfirmacionRegistro
+----
+Pre-condiciones: Nombre y dirección únicos.
+Pos-condiciones: Crea nuevo registro de hotel.
+
+Operación: actualizarHotel
+Firma:
+----
+actualizarHotel(datos: DatosHotel): ConfirmacionActualizacion
+----
+Pos-condiciones: Actualiza datos descriptivos del hotel.
+
+Operación: darBajaHotel
+Firma:
+----
+darBajaHotel(idHotel: String): ConfirmacionBaja
+----
+Pre-condiciones: Sin reservas activas.
+Pos-condiciones: Marca hotel como inactivo.
+
+Operación: registrarTipoHabitacion
+Firma:
+----
+registrarTipoHabitacion(datos: DatosTipoHabitacion): ConfirmacionRegistro
+----
+Pos-condiciones: Crea nueva categoría en el hotel.
+
+Operación: actualizarTipoHabitacion
+Firma:
+----
+actualizarTipoHabitacion(datos: DatosTipoHabitacion): ConfirmacionActualizacion
+----
+Pos-condiciones: Modifica capacidad o descripción.
+
+Operación: registrarHabitacion
+Firma:
+----
+registrarHabitacion(datos: DatosHabitacion): ConfirmacionRegistro
+----
+Pos-condiciones: Da de alta una unidad física (número de puerta).
+
+Operación: registrarTarifa
+Firma:
+----
+registrarTarifa(datos: DatosTarifa): ConfirmacionRegistro
+----
+Pre-condiciones: No solapamiento de fechas.
+Pos-condiciones: Publica nuevo precio.
+
+Operación: actualizarTarifa
+Firma:
+----
+actualizarTarifa(datos: DatosTarifa): ConfirmacionActualizacion
+----
+Pos-condiciones: Modifica valores de tarifa existente.
+
+Operación: darBajaTarifa
+Firma:
+----
+darBajaTarifa(idTarifa: int): ConfirmacionBaja
+----
+Pre-condiciones: Análisis de impacto validado.
+Pos-condiciones: Desactiva tarifa.
+
+Operación: obtenerTarifasVigentes
+Firma:
+----
+obtenerTarifasVigentes(filtro: CriterioTarifa): ListaTarifas
+----
+Pos-condiciones: Retorna tarifas activas para el periodo.
+
+---
+
+==== IReservaMgt
+image::Interface diagrams/business interfaces/IReservaMgt.png[IReservaMgt, width=600, align=center]
+Especificación de Interfaz: IReservaMgt
+
+Descripción: Interfaz provista por el componente SistemaReservas.
+Administra el ciclo de vida de las reservas, modificaciones, cancelaciones y la trazabilidad histórica.
+
+Operación: crearReserva
+Firma:
+----
+crearReserva(solicitud: DatosReserva): ResumenReserva
+----
+Pre-condiciones: Inventario bloqueado y cliente válido.
+Pos-condiciones: Genera reserva en estado PENDIENTE.
+
+Operación: confirmarReserva
+Firma:
+----
+confirmarReserva(idReserva: int, infoPago: InfoPago): ComprobanteReserva
+----
+Pre-condiciones: Pago autorizado.
+Pos-condiciones: Cambia estado a CONFIRMADA.
+
+Operación: cancelarReserva
+Firma:
+----
+cancelarReserva(idReserva: int, motivo: String): ReciboCancelacion
+----
+Pos-condiciones: Cambia estado a CANCELADA.
+
+Operación: modificarReserva
+Firma:
+----
+modificarReserva(idReserva: int, cambios: SolicitudCambio): ResumenCambio
+----
+Pos-condiciones: Actualiza fechas o tipo de habitación.
+
+Operación: buscarReservas
+Firma:
+----
+buscarReservas(filtro: CriterioBusquedaReserva): ListaReservas
+----
+Pos-condiciones: Retorna colección filtrada.
+
+Operación: obtenerHistorialReserva
+Firma:
+----
+obtenerHistorialReserva(idReserva: int): HistorialEventos
+----
+Pos-condiciones: Retorna bitácora de cambios de estado.
+
+Operación: analizarImpactoBajaTarifa
+Firma:
+----
+analizarImpactoBajaTarifa(idTarifa: int): InformeImpacto
+----
+Pos-condiciones: Retorna lista de reservas afectadas por eliminación de tarifa.
+
+Operación: cotizarModificacion
+Firma:
+----
+cotizarModificacion(idReserva: int, cambios: SolicitudCambio): Cotizacion
+----
+Pos-condiciones: Calcula diferencias de precio sin aplicar cambios.
+
+---
+
+==== IPagosMgt
+image::Interface diagrams/business interfaces/IPagosMgt.png[IPagosMgt, width=600, align=center]
+Especificación de Interfaz: IPagosMgt
+
+Descripción: Interfaz provista por el componente SistemaPagos.
+Fachada para la gestión de cobros, reembolsos y validación de instrumentos financieros.
+
+Operación: procesarPago
+Firma:
+----
+procesarPago(datosPago: InfoTransaccion): ResultadoPago
+----
+Pre-condiciones: Datos financieros válidos.
+Pos-condiciones: Ejecuta cargo y retorna autorización.
+
+Operación: procesarReembolso
+Firma:
+----
+procesarReembolso(idTransaccionOriginal: String, monto: decimal): ConfirmacionReembolso
+----
+Pre-condiciones: Transacción original aprobada.
+Pos-condiciones: Devuelve fondos al cliente.
+
+Operación: obtenerEstadoTransaccion
+Firma:
+----
+obtenerEstadoTransaccion(idTransaccion: String): EstadoTransaccion
+----
+Pos-condiciones: Retorna estado actual (APROBADO/RECHAZADO/PENDIENTE).
+
+Operación: validarMetodoPago
+Firma:
+----
+validarMetodoPago(metodo: MetodoPago): ResultadoValidacion
+----
+Pos-condiciones: Verifica vigencia y formato de tarjeta/cuenta.
+
+---
+
+==== IEstanciaMgt
+image::Interface diagrams/business interfaces/IEstanciaMgt.png[IEstanciaMgt, width=600, align=center]
+Especificación de Interfaz: IEstanciaMgt
+
+Descripción: Interfaz provista por el componente SistemaRecepcion.
+Controla las operaciones durante la permanencia del huésped: Check-in, cargos a la habitación, cambios y Check-out.
+
+Operación: iniciarEstancia
+Firma:
+----
+iniciarEstancia(idReserva: int, asignaciones: List<AsignacionHabitacion>): IdEstancia
+----
+Pre-condiciones: Reserva confirmada, fecha correcta.
+Pos-condiciones: Registra Check-in.
+
+Operación: finalizarEstancia
+Firma:
+----
+finalizarEstancia(idEstancia: int): ResumenCierre
+----
+Pre-condiciones: Saldo cero.
+Pos-condiciones: Registra Check-out y libera habitación.
+
+Operación: registrarConsumo
+Firma:
+----
+registrarConsumo(idEstancia: int, consumo: DetalleConsumo): ReciboCargo
+----
+Pre-condiciones: Estancia activa.
+Pos-condiciones: Suma cargo a la cuenta.
+
+Operación: obtenerEstadoCuenta
+Firma:
+----
+obtenerEstadoCuenta(idEstancia: int): EstadoCuenta
+----
+Pos-condiciones: Retorna desglose de cargos y abonos.
+
+Operación: cambiarHabitacion
+Firma:
+----
+cambiarHabitacion(idEstancia: int, nuevaHabitacion: String): ConfirmacionCambio
+----
+Pos-condiciones: Actualiza asignación física.
+
+Operación: buscarEstanciaPorHabitacion
+Firma:
+----
+buscarEstanciaPorHabitacion(numero: String): ResumenEstancia
+----
+Pos-condiciones: Retorna estancia activa si existe.
+
+---
+
+==== IClienteMgt
+image::Interface diagrams/business interfaces/IClienteMgt.png[IClienteMgt, width=600, align=center]
+Especificación de Interfaz: IClienteMgt
+
+Descripción: Interfaz provista por el componente SistemaGestionClientes.
+Administra la información de usuarios, huéspedes y personal (en roles de cliente).
+
+Operación: registrarCliente
+Firma:
+----
+registrarCliente(datos: DatosCliente): ConfirmacionRegistro
+----
+Pos-condiciones: Crea perfil de usuario.
+
+Operación: actualizarCliente
+Firma:
+----
+actualizarCliente(datos: DatosCliente): ConfirmacionActualizacion
+----
+Pos-condiciones: Modifica datos de contacto o preferencias.
+
+Operación: obtenerCliente
+Firma:
+----
+obtenerCliente(idUsuario: int): PerfilCliente
+----
+Pos-condiciones: Retorna información completa del usuario.
+
+Operación: buscarClientes
+Firma:
+----
+buscarClientes(filtro: CriterioCliente): ListaClientes
+----
+Pos-condiciones: Retorna lista de clientes coincidentes.
+
+Operación: validarCredenciales
+Firma:
+----
+validarCredenciales(usuario: String, pass: String): TokenSesion
+----
+Pos-condiciones: Autentica al usuario en el sistema.
+
+prueba 2
