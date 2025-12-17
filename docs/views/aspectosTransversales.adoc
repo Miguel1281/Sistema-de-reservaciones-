@@ -1,0 +1,35 @@
+== Aspectos Transversales (Cross-Cutting Concerns)
+
+En la arquitectura del sistema hotelero, ciertas responsabilidades no pueden confinarse a un unico componente o capa, ya que su implementacion afecta la integridad, seguridad y operatividad de todo el sistema. Esta seccion detalla la estrategia para gestionar tres aspectos transversales criticos: Seguridad, Observabilidad (Auditoria) y Gestion de Transacciones, asegurando una aplicacion uniforme de politicas y patrones a traves de los distintos microservicios y capas de la aplicacion.
+
+=== Seguridad y Control de Acceso
+
+La seguridad es el aspecto transversal mas critico, dado que el sistema maneja datos sensibles de huespedes y transacciones financieras. La estrategia adoptada es de Defensa en Profundidad, aplicando controles en cada nivel de la infraestructura y aplicacion, en lugar de confiar unicamente en el perimetro.
+
+Estrategias y Tacticas:
+
+* Autenticacion y Autorizacion Centralizada (RBAC): Para mitigar riesgos de acceso no autorizado, se implementa un modelo de Control de Acceso Basado en Roles (RBAC). A pesar de la naturaleza distribuida de los servicios (Reservas, Recepcion, Tarifas), la identidad del usuario no se gestiona de forma aislada. Se utiliza un mecanismo de tokens seguros (como JWT) que fluye desde la capa de presentacion (SPA/Web) hacia los servicios backend.
+
+** Interceptors y Filtros: En la capa de Servicios de Aplicacion, se utilizan interceptores que validan la firma y vigencia del token antes de procesar cualquier solicitud, rechazando peticiones anonimas a endpoints administrativos (CRN sobre Seguridad).
+
+* Proteccion de Datos en Transito y Reposo: Cumpliendo con los estandares de seguridad para transacciones (referencia a Pasarela de Pagos), se impone el uso de TLS para toda comunicacion externa e interna entre el API Gateway y los Pods. Adicionalmente, se aplica la tactica de Validacion de Entradas en todas las fronteras del sistema para prevenir ataques de Inyeccion SQL y XSS, utilizando ORMs que parametrizan consultas por defecto, tal como se especifica en las restricciones de infraestructura.
+
+=== Observabilidad y Auditoria (Logging)
+
+Dado el requisito de trazabilidad operativa y la necesidad de diagnosticar incidentes en un entorno distribuido, la observabilidad no es opcional. La estrategia se centra en la Centralizacion de Logs y la Correlacion de Eventos.
+
+Estrategias y Tacticas:
+
+* Registro de Eventos Centralizado: Para satisfacer la preocupacion de Trazabilidad y Auditabilidad (CRN), se establece un mandato arquitectonico: ningun servicio escribe logs en archivos locales efimeros. En su lugar, todos los componentes (SistemaReservas, SistemaRecepcion) envian sus eventos de forma asincrona a un agregador central (Log Aggregator). Esto permite al equipo de operaciones consultar la historia completa de una reserva desde su creacion en la web hasta el Check-out en recepcion desde un unico tablero.
+
+* Identificador de Correlacion (Trace ID): Para evitar la fragmentacion de la informacion en la arquitectura de microservicios, se implementa el patron de Correlation ID. Cada solicitud HTTP que ingresa al Balanceador de Carga recibe un identificador unico que se propaga en los encabezados de las llamadas subsiguientes a los servicios de dominio y base de datos. Esto permite reconstruir el flujo exacto de una transaccion fallida, facilitando la depuracion y el cumplimiento de auditorias.
+
+=== Gestion de Transacciones y Consistencia
+
+El sistema debe equilibrar la necesidad de consistencia estricta en el inventario para evitar overbooking con el rendimiento. La estrategia transversal elegida es la Gestion Declarativa de Transacciones con niveles de aislamiento adaptativos.
+
+Estrategias y Tacticas:
+
+* Transacciones ACID para Procesos Criticos: Para operaciones de nucleo como HacerReserva y CheckIn, se impone una consistencia fuerte. Se utiliza un modelo de gestion de transacciones gestionado por el contenedor en la capa de Servicios. Esto asegura que la logica de negocio no se contamine con codigo de gestion de conexiones (commit y rollback). Si una operacion falla, el marco de trabajo revierte automaticamente cualquier cambio en el inventario, garantizando la atomicidad definida en las restricciones de integridad.
+
+* Idempotencia en Operaciones Financieras: Para manejar los reintentos de pago sin duplicar cobros, se aplica el patron de Idempotencia de manera transversal en el servicio de Pagos. Cada solicitud de cobro debe incluir una clave de idempotencia unica. Si el servicio recibe una peticion duplicada, el sistema reconoce la clave y devuelve el resultado de la transaccion original en lugar de ejecutar un nuevo cobro.
