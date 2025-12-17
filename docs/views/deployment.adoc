@@ -1,2 +1,48 @@
 == Diagrama de despliegue
 image::Deployment/DiagramaDespliegue.jpg[Diagrama de despliegue, width=600, align=center]
+
+Esta vista detalla el mapeo de los componentes de software sobre la infraestructura fisica y virtualizada. Se ha seleccionado un patron de Microservicios Contenerizados sobre un Cluster Orquestado (Kubernetes), con una estrategia de persistencia aislada (Database-per-Service). Esta configuracion fisica es la respuesta directa a los escenarios de atributos de calidad priorizados en el Utility Tree.
+
+=== Descripcion de la Topologia y Estructura
+
+El diagrama de despliegue ilustra una arquitectura distribuida en cuatro niveles logicos de infraestructura:
+
+. Nivel de Cliente (Presentacion): Representado por el nodo Dispositivo Cliente. Aqui se ejecutan artefactos ligeros como la SPA (Single Page Application), disenada especificamente para el navegador web o tabletas de recepcion.
+. Nivel de Gestion de Trafico (Gateway): Un nodo Balanceador de Carga equipado con un proxy inverso (Nginx) actua como la unica puerta de enlace, gestionando la terminacion SSL y el enrutamiento inteligente hacia el cluster.
+. Nivel de Ejecucion (Computo): Un Cluster K8s (Kubernetes) aloja los servicios de negocio (Reservas, Recepcion, Pagos, Tarifas) encapsulados en unidades de despliegue independientes llamadas Pods.
+. Nivel de Datos (Persistencia): Un servidor de base de datos optimizado que aloja esquemas aislados (DB_Reservas, DB_Pagos) para cada microservicio, evitando el acoplamiento a nivel de datos.
+
+=== Justificacion de las Tacticas de Despliegue frente a los ASR
+
+La eleccion de esta topologia se justifica mediante la satisfaccion de los siguientes impulsores arquitectonicos definidos en el analisis del sistema:
+
+==== Disponibilidad: Recuperacion ante Fallos y Aislamiento
+
+El diseno responde directamente al ASR-Disponibilidad: Recuperacion ante caida de BD y la tactica de Redundancia / Conmutacion por error (Failover) identificada en el documento.
+
+* Tactica de Aislamiento (Database-per-Service): Al separar fisicamente los esquemas de base de datos (DB_Reservas vs DB_Recepcion), se garantiza que una corrupcion o bloqueo en la tabla de operaciones de recepcion no afecte la disponibilidad del motor de reservas web. Esto reduce el radio de explosion de cualquier incidente de base de datos.
+* Tactica de Resiliencia en Pagos: Para atender el ASR Deteccion de caida de Pasarela de Pago, el servicio de pagos se aisla en su propio Pod (Pod: Pagos). Si la pasarela externa cae, el fallo se contiene en este contenedor, permitiendo que el resto del sistema siga operando. La comunicacion asincrona entre contenedores facilita la implementacion de patrones de reintento sin bloquear hilos de ejecucion en el servicio de reservas.
+
+==== Rendimiento: Escalabilidad ante Picos de Demanda
+
+Aunque no se detalla un QAS especifico de carga masiva, la arquitectura esta preparada para el alto rendimiento implicito en la gestion de reservas hoteleras.
+
+* Tactica de Escalado Horizontal: El uso de nodos de ejecucion tipo executionEnvironment (Pods) permite que el orquestador (K8s) instancie automaticamente nuevas replicas del Pod: Reservas cuando el Balanceador de Carga detecta un aumento en el trafico HTTP. Esto asegura tiempos de respuesta bajos incluso durante temporadas altas.
+* Separacion de Cargas: La distincion fisica entre el servidor de aplicaciones y el servidor de base de datos (device separados) evita que la logica de negocio compita por recursos de CPU y RAM con el motor de almacenamiento.
+
+==== Usabilidad: Eficiencia Operativa
+
+La topologia soporta el QAS-Usabilidad: Check-in agil mediante la tactica de Cliente Ligero (SPA).
+
+* Descarga de Procesamiento: Al desplegar la aplicacion de recepcion como un artefacto estatico en el Navegador Web del cliente, se aprovecha la capacidad de computo del dispositivo del usuario para la renderizacion, mientras que el backend se dedica al procesamiento de datos.
+
+==== Seguridad: Defensa en Profundidad
+
+La estructura de red protege los activos de informacion criticos del sistema.
+
+* Segmentacion de Red: Los Pods y las Bases de Datos se ubican en una red privada virtual, inaccesible directamente desde internet. El Balanceador de Carga actua como un Bastion, filtrando todo el trafico entrante.
+* Encriptacion en Transito: Se especifica el protocolo HTTPS (TLS) para la comunicacion entre el Dispositivo Cliente y el balanceador, asi como hacia los sistemas externos (Pasarela Pagos), asegurando la confidencialidad de los datos sensibles.
+
+==== Modificabilidad y Mantenibilidad
+
+La arquitectura de microservicios facilita la evolucion del sistema. Para cambiar la logica de calculo de impuestos asociada al ASR-Modificabilidad, solo es necesario redesplegar el Pod: Tarifas y su esquema DB_Tarifas, sin detener las reservas o la recepcion.
