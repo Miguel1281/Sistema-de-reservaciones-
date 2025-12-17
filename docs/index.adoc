@@ -61,7 +61,5 @@ include::views/sequenceDiagrams.adoc[]
 include::views/deployment.adoc[]
 include::views/aspectosTransversales.adoc[]
 include::views/traceabilityMatrix.adoc[]
-include::qualities.adoc[]
-include::decisions.adoc[]
+include::views/conclusionesYRiesgos.adoc[]
 include::appendix.adoc[]
-

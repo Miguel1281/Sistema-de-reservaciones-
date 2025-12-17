@@ -1,0 +1,26 @@
+== Conclusiones y Análisis de Riesgos
+
+=== Conclusiones del Diseño
+
+El diseño de software presentado logra alinear la tecnología con la visión de negocio de transformar una gestión dispersa en una plataforma centralizada y eficiente. La arquitectura no fue elegida al azar, sino que responde directamente a los atributos de calidad priorizados en el Árbol de Utilidad.
+
+En primer lugar, la arquitectura garantiza la confianza y consistencia, alineándose con el objetivo de negocio y las restricciones de integridad. Al decidir utilizar una base de datos relacional centralizada con un control estricto de transacciones, el sistema asegura matemáticamente que la tasa de dobles reservas sea cero. Aunque esto implicó priorizar la consistencia sobre la velocidad absoluta en momentos de altísima demanda, se cumple con la promesa de marca de que una reserva confirmada es una reserva garantizada.
+
+Para soportar la maximización de ventas y el alto volumen de tráfico esperado, se optó por separar las operaciones de búsqueda de las de compra. Esto significa que miles de personas pueden consultar disponibilidad simultáneamente gracias a un sistema de copias temporales en caché, sin saturar el núcleo del sistema que procesa los pagos. Esto protege la estabilidad de la plataforma y asegura que siempre se pueda vender, incluso durante campañas de marketing agresivas.
+
+En cuanto a la eficiencia operativa y usabilidad, el diseño reconoció que los recepcionistas necesitan herramientas ágiles. La decisión de crear una aplicación ligera y exclusiva para ellos permite que el sistema funcione rápido incluso en computadoras viejas, facilitando que un recepcionista novato pueda completar un check-in en menos de 2 minutos, tal como se exigió en los objetivos de eficiencia.
+
+Finalmente, el sistema está preparado para el futuro gracias a su capacidad de modificación. Al separar el código en capas independientes, el negocio tiene la libertad de cambiar reglas comerciales, como las penalizaciones por cancelación, o reemplazar al proveedor de pagos sin necesidad de reescribir todo el software. Esto convierte a la plataforma en una ventaja competitiva duradera y no solo en una solución temporal.
+
+=== Análisis de Riesgos y Estrategias
+
+A pesar de las medidas tomadas, centralizar la operación de 5,000 hoteles conlleva riesgos inherentes que deben ser vigilados y gestionados activamente.
+
+Riesgo de Cuello de Botella por Centralización
+Al obligar a que todas las transacciones pasen por un único punto para garantizar que no haya errores ni sobreventas accidentales, existe la posibilidad de que, en días de venta extrema como un Black Friday, el sistema se vuelva más lento de lo esperado porque los usuarios tendrán que hacer fila digitalmente para confirmar su habitación. Como estrategia de mitigación, se diseñó el sistema de tal forma que libere las habitaciones rápidamente si el pago no se concreta en pocos minutos, manteniendo el flujo de ventas constante.
+
+Dependencia de Conectividad y Servicios Externos
+Dado que el sistema vive completamente en la nube, la operación diaria de los hoteles, incluyendo el check-in y check-out, depende de tener conexión a internet. Además, si la pasarela de pagos externa falla, el sistema podría quedar con reservas en un estado incierto. Para esto se diseñó un mecanismo de compensación que detecta estos fallos y libera automáticamente el inventario retenido, evitando que las habitaciones se queden bloqueadas innecesariamente y minimizando el impacto operativo.
+
+Migración de Datos Legados
+Mover la información histórica de 5,000 sistemas locales distintos a esta nueva plataforma central es un proceso complejo y propenso a errores de datos o corrupción de información histórica. Como estrategia, se recomienda realizar esta transición de manera gradual, hotel por hotel, utilizando herramientas de limpieza de datos para asegurar que el nuevo sistema comience con información pura y confiable desde el primer día.
