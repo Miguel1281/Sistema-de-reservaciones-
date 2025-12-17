@@ -847,3 +847,366 @@ Pos-condiciones:
 * Retorna ConfirmacionBaja con el nombre del usuario responsable para auditoría.
 
 ---
+
+==== CU16-IActualizarTarifa
+image::Interface diagrams/CU16-IActualizarTarifa.png[IActualizarTarifa, width=600, align=center]
+Especificación de Interfaz: IActualizarTarifa
+
+Descripción: Interfaz provista por el componente SistemaTarifas.
+Permite la modificación de los valores, fechas de vigencia y condiciones de las tarifas existentes en el catálogo.
+
+Operación: actualizarTarifa
+
+Firma:
+----
+actualizarTarifa(tarifaModificada: DetalleTarifa): ConfirmacionActualizacion
+----
+
+Pre-condiciones:
+
+* La tarifa a modificar debe existir en el sistema.
+* Los nuevos valores de precio deben ser positivos.
+* El rango de fechas no debe generar conflictos con otras tarifas si se modifican los periodos.
+
+Pos-condiciones:
+
+* Se actualizan los atributos de la tarifa en la base de datos (ICatalogoMgt).
+* Se retorna una ConfirmacionActualizacion indicando el éxito de la operación.
+---
+
+==== CU17-IRegistrarPolitica
+image::Interface diagrams/CU17-IRegistrarPolitica.png[IRegistrarPolitica, width=600, align=center]
+Especificación de Interfaz: IRegistrarPolitica
+
+Descripción: Interfaz provista por el componente SistemaPoliticas.
+Permite a los administradores definir nuevas normativas operativas (cancelación, mascotas, check-in) que regirán las reservas y estancias.
+
+Operación: registrarPolitica
+
+Firma:
+----
+registrarPolitica(nuevaPolitica: Politica): ConfirmacionRegistro
+----
+
+Pre-condiciones:
+
+* El nombre de la política no debe estar duplicado.
+* La descripción debe ser clara y no vacía.
+
+Pos-condiciones:
+
+* Se crea una nueva entrada en el repositorio de políticas.
+* La política queda en estado activo para ser consultada por otros módulos.
+---
+
+==== CU18-IActualizarPolitica
+image::Interface diagrams/CU18-IActualizarPolitica.png[IActualizarPolitica, width=600, align=center]
+Especificación de Interfaz: IActualizarPolitica
+
+Descripción: Interfaz provista por el componente SistemaPoliticas.
+Facilita la edición de las condiciones y descripciones de las políticas vigentes para adaptarse a cambios en la operación del hotel.
+
+Operación: actualizarPolitica
+
+Firma:
+----
+actualizarPolitica(politicaModificada: Politica): ConfirmacionActualizacion
+----
+
+Pre-condiciones:
+
+* La política identificada debe existir.
+
+Pos-condiciones:
+
+* Se actualiza la definición de la política en el sistema.
+* Los cambios se reflejan inmediatamente para las nuevas consultas, aunque pueden no afectar retroactivamente a contratos ya firmados (reservas pasadas).
+---
+
+==== CU19-IDarDeBajaPolitica
+image::Interface diagrams/CU19-IDarDeBajaPolitica.png[IDarDeBajaPolitica, width=600, align=center]
+Especificación de Interfaz: IDarDeBajaPolitica
+
+Descripción: Interfaz provista por el componente SistemaPoliticas.
+Permite desactivar o eliminar lógicamente una política que ya no aplica, asegurando que no sea seleccionable en el futuro.
+
+Operación: darBajaPolitica
+
+Firma:
+----
+darBajaPolitica(idPolitica: int): ConfirmacionBaja
+----
+
+Pre-condiciones:
+
+* La política debe existir y estar activa.
+
+Pos-condiciones:
+
+* El estado de la política cambia a INACTIVA.
+* Se mantiene el registro histórico para auditoría.
+---
+
+==== CU20-IRegistrarGerente
+image::Interface diagrams/CU20-IRegistrarGerente.png[IRegistrarGerente, width=600, align=center]
+Especificación de Interfaz: IRegistrarGerente
+
+Descripción: Interfaz provista por el componente SistemaAdministracionPersonal.
+Gestiona el alta de nuevos perfiles de nivel gerencial, asignándoles credenciales y asociándolos a un hotel específico.
+
+Operación: registrarGerente
+
+Firma:
+----
+registrarGerente(datosGerente: DatosPersonal, idHotel: String): ConfirmacionRegistro
+----
+
+Pre-condiciones:
+
+* El correo electrónico no debe estar registrado previamente.
+* El hotel asignado debe existir en el sistema.
+
+Pos-condiciones:
+
+* Se crea la cuenta de usuario con rol de GERENTE.
+* Se establece la relación laboral con el hotel indicado.
+---
+
+==== CU21-IActualizarGerente
+image::Interface diagrams/CU21-IActualizarGerente.png[IActualizarGerente, width=600, align=center]
+Especificación de Interfaz: IActualizarGerente
+
+Descripción: Interfaz provista por el componente SistemaAdministracionPersonal.
+Permite modificar la información de contacto o asignación de los gerentes registrados.
+
+Operación: actualizarGerente
+
+Firma:
+----
+actualizarGerente(gerenteModificado: DatosPersonal): ConfirmacionActualizacion
+----
+
+Pre-condiciones:
+
+* El gerente debe existir en el sistema.
+
+Pos-condiciones:
+
+* Se actualizan los datos personales y/o laborales en la base de datos.
+---
+
+==== CU22-IDarDeBajaGerente
+image::Interface diagrams/CU22-IDarDeBajaGerente.png[IDarDeBajaGerente, width=600, align=center]
+Especificación de Interfaz: IDarDeBajaGerente
+
+Descripción: Interfaz provista por el componente SistemaAdministracionPersonal.
+Revoca el acceso al sistema de un gerente, inhabilitando su cuenta por cese de funciones o cambio de rol.
+
+Operación: darBajaGerente
+
+Firma:
+----
+darBajaGerente(idGerente: int): ConfirmacionBaja
+----
+
+Pre-condiciones:
+
+* El gerente debe estar activo.
+
+Pos-condiciones:
+
+* El estado del usuario cambia a INACTIVO.
+* Se revocan los permisos de acceso al módulo de gestión.
+---
+
+==== CU23-IConsultarGerente
+image::Interface diagrams/CU23-IConsultarGerente.png[IConsultarGerente, width=600, align=center]
+Especificación de Interfaz: IConsultarGerente
+
+Descripción: Interfaz provista por el componente SistemaAdministracionPersonal.
+Permite visualizar la ficha completa de un gerente, incluyendo su historial y hotel asignado.
+
+Operación: consultarGerente
+
+Firma:
+----
+consultarGerente(idGerente: int): DetalleGerente
+----
+
+Pre-condiciones:
+
+* El ID proporcionado debe ser válido.
+
+Pos-condiciones:
+
+* Retorna un objeto DetalleGerente con toda la información registrada.
+---
+
+==== CU24-IRegistrarHotel
+image::Interface diagrams/CU24-IRegistrarGerente.png[IRegistrarHotel, width=600, align=center]
+Especificación de Interfaz: IRegistrarHotel
+
+Descripción: Interfaz provista por el componente SistemaInventario.
+Permite dar de alta una nueva propiedad hotelera en la cadena, definiendo sus datos generales y configuración inicial.
+
+Operación: registrarHotel
+
+Firma:
+----
+registrarHotel(nuevoHotel: DatosHotel): ConfirmacionRegistro
+----
+
+Pre-condiciones:
+
+* La dirección y nombre del hotel deben ser únicos.
+
+Pos-condiciones:
+
+* Se crea el registro del hotel en el catálogo global.
+* El hotel queda listo para la configuración de habitaciones (aunque aún no tenga inventario).
+---
+
+==== CU25-IActualizarHotel
+image::Interface diagrams/CU25-IActualizarGerente.png[IActualizarHotel, width=600, align=center]
+Especificación de Interfaz: IActualizarHotel
+
+Descripción: Interfaz provista por el componente SistemaInventario.
+Permite modificar la información descriptiva, ubicación o servicios de un hotel existente.
+
+Operación: actualizarHotel
+
+Firma:
+----
+actualizarHotel(hotelModificado: DatosHotel): ConfirmacionActualizacion
+----
+
+Pre-condiciones:
+
+* El hotel debe existir en el sistema.
+
+Pos-condiciones:
+
+* La información pública del hotel se actualiza para los canales de venta.
+---
+
+==== CU26-IDarDeBajaHotel
+image::Interface diagrams/CU26-IDarDeBajaHotel.png[IDarDeBajaHotel, width=600, align=center]
+Especificación de Interfaz: IDarDeBajaHotel
+
+Descripción: Interfaz provista por el componente SistemaInventario.
+Retira un hotel de la oferta comercial de la cadena, usualmente por cierre o venta de la propiedad.
+
+Operación: darBajaHotel
+
+Firma:
+----
+darBajaHotel(idHotel: String): ConfirmacionBaja
+----
+
+Pre-condiciones:
+
+* El hotel no debe tener reservas activas o futuras pendientes de ejecución (Validación estricta).
+
+Pos-condiciones:
+
+* El estado del hotel pasa a INACTIVO.
+* Se bloquea la creación de nuevas habitaciones o reservas para dicha propiedad.
+---
+
+==== CU27-IConsultarHotel
+image::Interface diagrams/CU27-IConsultarHotel.png[IConsultarHotel, width=600, align=center]
+Especificación de Interfaz: IConsultarHotel
+
+Descripción: Interfaz provista por el componente SistemaInventario.
+Provee acceso a la información detallada de configuración de un hotel específico.
+
+Operación: consultarHotel
+
+Firma:
+----
+consultarHotel(idHotel: String): DetalleHotel
+----
+
+Pre-condiciones:
+
+* El ID del hotel debe ser válido.
+
+Pos-condiciones:
+
+* Retorna la información completa del hotel, incluyendo resumen de inventario y personal asignado.
+---
+
+==== CU28-IRegistrarTipoHabitacion
+image::Interface diagrams/CU28-IRegistrarTipoHabitacion.png[IRegistrarTipoHabitacion, width=600, align=center]
+Especificación de Interfaz: IRegistrarTipoHabitacion
+
+Descripción: Interfaz provista por el componente SistemaInventario.
+Define una nueva categoría de habitación (ej. "Doble", "Suite", "Sencilla") con sus características base y capacidad.
+
+Operación: registrarTipoHabitacion
+
+Firma:
+----
+registrarTipoHabitacion(nuevoTipo: DatosTipoHabitacion): ConfirmacionRegistro
+----
+
+Pre-condiciones:
+
+* El nombre del tipo de habitación no debe duplicarse dentro del mismo hotel.
+* La capacidad (personas) debe ser mayor a 0.
+
+Pos-condiciones:
+
+* Se añade el nuevo tipo de habitación al catálogo del hotel.
+* Se habilita la posibilidad de asignar tarifas a este tipo.
+---
+
+==== CU29-IActualizarTipoHabitacion
+image::Interface diagrams/CU29-IActualizarTipoHabitacion.png[IActualizarTipoHabitacion, width=600, align=center]
+Especificación de Interfaz: IActualizarTipoHabitacion
+
+Descripción: Interfaz provista por el componente SistemaInventario.
+Permite modificar las características descriptivas o de capacidad de una categoría de habitación.
+
+Operación: actualizarTipoHabitacion
+
+Firma:
+----
+actualizarTipoHabitacion(tipoModificado: DatosTipoHabitacion): ConfirmacionActualizacion
+----
+
+Pre-condiciones:
+
+* El tipo de habitación debe existir.
+
+Pos-condiciones:
+
+* Se actualizan los datos en el catálogo.
+* Los cambios se reflejan en la información mostrada a los huéspedes en futuras búsquedas.
+---
+
+==== CU30-DarDeBajaTipoHabitacion
+image::Interface diagrams/CU30-DarDeBajaTipoHabitacion.png[DarDeBajaTipoHabitacion, width=600, align=center]
+Especificación de Interfaz: IDarDeBajaTipoHabitacion
+
+Descripción: Interfaz provista por el componente SistemaInventario.
+Elimina una categoría de habitación del catálogo comercial, impidiendo que se vendan nuevas unidades de este tipo.
+
+Operación: darBajaTipoHabitacion
+
+Firma:
+----
+darBajaTipoHabitacion(idTipoHabitacion: String): ConfirmacionBaja
+----
+
+Pre-condiciones:
+
+* No deben existir reservas futuras para este tipo de habitación.
+* No deben existir habitaciones físicas activas asociadas a este tipo (deben reasignarse o darse de baja primero).
+
+Pos-condiciones:
+
+* El tipo de habitación se marca como ELIMINADO o DESCONTINUADO.
+---
+
+prueba de version
