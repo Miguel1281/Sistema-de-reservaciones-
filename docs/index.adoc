@@ -1,11 +1,11 @@
 = Descripción de la Arquitectura de Software
-:author: Brayan Gabriel Fernández Tlapa| Rodrigo Luna Vázquez| Miguel Angel Méndez Ronzón
-:revnumber: Diseño de software | Quinto periodo | 17788
-:revdate: 29 de Septiembre, 2025
+Brayan Gabriel Fernández Tlapa; Rodrigo Luna Vázquez; Miguel Angel Méndez Ronzón
+v1.13, 29 de Septiembre, 2025
+:description: Documentación de arquitectura para el sistema de reservaciones
 :url-repo: https://github.com/Miguel1281/Sistema-de-reservaciones-.git
-:revremark: Repositorio del proyecto: {url-repo}
 :doctype: book
 :toc: left
+:toc-title: Tabla de Contenido
 :sectnums:
 :icons: font
 :source-highlighter: highlightjs
@@ -23,6 +23,14 @@
 :note-caption: Nota
 :tip-caption: Consejo
 :warning-caption: Advertencia
+
+[abstract]
+.Ficha del Curso
+--
+**Materia:** Diseño de Software +
+**Periodo:** Quinto periodo (Grupo 17788) +
+**Repositorio:** {url-repo}[Acceder al código fuente en GitHub]
+--
 
 == Historial de Revisiones
 
