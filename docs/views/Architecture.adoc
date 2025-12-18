@@ -16,8 +16,10 @@ Finalmente, la Capa de infraestructura soporta al sistema implementando las inte
 
 En conclusión, la estructura de paquetes propuesta refleja una jerarquía donde la estabilidad aumenta conforme se desciende de nivel. Las capas superiores (UI) pueden cambiar frecuentemente para adaptarse a tendencias visuales, mientras que el dominio permanece estable protegiendo las reglas de oro del negocio. Este diseño garantiza un sistema mantenible, seguro y capaz de evolucionar junto con las necesidades estratégicas de la cadena hotelera.
 
-image::../images/Diagramas de paquetes.png[Diagrama de paquetes, align="center"]
+image::/images/Diagramas de paquetes.png[Diagrama de paquetes, align="center"]
+
 
 === Modelo de conceptos de negocio
 
-image::../images/Modelo de conceptos de negocio.jpg[Modelo de conceptos de negocio de sistema hotelero, width=600, align=center]
+
+image::/images/Modelo de conceptos de negocio.jpg[Modelo de conceptos de negocio de sistema hotelero, width=600, align=center]
