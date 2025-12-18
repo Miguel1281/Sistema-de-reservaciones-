@@ -1289,7 +1289,7 @@ Firma:
 registrarRecepcionista(nuevoRecepcionista: DatosRecepcionista): ConfirmacionRegistro
 ----
 ==== CU41-IActualizarRecepcionista
-image::/Interface diagrams/CU41-IActualizarRecepcionista.png[IActualizarRecepcionista, width=600, align=center]
+image::Interface diagrams/CU41-IActualizarRecepcionista.png[IActualizarRecepcionista, width=600, align=center]
 
 Firma:
 ----
