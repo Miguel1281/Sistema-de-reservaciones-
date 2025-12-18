@@ -42,6 +42,7 @@
 |1.10    | 2025-12-16 | Brayan Gabriel Fernández Tlapa    | Agrega diagrama de secuencia para hacer reserva
 |1.11    | 2025-12-16 | Miguel Angel Méndez Ronzón    | Se actualiza el diagrama de la vista logica del sistema.
 |1.12    | 2025-12-16 | Miguel Angel Méndez Ronzón-Brayan Gabriel Fernández Tlapa    | Corrige diagrama de casos de uso y agrega diagramas de casos de uso por actor.
+|1.13    | 2025-12-16 | Brayan Gabriel Fernández Tlapa    | Agrega conclusiones y riesgos
 |===
 
 

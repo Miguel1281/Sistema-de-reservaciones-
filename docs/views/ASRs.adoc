@@ -48,19 +48,27 @@
 == Definición e importancia para el sistema
 
 === 1. Disponibilidad (Availability)
-Grado en que un sistema o componente es operacional y accesible cuando se requiere para su uso.
+La disponibilidad se refiere a una propiedad del software, es decir, que está ahí y listo para llevar a cabo
+su tarea cuando lo necesitas. Se trata de una perspectiva amplia que abarca lo que normalmente
+se denomina fiabilidad (aunque puede incluir consideraciones adicionales, como el tiempo de inactividad debido
+al mantenimiento periódico). La disponibilidad se basa en el concepto de fiabilidad añadiendo la noción
+de recuperación, es decir, cuando el sistema se estropea, se repara a sí mismo.
+
+La disponibilidad también abarca la capacidad de un sistema para enmascarar o reparar fallos de manera que
+no se conviertan en averías, garantizando así que el periodo acumulado de interrupción del servicio no
+supere un valor requerido durante un intervalo de tiempo especificado.
 
 === 2. Modificabilidad (Modifiability)
-Grado en que un producto o sistema puede ser modificado de manera efectiva y eficiente sin introducir defectos o degradar la calidad del producto existente.
+La modifiability es la cualidad de un sistema relacionada con su capacidad para aceptar y soportar cambios en distintos aspectos como sus funciones, plataforma, entorno, cualidades o capacidad buscando minimizar el costo y el riesgo asociados a realizar dichos cambios a lo largo de su vida útil.
 
 === 3. Rendimiento (Performance)
-Grado en que un sistema o componente cumple sus funciones designadas dentro de determinadas restricciones, como velocidad, precisión o uso de memoria.
+El rendimiento es la capacidad de un sistema de software para cumplir con los requisitos temporales, respondiendo a los eventos que ocurren como interrupciones, mensajes o solicitudes dentro del tiempo requerido, teniendo en cuenta el tiempo que consumen las operaciones y caracterizando los patrones de llegada de los eventos y los patrones de respuesta del sistema.
 
 === 4. Seguridad (Security)
-Grado en que un producto o sistema protege la información y los datos para que las personas u otros productos o sistemas tengan el grado de acceso apropiado para sus tipos y niveles de autorización.
+La seguridad es una medida de la capacidad del sistema para proteger los datos y la información contra el acceso no autorizado, al tiempo que sigue proporcionando acceso a las personas y sistemas autorizados. Un ataque, es decir, una acción realizada contra un sistema informático con la intención de causar daños, puede adoptar diversas formas. Puede tratarse de un intento no autorizado de acceder a datos o servicios o de modificar datos, o puede tener por objeto denegar servicios a usuarios legítimos.
 
 === 5. Usabilidad (Usability)
-Grado en que un producto o sistema puede ser utilizado por usuarios específicos para alcanzar metas específicas con efectividad, eficiencia y satisfacción en un contexto de uso determinado.
+La usabilidad se refiere a la facilidad con la que el usuario puede realizar una tarea deseada y al tipo de asistencia que le brinda el sistema.
 
 == Importancia para el sistema
 
@@ -90,7 +98,9 @@ Crucial para huéspedes y personal de recepción.
 
 == Referencia
 
-ISO/IEC/IEEE 24765:2017(E). *Systems and software engineering — Vocabulary.*
+* ISO/IEC/IEEE 24765:2017(E). *Systems and software engineering — Vocabulary.*
+
+* Bass, L., Clements, P., & Kazman, R. (2022). Software architecture in practice (4th ed.). Pearson Education.
 
 == Refinamientos y escenarios de calidad
 
