@@ -129,12 +129,11 @@ image::Comunication/CU31/CU-31ConsultarTipoHabitacion.png[consultarTipoHabitacio
 
 === CU-32
 image::Comunication/CU32/CU-32 obtenerHoteles.png[obtenerHoteles, width=600, align=center]
-image::Comunication/CU32/CU-32ConsultarBitacora.png
-[consultarBitacora, width=600, align=center]
+image::Comunication/CU32/CU-32ConsultarBitacora.png[consultarBitacora, width=600, align=center]
 
 === CU-33
 image::Comunication/CU33/CU-33 buscarReservacion.png[buscarReservacion reservación, width=600, align=center]
-image::Comunication/CU33/CU-33 Rastrear historial reservación.jpg[rastrearHistorialReservacion, width=600, align=center]
+image::Comunication/CU33/CU-33RastrearHistorialReservacion.png[rastrearHistorialReservacion, width=600, align=center]
 
 === CU-34
 image::Comunication/CU34/CU-34 obtenerHoteles.png[obtenerHoteles, width=600, align=center]
@@ -161,8 +160,7 @@ image::Comunication/CU38/CU-38ConsultarHabitacion.png[consultarHabitacion, width
 === CU-39
 image::Comunication/CU39/CU-39 bloquearHabitacion.png[bloquearHabitacion, width=600, align=center]
 image::Comunication/CU39/CU-39 buscarReserva.png[buscarReserva, width=600, align=center]
-image::Comunication/CU39/CU39/CU-39 obtenerHabitacion.png
-[obtenerHabitacion, width=600, align=center]
+image::Comunication/CU39/CU39/CU-39 obtenerHabitacion.png[obtenerHabitacion, width=600, align=center]
 
 === CU-40
 image::Comunication/CU40/CU-40RegistrarRecepcionista.png[registrarRecepcionista, width=600, align=center]

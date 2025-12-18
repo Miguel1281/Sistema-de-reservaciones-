@@ -85,3 +85,8 @@ El sistema aprovecha el procesamiento en segundo plano para optimizar la percepc
 . Rama crítica (persistencia): La actualización del inventario y el cierre de la cuenta ocurren en el hilo principal con consistencia fuerte. El sistema no confirma la salida hasta que estos datos están persistidos.
 
 . Rama no crítica (notificación): El envío del detalle de la cuenta por correo electrónico se maneja con consistencia eventual, permitiendo un leve retraso sin afectar la operación operativa del hotel
+
+
+
+
+

@@ -1528,4 +1528,5 @@ validarCredenciales(usuario: String, pass: String): TokenSesion
 ----
 Pos-condiciones: Autentica al usuario en el sistema.
 
-prueba 2
+
+
