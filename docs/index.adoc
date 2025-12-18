@@ -1,8 +1,8 @@
-= Descripción de la Arquitectura de Software
+= Sistema Hotelero: Descripción de la Arquitectura de Software
 Brayan Gabriel Fernández Tlapa; Rodrigo Luna Vázquez; Miguel Angel Méndez Ronzón
-v1.13, 29 de Septiembre, 2025
-:description: Documentación de arquitectura para el sistema de reservaciones
+v1.13, 17 de Diciembre, 2025
 :url-repo: https://github.com/Miguel1281/Sistema-de-reservaciones-.git
+:company: Universidad Veracruzana
 :doctype: book
 :toc: left
 :toc-title: Tabla de Contenido
@@ -25,11 +25,15 @@ v1.13, 29 de Septiembre, 2025
 :warning-caption: Advertencia
 
 [abstract]
-.Ficha del Curso
+.Ficha Académica
 --
-**Materia:** Diseño de Software +
-**Periodo:** Quinto periodo (Grupo 17788) +
-**Repositorio:** {url-repo}[Acceder al código fuente en GitHub]
+**UNIVERSIDAD VERACRUZANA** +
+_Licenciatura en Ingeniería de Software_
+
+**Experiencia Educativa:** Diseño de Software (Periodo Agosto 25 - Enero 26) +
+**Académico:** Dr. Jorge Octavio Ocharan Hernández +
+
+**Repositorio del Proyecto:** {url-repo}[Ver en GitHub]
 --
 
 == Historial de Revisiones
