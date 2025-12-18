@@ -23,3 +23,5 @@ image::Diagramas de paquetes.png[Diagrama de paquetes, align="center"]
 
 
 image::Modelo de conceptos de negocio.jpg[Modelo de conceptos de negocio de sistema hotelero, width=600, align=center]
+
+
