@@ -29,3 +29,8 @@ image::Modelo de conceptos de negocio.jpg[Modelo de conceptos de negocio, align=
 
 
 
+
+
+
+
+
