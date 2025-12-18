@@ -1212,84 +1212,209 @@ Pos-condiciones:
 ==== CU31-IConsultarTipoHabitacion
 image::Interface diagrams/CU31-IConsultarTipoHabitacion.png[IConsultarTipoHabitacion, width=600, align=center]
 
+Descripción: Interfaz provista por el componente SistemaInventario. Permite obtener la información detallada de una categoría de habitación específica del catálogo.
+
+Operación: consultarTipoHabitacion
+
 Firma:
 ----
 consultarTipoHabitacion(idTipoHabitacion: int): DetalleTipoHabitacion
 ----
 
+Precondiciones:
+* Existe al menos un tipo de habitación registrado en el sistema.
+
+Postcondiciones:
+* El sistema muestra la información completa del tipo de habitación.
+---
+
 ==== CU32-IConsultarBitacoraTransacciones
 image::Interface diagrams/CU32-IConsultarBitacoraTransacciones.png[IConsultarBitacoraTransacciones, width=600, align=center]
+
+Descripción: Interfaz provista por el componente SistemaReservas. Permite recuperar el registro de eventos y movimientos realizados en el sistema filtrados por fecha y tipo de evento.
+
+Operación: consultarBitacora
 
 Firma:
 ----
 consultarBitacora(fecha: Date, tipo: string): DetalleBitacora
 ----
 
+Precondiciones:
+* Existen transacciones registradas en el sistema.
+
+Postcondiciones:
+* El sistema muestra en pantalla las transacciones que cumplen con los criterios de búsqueda seleccionados.
+---
+
+
 ==== CU33-IRastrearHistorialReservacion
 image::Interface diagrams/CU33-IRastrearHistorialReservacion.png[IRastrearHistorialReservacion, width=600, align=center]
+
+Descripción: Interfaz provista por el componente SistemaReservas. Permite visualizar el ciclo de vida completo de una reserva, incluyendo creación, pagos y modificaciones.
+
+Operación: rastrearHistorialReserva
 
 Firma:
 ----
 rastrearHistorialReserva(idReserva: int): DetalleReserva
 ----
 
+Precondiciones:
+* Existe al menos una reserva registrada en el sistema.
+
+Postcondiciones:
+* El sistema muestra en pantalla el historial completo del ciclo de vida de la reservación seleccionada.
+---
+
+
 ==== CU34-IGenerarReporteTrazabilidadTarifas
 image::Interface diagrams/CU34-IGenerarReporteTrazabilidadTarifas.png[IGenerarReporteTrazabilidadTarifas, width=600, align=center]
+
+Descripción: Interfaz provista por el componente SistemaTarifas. Genera un reporte detallado sobre la tarifa aplicada a una reserva específica, asegurando la transparencia en el precio cobrado.
+
+Operación: generarReporteTarifas
 
 Firma:
 ----
 generarReporteTarifas(idReserva: int): Reporte
 ----
 
+Precondiciones:
+* Existen transacciones de reservaciones registradas en el sistema con tarifas y políticas asociadas.
+
+Postcondiciones:
+* El sistema muestra en pantalla el reporte de trazabilidad de tarifas y políticas de overbooking según los criterios seleccionados.
+---
+
+
 ==== CU35-IRegistrarHabitacion
 image::Interface diagrams/CU35-IRegistrarHabitacion.png[IRegistrarHabitacion, width=600, align=center]
+
+Descripción: Interfaz provista por el componente SistemaInventario. Permite dar de alta una nueva unidad física de habitación vinculándola a un hotel y a un tipo de habitación existente.
+
+Operación: registrarHabitacion
 
 Firma:
 ----
 registrarHabitacion(idHotel: int, idTipoHabitacion: int): ConfirmacionRegistro
 ----
 
+Precondiciones:
+* Existe al menos un tipo de habitación registrado en el sistema.
+* Existe al menos un hotel registrado en el sistema.
+
+Postcondiciones:
+* Se registra la nueva habitación en la base de datos, asociada al hotel correspondiente.
+---
+
+
 ==== CU36-IActualizarHabitacion
 image::Interface diagrams/CU36-IActualizarHabitacion.png[IActualizarHabitacion, width=600, align=center]
+
+Descripción: Interfaz provista por el componente SistemaInventario. Permite modificar los datos técnicos o de ubicación de una habitación física ya registrada en el catálogo.
+
+Operación: actualizarHabitacion
 
 Firma:
 ----
 actualizarHabitacion(idHabitacion: int): ConfirmacionActualizacion
 ----
 
+Precondiciones:
+* Existe al menos una habitación registrada en el sistema.
+
+Postcondiciones:
+* La información de la habitación seleccionada se actualiza correctamente en la base de datos.
+---
+
+
 ==== CU37-IDarDeBajaHabitacion
 image::Interface diagrams/CU37-IDarDeBajaHabitacion.png[IDarDeBajaHabitacion, width=600, align=center]
+
+Descripción: Interfaz provista por el componente SistemaInventario. Elimina de forma lógica una habitación física del inventario disponible para la venta.
+
+Operación: DarDeBajaHabitacion
 
 Firma:
 ----
 DarDeBajaHabitacio(idHabitacion: int): ConfirmacionBaja
 ----
 
+Precondiciones:
+* Existe al menos una habitación registrada en el sistema.
+
+Postcondiciones:
+* Se actualiza el estado de la habitación en la base de datos.
+---
+
+
 ==== CU38-IConsultarHabitacion
 image::Interface diagrams/CU38-IConsultarHabitacion.png[IConsultarHabitacion, width=600, align=center]
+
+Descripción: Interfaz provista por el componente SistemaInventario. Recupera los detalles específicos y el estado actual de una habitación física determinada.
+
+Operación: consultarHabitacion
 
 Firma:
 ----
 consultarHabitacion(idHabitacion: int): DetalleHabitacion
 ----
 
+Precondiciones:
+* Existe al menos una habitación registrada en el sistema.
+
+Postcondiciones:
+* El sistema muestra la información completa de la habitación seleccionada.
+---
+
+
 ==== CU39-IBloquearHabitacion
 image::Interface diagrams/CU39-IBloquearHabitacion.png[IBloquearHabitacion, width=600, align=center]
+
+Descripción: Interfaz provista por el componente SistemaInventario. Permite restringir la disponibilidad de una habitación para la venta por motivos de mantenimiento o administrativos.
+
+Operación: bloquearHabitacion
 
 Firma:
 ----
 bloquearHabitacion(idHabitacion: int, motivo: Motivo): ConfirmacionBloqueo
 ----
 
+Precondiciones:
+* Existe al menos una habitación registrada en el sistema.
+
+Postcondiciones:
+* Se actualiza el estado de disponibilidad de la HABITACIÓN en la base de datos.
+---
+
+
 ==== CU40-IRegistrarRecepcionista
 image::Interface diagrams/CU40-IRegistrarRecepcionista.png[IRegistrarRecepcionista, width=600, align=center]
+
+Descripción: Interfaz provista por el componente SistemaAdministracionPersonal. Permite crear una nueva cuenta de usuario con rol de recepcionista para operar en un hotel específico.
+
+Operación: registrarRecepcionista
 
 Firma:
 ----
 registrarRecepcionista(nuevoRecepcionista: DatosRecepcionista): ConfirmacionRegistro
 ----
+
+Precondiciones:
+* El gerente ha iniciado sesión en el sistema y tiene un HOTEL asignado.
+
+Postcondiciones:
+* Se registra el nuevo recepcionista en la base de datos, asociado al hotel correspondiente.
+---
+
+
 ==== CU41-IActualizarRecepcionista
 image::Interface diagrams/CU41-IActualizarRecepcionista.png[IActualizarRecepcionista, width=600, align=center]
+
+Descripción: Interfaz provista por el componente SistemaAdministracionPersonal. Permite modificar la información personal de un recepcionista registrado.
+
+Operación: actualizarRecepcionista
 
 Firma:
 ----
@@ -1297,21 +1422,52 @@ actualizarRecepcionista(idRecepcionista: int):
 ConfirmacionActualizacion
 ----
 
+Precondiciones:
+* Existe al menos un RECEPCIONISTA registrado en el sistema del HOTEL.
+
+Postcondiciones
+* Se actualiza la información del RECEPCIONISTA en la base de datos.
+---
+
+
 ==== CU42-IConsultarRecepcionista
 image::Interface diagrams/CU42-IConsultarReceçionista.png[IConsultarRecepcionista, width=600, align=center]
+
+Descripción: Interfaz provista por el componente SistemaAdministracionPersonal. Permite consultar el perfil y los datos de contacto de un recepcionista en el sistema.
+
+Operación: consultarRecepcionista
 
 Firma:
 ----
 consultarRecepcionista(idRecepcionista: int): DetalleRecepcionista
 ----
 
+Precondiciones:
+* Existe al menos un recepcionista registrado en el sistema.
+
+Postcondiciones:
+* El sistema muestra la información del recepcionista seleccionado.
+---
+
+
 ==== CU43-IDarDeBajaRecepcionista
 image::Interface diagrams/CU43-IDarDeBajaRecepcionista.png[IDarDeBajaRecepcionista, width=600, align=center]
+
+Descripción: Interfaz provista por el componente SistemaAdministracionPersonal. Desactiva el acceso y elimina el registro de un recepcionista de la nómina de usuarios activos.
+
+Operación: darDeBajaRecepcionista
 
 Firma:
 ----
 darDeBajaRecepcionista(idRecepcionista: int): ConfirmacionBaja
 ----
+
+Precondiciones:
+* Existe al menos un recepcionista registrado en el sistema del hotel.
+
+Postcondiciones
+* Se actualiza el estado del recepionista en la base de datos.
+---
 
 
 === Interfaces de Negocio
