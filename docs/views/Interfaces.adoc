@@ -1222,9 +1222,11 @@ consultarTipoHabitacion(idTipoHabitacion: int): DetalleTipoHabitacion
 ----
 
 Precondiciones:
+
 * Existe al menos un tipo de habitación registrado en el sistema.
 
 Postcondiciones:
+
 * El sistema muestra la información completa del tipo de habitación.
 ---
 
@@ -1241,9 +1243,11 @@ consultarBitacora(fecha: Date, tipo: string): DetalleBitacora
 ----
 
 Precondiciones:
+
 * Existen transacciones registradas en el sistema.
 
 Postcondiciones:
+
 * El sistema muestra en pantalla las transacciones que cumplen con los criterios de búsqueda seleccionados.
 ---
 
@@ -1261,9 +1265,11 @@ rastrearHistorialReserva(idReserva: int): DetalleReserva
 ----
 
 Precondiciones:
+
 * Existe al menos una reserva registrada en el sistema.
 
 Postcondiciones:
+
 * El sistema muestra en pantalla el historial completo del ciclo de vida de la reservación seleccionada.
 ---
 
@@ -1281,9 +1287,11 @@ generarReporteTarifas(idReserva: int): Reporte
 ----
 
 Precondiciones:
+
 * Existen transacciones de reservaciones registradas en el sistema con tarifas y políticas asociadas.
 
 Postcondiciones:
+
 * El sistema muestra en pantalla el reporte de trazabilidad de tarifas y políticas de overbooking según los criterios seleccionados.
 ---
 
@@ -1301,10 +1309,12 @@ registrarHabitacion(idHotel: int, idTipoHabitacion: int): ConfirmacionRegistro
 ----
 
 Precondiciones:
+
 * Existe al menos un tipo de habitación registrado en el sistema.
 * Existe al menos un hotel registrado en el sistema.
 
 Postcondiciones:
+
 * Se registra la nueva habitación en la base de datos, asociada al hotel correspondiente.
 ---
 
@@ -1322,9 +1332,11 @@ actualizarHabitacion(idHabitacion: int): ConfirmacionActualizacion
 ----
 
 Precondiciones:
+
 * Existe al menos una habitación registrada en el sistema.
 
 Postcondiciones:
+
 * La información de la habitación seleccionada se actualiza correctamente en la base de datos.
 ---
 
@@ -1342,9 +1354,11 @@ DarDeBajaHabitacio(idHabitacion: int): ConfirmacionBaja
 ----
 
 Precondiciones:
+
 * Existe al menos una habitación registrada en el sistema.
 
 Postcondiciones:
+
 * Se actualiza el estado de la habitación en la base de datos.
 ---
 
@@ -1362,9 +1376,11 @@ consultarHabitacion(idHabitacion: int): DetalleHabitacion
 ----
 
 Precondiciones:
+
 * Existe al menos una habitación registrada en el sistema.
 
 Postcondiciones:
+
 * El sistema muestra la información completa de la habitación seleccionada.
 ---
 
@@ -1382,9 +1398,11 @@ bloquearHabitacion(idHabitacion: int, motivo: Motivo): ConfirmacionBloqueo
 ----
 
 Precondiciones:
+
 * Existe al menos una habitación registrada en el sistema.
 
 Postcondiciones:
+
 * Se actualiza el estado de disponibilidad de la HABITACIÓN en la base de datos.
 ---
 
@@ -1402,9 +1420,11 @@ registrarRecepcionista(nuevoRecepcionista: DatosRecepcionista): ConfirmacionRegi
 ----
 
 Precondiciones:
+
 * El gerente ha iniciado sesión en el sistema y tiene un HOTEL asignado.
 
 Postcondiciones:
+
 * Se registra el nuevo recepcionista en la base de datos, asociado al hotel correspondiente.
 ---
 
@@ -1423,9 +1443,11 @@ ConfirmacionActualizacion
 ----
 
 Precondiciones:
+
 * Existe al menos un RECEPCIONISTA registrado en el sistema del HOTEL.
 
-Postcondiciones
+Postcondiciones:
+
 * Se actualiza la información del RECEPCIONISTA en la base de datos.
 ---
 
@@ -1443,9 +1465,11 @@ consultarRecepcionista(idRecepcionista: int): DetalleRecepcionista
 ----
 
 Precondiciones:
+
 * Existe al menos un recepcionista registrado en el sistema.
 
 Postcondiciones:
+
 * El sistema muestra la información del recepcionista seleccionado.
 ---
 
@@ -1463,9 +1487,11 @@ darDeBajaRecepcionista(idRecepcionista: int): ConfirmacionBaja
 ----
 
 Precondiciones:
+
 * Existe al menos un recepcionista registrado en el sistema del hotel.
 
 Postcondiciones
+
 * Se actualiza el estado del recepionista en la base de datos.
 ---
 
