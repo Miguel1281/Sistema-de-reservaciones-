@@ -160,7 +160,7 @@ image::Comunication/CU38/CU-38ConsultarHabitacion.png[consultarHabitacion, width
 === CU-39
 image::Comunication/CU39/CU-39 bloquearHabitacion.png[bloquearHabitacion, width=600, align=center]
 image::Comunication/CU39/CU-39 buscarReserva.png[buscarReserva, width=600, align=center]
-image::Comunication/CU39/CU39/CU-39 obtenerHabitacion.png[obtenerHabitacion, width=600, align=center]
+image::Comunication/CU39/CU-39 obtenerHabitacion.png[obtenerHabitacion, width=600, align=center]
 
 === CU-40
 image::Comunication/CU40/CU-40RegistrarRecepcionista.png[registrarRecepcionista, width=600, align=center]
