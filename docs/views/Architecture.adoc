@@ -19,9 +19,13 @@ En conclusión, la estructura de paquetes propuesta refleja una jerarquía donde
 image::Diagramas de paquetes.png[Diagrama de paquetes, align="center"]
 
 
+
+
 === Modelo de conceptos de negocio
 
 
-image::Modelo de conceptos de negocio.jpg[Modelo de conceptos de negocio de sistema hotelero, width=600, align=center]
+
+image::Modelo de conceptos de negocio.jpg[Modelo de conceptos de negocio, align="center"]
+
 
 
