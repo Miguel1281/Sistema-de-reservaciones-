@@ -1209,6 +1209,111 @@ Pos-condiciones:
 * El tipo de habitación se marca como ELIMINADO o DESCONTINUADO.
 ---
 
+==== CU31-IConsultarTipoHabitacion
+image::Interface diagrams/CU31-IConsultarTipoHabitacion.png[IConsultarTipoHabitacion, width=600, align=center]
+
+Firma:
+----
+consultarTipoHabitacion(idTipoHabitacion: int): DetalleTipoHabitacion
+----
+
+==== CU32-IConsultarBitacoraTransacciones
+image::Interface diagrams/CU32-IConsultarBitacoraTransacciones.png[IConsultarBitacoraTransacciones, width=600, align=center]
+
+Firma:
+----
+consultarBitacora(fecha: Date, tipo: string): DetalleBitacora
+----
+
+==== CU33-IRastrearHistorialReservacion
+image::Interface diagrams/CU33-IRastrearHistorialReservacion.png[IRastrearHistorialReservacion, width=600, align=center]
+
+Firma:
+----
+rastrearHistorialReserva(idReserva: int): DetalleReserva
+----
+
+==== CU34-IGenerarReporteTrazabilidadTarifas
+image::Interface diagrams/CU34-IGenerarReporteTrazabilidadTarifas.png[IGenerarReporteTrazabilidadTarifas, width=600, align=center]
+
+Firma:
+----
+generarReporteTarifas(idReserva: int): Reporte
+----
+
+==== CU35-IRegistrarHabitacion
+image::Interface diagrams/CU35-IRegistrarHabitacion.png[IRegistrarHabitacion, width=600, align=center]
+
+Firma:
+----
+registrarHabitacion(idHotel: int, idTipoHabitacion: int): ConfirmacionRegistro
+----
+
+==== CU36-IActualizarHabitacion
+image::Interface diagrams/CU36-IActualizarHabitacion.png[IActualizarHabitacion, width=600, align=center]
+
+Firma:
+----
+actualizarHabitacion(idHabitacion: int): ConfirmacionActualizacion
+----
+
+==== CU37-IDarDeBajaHabitacion
+image::Interface diagrams/CU37-IDarDeBajaHabitacion.png[IDarDeBajaHabitacion, width=600, align=center]
+
+Firma:
+----
+DarDeBajaHabitacio(idHabitacion: int): ConfirmacionBaja
+----
+
+==== CU38-IConsultarHabitacion
+image::Interface diagrams/CU38-IConsultarHabitacion.png[IConsultarHabitacion, width=600, align=center]
+
+Firma:
+----
+consultarHabitacion(idHabitacion: int): DetalleHabitacion
+----
+
+==== CU39-IBloquearHabitacion
+image::Interface diagrams/CU39-IBloquearHabitacion.png[IBloquearHabitacion, width=600, align=center]
+
+Firma:
+----
+bloquearHabitacion(idHabitacion: int, motivo: Motivo): ConfirmacionBloqueo
+----
+
+==== CU40-IRegistrarRecepcionista
+image::Interface diagrams/CU40-IRegistrarRecepcionista.png[IRegistrarRecepcionista, width=600, align=center]
+
+Firma:
+----
+registrarRecepcionista(nuevoRecepcionista: DatosRecepcionista): ConfirmacionRegistro
+----
+==== CU41-IActualizarRecepcionista
+image::/Interface diagrams/CU41-IActualizarRecepcionista.png[IActualizarRecepcionista, width=600, align=center]
+
+Firma:
+----
+actualizarRecepcionista(idRecepcionista: int):
+ConfirmacionActualizacion
+----
+
+==== CU42-IConsultarRecepcionista
+image::Interface diagrams/CU42-IConsultarReceçionista.png[IConsultarRecepcionista, width=600, align=center]
+
+Firma:
+----
+consultarRecepcionista(idRecepcionista: int): DetalleRecepcionista
+----
+
+==== CU43-IDarDeBajaRecepcionista
+image::Interface diagrams/CU43-IDarDeBajaRecepcionista.png[IDarDeBajaRecepcionista, width=600, align=center]
+
+Firma:
+----
+darDeBajaRecepcionista(idRecepcionista: int): ConfirmacionBaja
+----
+
+
 === Interfaces de Negocio
 
 ==== ICatalogoMgt
