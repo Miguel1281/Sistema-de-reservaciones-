@@ -24,8 +24,7 @@ image::Diagramas de paquetes.png[Diagrama de paquetes, align="center"]
 === Modelo de conceptos de negocio
 
 
-
-image::Modelo de conceptos de negocio.jpg[Modelo de conceptos de negocio, align="center"]
+image::ModeloDeConceptosDeNegocio.jpg[Modelo de conceptos de negocio, align="center"]
 
 
 
